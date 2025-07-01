@@ -44,6 +44,7 @@ function FeaturedProducts() {
   return (
     <section className="featured-section">
       <h2>Featured Products</h2>
+      <p>Get all the discount & ofeer's product right now !</p>
       <div className="featured-grid">
         {products.map((p) => (
           <div key={p.name} className="featured-product">
