@@ -1,17 +1,41 @@
 import React from 'react';
+import KitchenImage from '../assets/kitchenImage.jpg';
+import LaundryImage from '../assets/LaundryImage.jpg';
+import CleaningImage from '../assets/Cleaning.jpg';
+import FurnitureImage from '../assets/Furniture.jpg';
 import './CategorySection.css';
 
 function CategorySection() {
-  const categories = ['Kitchen Appliances', 'Laundry Essentials', 'Cleaning Solutions', 'Smart Devices'];
+  const categories = [
+    {
+      name: 'Kitchen Appliances',
+      image: { src: KitchenImage, alt: 'Kitchen Appliances' },
+    },
+    {
+      name: 'Laundry Essentials',
+      image: { src: LaundryImage, alt: 'Laundry Essentials' },
+    },
+    {
+      name: 'Cleaning Solutions',
+      image: { src: CleaningImage, alt: 'Cleaning Solutions' },
+    },
+    {
+      name: 'Home Furniture',
+      image: { src: FurnitureImage, alt: 'Smart Devices' },
+    },
+  ];
 
   return (
     <section className="category-section">
       <h2>Explore Our Categories</h2>
-      <ul>
+      <div className="category-grid">
         {categories.map((cat) => (
-          <li key={cat}>{cat}</li>
+          <div className="category-card" key={cat.name}>
+            <img src={cat.image.src} alt={cat.image.alt} />
+            <h3>{cat.name}</h3>
+          </div>
         ))}
-      </ul>
+      </div>
     </section>
   );
 }
