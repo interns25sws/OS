@@ -9,7 +9,7 @@ export default function  Header () {
     <header className="header">
       <div className="header-container">
         <div className="logo">
-          <Link to="/">MyShop</Link>
+          <Link to="/">OnlineBazzar</Link>
         </div>
 
         <nav className={`nav ${menuOpen ? "open" : ""}`}>

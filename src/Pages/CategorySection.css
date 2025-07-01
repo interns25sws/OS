@@ -25,10 +25,11 @@
   overflow: hidden;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   will-change: transform;
+  cursor: pointer;
 }
 
 .category-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-6  px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
