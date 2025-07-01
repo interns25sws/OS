@@ -1,0 +1,159 @@
+.header {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: box-shadow 0.2s;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+}
+
+.logo a {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #222;
+  text-decoration: none;
+  letter-spacing: 2px;
+  transition: color 0.2s;
+}
+
+.logo a:hover {
+  color: #007bff;
+}
+
+.nav {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+  transition: max-height 0.3s;
+}
+
+.nav a {
+  color: #333;
+  text-decoration: none;
+  font-size: 1.15rem;
+  font-weight: 500;
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.nav a:hover {
+  color: #fff;
+  background: #007bff;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.search-input {
+  padding: 0.45rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  font-size: 1rem;
+  transition: border 0.2s, box-shadow 0.2s;
+  width: 180px;
+  background: #fafbfc;
+}
+
+.search-input:focus {
+  border: 1.5px solid #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.08);
+}
+
+.icon i {
+  color: #333;
+  font-size: 1.6rem;
+  margin-left: 0.5rem;
+  transition: color 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+
+.icon i:hover {
+  color: #007bff;
+  transform: scale(1.1);
+}
+
+.hamburger {
+  display: none;
+  font-size: 2.2rem;
+  cursor: pointer;
+  user-select: none;
+  margin-left: 1rem;
+  color: #333;
+  transition: color 0.2s;
+}
+
+.hamburger:hover {
+  color: #007bff;
+}
+
+@media (max-width: 900px) {
+  .header-container {
+    padding: 0.75rem 1rem;
+  }
+  .nav {
+    gap: 1.2rem;
+  }
+  .search-input {
+    width: 120px;
+  }
+}
+
+@media (max-width: 700px) {
+  .header-container {
+    flex-wrap: wrap;
+    padding: 0.5rem 0.5rem;
+  }
+  .nav {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    max-height: 0;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+    transition: max-height 0.3s;
+    z-index: 99;
+  }
+  .nav.open {
+    max-height: 300px;
+    padding: 1rem 0;
+  }
+  .nav a {
+    width: 100%;
+    padding: 1rem 2rem;
+    border-radius: 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .header-right {
+    gap: 0.7rem;
+  }
+  .search-input {
+    width: 90px;
+    font-size: 0.95rem;
+  }
+  .hamburger {
+    display: block;
+  }
+}
+
+.header.scrolled {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
