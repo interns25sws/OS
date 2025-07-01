@@ -20,7 +20,7 @@ function CategorySection() {
       image: { src: CleaningImage, alt: 'Cleaning Solutions' },
     },
     {
-      name: 'Home Furniture',
+      name: 'Home',
       image: { src: FurnitureImage, alt: 'Smart Devices' },
     },
   ];

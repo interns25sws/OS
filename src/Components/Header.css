@@ -100,6 +100,31 @@
   color: #007bff;
 }
 
+@media (min-width: 1200px) {
+  .header-container {
+    max-width: 1400px;
+    padding: 1.5rem 3rem;
+  }
+  .nav {
+    gap: 3rem;
+  }
+  .search-input {
+    width: 220px;
+  }
+}
+
+@media (max-width: 1199px) and (min-width: 901px) {
+  .header-container {
+    padding: 1rem 1.5rem;
+  }
+  .nav {
+    gap: 2rem;
+  }
+  .search-input {
+    width: 160px;
+  }
+}
+
 @media (max-width: 900px) {
   .header-container {
     padding: 0.75rem 1rem;
@@ -151,6 +176,31 @@
   }
   .hamburger {
     display: block;
+  }
+}
+
+@media (max-width: 400px) {
+  .header-container {
+    padding: 0.3rem 0.2rem;
+  }
+  .logo a {
+    font-size: 1.2rem;
+    margin-left: 10px;
+  }
+  .header-right .search-input {
+    display: none;
+  }
+  .search-input {
+    width: 60px;
+    font-size: 0.85rem;
+  }
+  .nav a {
+    padding: 0.7rem 1rem;
+  }
+  .nav .search-input {
+    display: block;
+    margin: 0.5rem 1rem;
+    width: calc(100% - 2rem);
   }
 }
 

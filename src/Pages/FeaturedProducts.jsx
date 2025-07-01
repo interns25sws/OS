@@ -1,5 +1,6 @@
 import React from "react";
 import "./FeaturedProducts.css";
+import SamsungImage from "../assets/samsung.jpg"; 
 
 function FeaturedProducts() {
   const products = [
@@ -7,7 +8,7 @@ function FeaturedProducts() {
       name: "Samsung Smart Refrigerator",
       price: "$1,299",
       desc: "Wi-Fi enabled, touch screen, energy-efficient",
-      image: "https://images.samsung.com/is/image/samsung/p6pim/in/rs74t5f01b4-tl/gallery/in-side-by-side-refrigerator-rs8000-rs74t5f01b4-tl-530347978?$650_519_PNG$",
+      image: { src: SamsungImage, alt: "Samsung Smart Refrigerator" },
     },
     {
       name: "LG Front Load Washing Machine",
@@ -39,13 +40,49 @@ function FeaturedProducts() {
       desc: "360° audio, Siri built-in, smart home hub",
       image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/homepod-mini-select-202110?wid=470&hei=556&fmt=png-alpha&.v=1632925511000",
     },
+    {
+      name: "Mi Smart Air Purifier 4",
+      price: "$199",
+      desc: "HEPA filter, app control, real-time air quality",
+      image: "https://i01.appmifile.com/webfile/globalimg/products/pc/mi-air-purifier-4/section01-01.png",
+    },
+    {
+      name: "Amazon Echo Show 8",
+      price: "$129",
+      desc: "8\" HD screen, Alexa, video calls, smart home control",
+      image: "https://m.media-amazon.com/images/I/61lWl5vY6NL._AC_SL1000_.jpg",
+    },
+    {
+      name: "Bosch Dishwasher Series 4",
+      price: "$849",
+      desc: "EcoSilence Drive, 12 place settings, AquaStop",
+      image: "https://media3.bosch-home.com/Product_Shots/1600x900/MCSA02145598_DW_SPS4HKI60E_def.jpg",
+    },
+    {
+      name: "iRobot Roomba i7+",
+      price: "$799",
+      desc: "Self-emptying, smart mapping, Wi-Fi connected",
+      image: "https://cdn.irobot.com/images/roomba-i7-plus/roomba-i7-plus-hero.png",
+    },
+    {
+      name: "Panasonic Microwave Oven",
+      price: "$299",
+      desc: "Inverter tech, 27L, auto cook menus",
+      image: "https://www.panasonic.com/content/dam/pim/in/en/NN/NN-ST2/NN-ST266BFDG/NN-ST266BFDG-variation-image.png",
+    },
+    {
+      name: "Havells Instant Water Heater",
+      price: "$99",
+      desc: "3L, rust proof, LED indicator",
+      image: "https://www.havells.com/content/dam/havells/consumer/water-heater/instant-water-heater/instanio/instanio-3l/instanio-3l-ivory-white-blue.png",
+    },
   ];
 
   return (
     <section className="featured-section">
       <h2>Featured Products</h2>
-      <p>Get all the discount & ofeer's product right now !</p>
-      <div className="featured-grid">
+      <p>Get all the discounts & offers on home appliances right now!</p>
+      {/* <div className="featured-grid">
         {products.map((p) => (
           <div key={p.name} className="featured-product">
             <img src={p.image} alt={p.name} className="product-image" />
@@ -54,7 +91,7 @@ function FeaturedProducts() {
             <strong>{p.price}</strong>
           </div>
         ))}
-      </div>
+      </div> */}
     </section>
   );
 }

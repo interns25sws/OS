@@ -9,7 +9,7 @@ function Testimonials() {
 
   return (
     <section className="testimonials-section">
-      <h2>What Our Customers Say</h2>
+      {/* <h2>What Our Customers Say</h2>
       <div className="testimonial-list">
         {reviews.map((r) => (
           <blockquote key={r.name} className="testimonial-block">
@@ -17,7 +17,7 @@ function Testimonials() {
             <cite>— {r.name}</cite>
           </blockquote>
         ))}
-      </div>
+      </div> */}
     </section>
   );
 }
