@@ -11,6 +11,7 @@ import ThirdBody from './Components/Third-Body.jsx'
 import HomeAppliances from './Pages/HomeAppliances.jsx'
 import MensClothing from './Pages/MensClothing.jsx'
 import WomensClothing from './Pages/WomensClothing.jsx'
+import ElectronicGadgets from './Pages/ElectronicGadgets.jsx'
 
 function Home() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/HomeAppliances" element={<HomeAppliances />} />
         <Route path="/MensClothing" element={<MensClothing />} />
         <Route path='/WomensClothing' element={<WomensClothing />}/>
+        <Route path='/ElectronicGadgets' element={<ElectronicGadgets />}/>
       </Routes>
     </Router>
   )

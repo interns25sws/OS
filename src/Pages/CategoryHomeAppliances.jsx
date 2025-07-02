@@ -12,7 +12,6 @@ import VacuumCleanerImage from '../assets/HomeAppliancesImages/Vacuum Cleaners.j
 import FanImage from '../assets/HomeAppliancesImages/Fans & Coolers.jpg';
 import LightingImage from '../assets/HomeAppliancesImages/Lighting Fixtures.jpg';
 import './CategoryHomeAppliances.css';
-// import HomeAppliances from './HomeAppliances';
 
 function CategoryHomeAppliances() {
   const categories = [

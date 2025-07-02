@@ -40,7 +40,7 @@ export default function ItemsPage() {
         <h2 className="cart-title"> Electonic Gadgets</h2>
         <p>Latest gadgets for your family | upto 35% discount </p>
         <img src={ElectronicGadgets} alt="" />
-        <Link to="/electonic-gadgets" className="see-more-btn">
+        <Link to="/ElectronicGadgets" className="see-more-btn">
           See More
         </Link>
       </div>
