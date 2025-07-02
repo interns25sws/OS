@@ -32,7 +32,7 @@ export default function ItemsPage() {
         <h2 className="cart-title"> Womens Clothing</h2>
         <p>Mens clothing with proper set | upto 30% discount </p>
         <img src={WomensClothing} alt="" />
-        <Link to="/womens-clothing" className="see-more-btn">
+        <Link to="/WomensClothing" className="see-more-btn">
           See More
         </Link>
       </div>
@@ -78,6 +78,7 @@ export default function ItemsPage() {
           See More
         </Link>
       </div>
+      
     </section>
   );
 }

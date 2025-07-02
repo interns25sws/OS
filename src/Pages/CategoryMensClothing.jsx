@@ -15,14 +15,12 @@ import EthnicWear from '../assets/MensClothingImages/EthnicWear.jpg';
 import InnerWear from '../assets/MensClothingImages/InnerWear.jpg';
 import AccessoriesImage from '../assets/MensClothingImages/Accessrios.jpg';
 import FootWearImage from '../assets/MensClothingImages/FootWear.webp';
-import './CategoryMensClothing.css';
-// import HomeAppliances from './HomeAppliances';
 
 function CategoryMensClothing() {
   const categories = [
     {
       name: 'T-Shirts & Polos',
-      image: { src: PoloTshirts, alt: 'T-Shirts & Polos' },
+      image: { src: PoloTshirts, alt: 'T-Shirts & Polos' }
     },
     {
       name: 'Casual Shirts',
@@ -70,11 +68,11 @@ function CategoryMensClothing() {
     },
     {
       name: 'Innerwear',
-      image: { src: EthnicWear, alt: 'Innerwear' },
+      image: { src: InnerWear, alt: 'Innerwear' },
     },
     {
       name: 'Ethnic Wear',
-      image: { src: InnerWear, alt: 'Ethnic Wear' },
+      image: { src: EthnicWear, alt: 'Ethnic Wear' },
     },
     {
       name: 'Accessories',
