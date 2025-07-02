@@ -1,9 +1,13 @@
+/* =========================
+   Items Page Card Styling
+   ========================= */
+
 .cart-section {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   gap: 2.5rem;
-  padding: 4rem 6vw;
-  background: linear-gradient(135deg, #f8f8f8 60%, #e9eefa 100%);
+  padding: 4rem 7vw;
+  background: linear-gradient(135deg, #f7fafc 60%, #e3e9f9 100%);
   box-sizing: border-box;
   min-height: 100vh;
   transition: padding 0.3s;
@@ -11,59 +15,54 @@
 
 .cart-container {
   background: #fff;
-  border-radius: 1.2rem;
-  box-shadow: 0 6px 32px rgba(30, 34, 90, 0.13), 0 1.5px 6px rgba(0,0,0,0.03);
+  border-radius: 1.3rem;
+  box-shadow: 0 8px 32px rgba(30, 34, 90, 0.13), 0 2px 8px rgba(0,0,0,0.04);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  min-height: 30px;
-  padding: 24px 20px 20px 20px;
-  transition: transform 0.25s cubic-bezier(.4,2,.6,1), box-shadow 0.25s;
+  min-height: 40px;
+  padding: 26px 22px 22px 22px;
+  transition: 
+    transform 0.25s cubic-bezier(.4,2,.6,1),
+    box-shadow 0.25s;
   position: relative;
   overflow: hidden;
-}
-
-.cart-container:hover, .cart-container:focus-within {
-  transform: translateY(-8px) scale(1.025);
-  box-shadow: 0 12px 40px rgba(30, 34, 90, 0.18), 0 2px 8px rgba(0,0,0,0.04);
-  z-index: 2;
+  outline: none;
 }
 
 .cart-container img {
   width: 100%;
-  height: 180px;
+  height: 190px;
   object-fit: cover;
-  /* border-radius: 0.8rem; */
-  margin: 0 0 18px 0;
-  box-shadow: 0 2px 12px rgba(30, 34, 90, 0.09);
+  margin-bottom: 20px;
+  box-shadow: 0 2px 14px rgba(30, 34, 90, 0.10);
   background: #f3f6fa;
   flex-shrink: 0;
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s, transform 0.2s;
 }
 
 .cart-title {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  color: #232946;
-  margin-bottom: 0.6rem;
+  color: black;
+  margin-bottom: 0.7rem;
   letter-spacing: 0.01em;
   line-height: 1.2;
 }
 
 .cart-description,
 .cart-container p {
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   color: #5c5e6e;
-  margin-bottom: 14px;
-  line-height: 1.6;
+  margin-bottom: 16px;
+  line-height: 1.7;
   letter-spacing: 0.01em;
   flex-shrink: 0;
 }
 
 .see-more-btn {
-  /* margin-top: auto; */
-  color: #232946;
+  color: #2563eb;
   font-size: 1rem;
   font-weight: 500;
   text-align: left;
@@ -74,86 +73,86 @@
   padding: 0;
   transition: color 0.2s;
   display: inline-block;
+  border-radius: 0.3rem;
 }
 
-.see-more-btn:hover,
-.see-more-btn:focus {
-  color: #2563eb;
+.see-more-btn:hover {
   text-decoration: underline;
 }
 
 @media (max-width: 1200px) {
   .cart-section {
     gap: 2rem;
-    padding: 3rem 3vw;
+    padding: 3rem 4vw;
   }
   .cart-container {
-    min-height: 390px;
+    min-height: 340px;
     padding: 20px 14px 16px 14px;
   }
   .cart-container img {
-    height: 160px;
+    height: 150px;
   }
 }
 
 @media (max-width: 900px) {
   .cart-section {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
     gap: 1.5rem;
     padding: 2.5rem 2vw;
   }
   .cart-container {
-    min-height: 340px;
+    min-height: 290px;
     padding: 16px 10px 12px 10px;
   }
   .cart-title {
-    font-size: 1.1rem;
+    font-size: 1.08rem;
   }
   .cart-description,
   .cart-container p {
-    font-size: 0.98rem;
+    font-size: 0.97rem;
   }
   .cart-container img {
-    height: 120px;
+    height: 110px;
   }
 }
 
 @media (max-width: 600px) {
   .cart-section {
     grid-template-columns: 1fr;
-    gap: 1.2rem;
-    padding: 1.2rem 2vw;
+    gap: 1.1rem;
+    padding: 1.1rem 2vw;
   }
   .cart-container {
-    min-height: 260px;
+    min-height: 210px;
     padding: 10px 6px 10px 6px;
     border-radius: 0.7rem;
   }
   .cart-title {
-    font-size: 1rem;
+    font-size: 0.98rem;
   }
   .cart-description,
   .cart-container p {
-    font-size: 0.93rem;
+    font-size: 0.91rem;
   }
   .cart-container img {
-    height: 90px;
+    height: 80px;
     border-radius: 0.5rem;
   }
 }
 
-/* Subtle hover effect for images */
-.cart-container:hover img {
-  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.13);
-}
-
-/* Optional: Add a subtle fade-in animation for cards */
+/* Fade-in animation for cards */
 @media (prefers-reduced-motion: no-preference) {
   .cart-container {
     animation: fadeInCard 0.7s cubic-bezier(.4,2,.6,1) both;
   }
   @keyframes fadeInCard {
     from { opacity: 0; transform: translateY(24px) scale(0.98);}
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 1; transform: translateY(0) scale(1);}
   }
+}
+
+/* Accessibility: Focus visible for keyboard navigation */
+.cart-container:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
