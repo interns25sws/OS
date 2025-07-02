@@ -4,6 +4,7 @@ import "./Homepage.css";
 import slider1 from "../assets/ClothImage1.jpg";
 import slider2 from "../assets/clothImage2.jpg";
 import slider3 from "../assets/ClothImage3.jpg";
+  
 
 const sliderImages = [
   { src: slider1, alt: "Summer Collection" },
