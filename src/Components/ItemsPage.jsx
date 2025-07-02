@@ -50,7 +50,7 @@ export default function ItemsPage() {
           Automotive essentials your vechiles | Up to 60% off
         </p>
         <img src={AutomativeEssentials} alt="" />
-        <Link to="/home-appliances" className="see-more-btn">
+        <Link to="/AutomativeEssentials" className="see-more-btn">
           See More
         </Link>
       </div>

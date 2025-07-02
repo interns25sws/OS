@@ -12,6 +12,7 @@ import HomeAppliances from './Pages/HomeAppliances.jsx'
 import MensClothing from './Pages/MensClothing.jsx'
 import WomensClothing from './Pages/WomensClothing.jsx'
 import ElectronicGadgets from './Pages/ElectronicGadgets.jsx'
+import AutomativeEssentials from './Pages/CategoryAutomativeEssentials.jsx'
 
 function Home() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/MensClothing" element={<MensClothing />} />
         <Route path='/WomensClothing' element={<WomensClothing />}/>
         <Route path='/ElectronicGadgets' element={<ElectronicGadgets />}/>
+        <Route path='/AutomativeEssentials' element={<AutomativeEssentials />}/>
       </Routes>
     </Router>
   )
