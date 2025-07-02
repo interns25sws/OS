@@ -7,6 +7,7 @@ import ThirdBody from './Components/Third-Body.jsx'
 import AboutUs from './Components/about.jsx'
 import Contact from './Components/Contact.jsx'
 import HomeAppliances from './Pages/HomeAppliances.jsx'
+import MensClothing from './Pages/MensClothing.jsx'
 import './App.css'
 
 function Home() {
@@ -15,9 +16,9 @@ function Home() {
       <Header />
       <HomePage />
       <ItemsPage />
-      <ThirdBody />
-      <AboutUs />
-      <Contact />
+      {/* <ThirdBody /> */}
+      {/* <AboutUs /> */}
+      {/* <Contact /> */}
     </>
   )
 };
@@ -27,9 +28,10 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/contact" element={<Contact />} />
+        {/* <Route path="/about" element={<AboutUs />} /> */}
+        {/* <Route path="/contact" element={<Contact />} /> */}
         <Route path="/HomeAppliances" element={<HomeAppliances />} />
+        <Route path="/MensClothing" element={<MensClothing />} />
       </Routes>
     </Router>
   )

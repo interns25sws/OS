@@ -1,8 +1,6 @@
 import React from "react";
-import CategorySection from "./CategorySection";
-import FeaturedProducts from "./FeaturedProducts.jsx";
-import Testimonials from "./Testimonials.jsx";
 import "./HomeAppliances.css";
+import CategoryHomeAppliances from "./CategoryHomeAppliances.jsx";
 
 export default function HomeAppliances() {
   return (
@@ -12,13 +10,7 @@ export default function HomeAppliances() {
       </section>
 
       <section aria-label="Browse by Category">
-        <CategorySection />
-      </section>
-      <section aria-label="Featured Products">
-        <FeaturedProducts />
-      </section>
-      <section aria-label="Customer Testimonials">
-        <Testimonials />
+        <CategoryHomeAppliances />
       </section>
     </main>
   );

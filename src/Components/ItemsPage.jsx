@@ -24,7 +24,7 @@ export default function ItemsPage() {
         <h2 className="cart-title"> Mens Clothing</h2>
         <p>Mens clothing with proper set | upto 30% discount </p>
         <img src={MensClothing} alt="" />
-        <Link to="/mens-clothing" className="see-more-btn">
+        <Link to="/MensClothing" className="see-more-btn">
           See More
         </Link>
       </div>
