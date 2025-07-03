@@ -4,7 +4,7 @@ import CartImage from "../assets/HomeAppliance.jpg";
 import MensClothing from "../assets/MensClothing.png";
 import WomensClothing from "../assets/WomensClothing.jpeg";
 import ElectronicGadgets from "../assets/Gadgets.jpeg";
-import AutomativeEssentials from "../assets/Automative.jpg"
+import AutomativeEssentials from "../assets/Automative.jpg";
 import Sound from "../assets/Sound.jpg";
 
 export default function ItemsPage() {
@@ -13,7 +13,7 @@ export default function ItemsPage() {
       <div className="cart-container">
         <h2 className="cart-title"> Home Appliances</h2>
         <p className="cart-description">
-          Appliances for your home | upto 50% discount
+          Appliances for your good home | upto 50% discount
         </p>
         <img src={CartImage} alt="" />
         <Link to="/HomeAppliances" className="see-more-btn">
@@ -57,7 +57,7 @@ export default function ItemsPage() {
       <div className="cart-container">
         <h2 className="cart-title"> Home Appliances</h2>
         <p className="cart-description">
-          Appliances for your home | upto 50% discount
+          Appliances for your good home | upto 50% discount
         </p>
         <img src={CartImage} alt="" />
         <Link to="/HomeAppliances" className="see-more-btn">
@@ -101,7 +101,7 @@ export default function ItemsPage() {
       <div className="cart-container">
         <h2 className="cart-title"> Home Appliances</h2>
         <p className="cart-description">
-          Appliances for your home | upto 50% discount
+          Appliances for your good home  | upto 50% discount
         </p>
         <img src={CartImage} alt="" />
         <Link to="/HomeAppliances" className="see-more-btn">
@@ -142,8 +142,16 @@ export default function ItemsPage() {
           See More
         </Link>
       </div>
-      
-      
+      <div className="cart-container">
+        <h2 className="cart-title"> Home Appliances</h2>
+        <p className="cart-description">
+          Appliances for your good home | upto 50% discount
+        </p>
+        <img src={CartImage} alt="" />
+        <Link to="/HomeAppliances" className="see-more-btn">
+          See More
+        </Link>
+      </div>
     </section>
   );
 }

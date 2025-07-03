@@ -11,6 +11,7 @@ import WomensClothing from './Pages/WomensClothing.jsx'
 import ElectronicGadgets from './Pages/ElectronicGadgets.jsx'
 import AutomativeEssentials from './Pages/CategoryAutomativeEssentials.jsx'
 import Recommendations from './Components/Recommendations.jsx'
+import TrendingProducts from './Components/TrendProducts.jsx'
 
 function Home() {
   return (
@@ -18,6 +19,7 @@ function Home() {
       <Header />
       <HomePage />
       <ItemsPage />
+      <TrendingProducts />
       <Recommendations />
     </>
   )

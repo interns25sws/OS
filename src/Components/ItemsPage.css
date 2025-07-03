@@ -1,20 +1,13 @@
-/* ===============================
-   Cart Section Wrapper
-================================= */
 .cart-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  gap: 2.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
   padding: 4rem 7vw;
   background: linear-gradient(135deg, #f7fafc 60%, #e3e9f9 100%);
   box-sizing: border-box;
-  min-height: 80vh;
-  transition: padding 0.3s ease;
 }
 
-/* ===============================
-   Cart Card
-================================= */
 .cart-container {
   background: #fff;
   border-radius: 1.3rem;
@@ -22,14 +15,35 @@
   display: flex;
   flex-direction: column;
   padding: 26px 22px 22px;
-  position: relative;
   overflow: hidden;
-  transition: transform 0.25s cubic-bezier(0.4, 2, 0.6, 1), box-shadow 0.25s;
+  transition: transform 0.25s cubic-bezier(0.4, 2, 0.6, 1),
+    box-shadow 0.25s ease;
+  flex: 1 1 calc(25% - 2rem);
+  max-width: calc(25% - 2rem);
+  box-sizing: border-box;
 }
 
-/* ===============================
-   Cart Image
-================================= */
+@media (max-width: 1200px) {
+  .cart-container {
+    flex: 1 1 calc(33.33% - 2rem);
+    max-width: calc(33.33% - 2rem);
+  }
+}
+
+@media (max-width: 900px) {
+  .cart-container {
+    flex: 1 1 calc(50% - 2rem);
+    max-width: calc(50% - 2rem);
+  }
+}
+
+@media (max-width: 600px) {
+  .cart-container {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
 .cart-container img {
   width: 100%;
   height: 190px;
@@ -40,9 +54,6 @@
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-/* ===============================
-   Cart Content
-================================= */
 .cart-title {
   font-size: 1.3rem;
   font-weight: 700;
@@ -59,9 +70,6 @@
   margin-bottom: 1rem;
 }
 
-/* ===============================
-   See More Button
-================================= */
 .see-more-btn {
   color: #2563eb;
   font-size: 1rem;
@@ -76,60 +84,4 @@
 
 .see-more-btn:hover {
   text-decoration: underline;
-}
-
-/* ===============================
-   Responsive Styles
-================================= */
-@media (max-width: 1024px) {
-  .cart-section {
-    padding: 3rem 5vw;
-    gap: 2rem;
-  }
-  .cart-container {
-    padding: 20px 18px 18px;
-  }
-}
-
-@media (max-width: 768px) {
-  .cart-section {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    padding: 2.5rem 4vw;
-    gap: 1.8rem;
-  }
-
-  .cart-container img {
-    height: 170px;
-  }
-
-  .cart-title {
-    font-size: 1.15rem;
-  }
-
-  .cart-description {
-    font-size: 0.95rem;
-  }
-
-  .see-more-btn {
-    font-size: 0.95rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .cart-section {
-    padding: 2rem 3vw;
-    gap: 1.5rem;
-  }
-
-  .cart-container img {
-    height: 160px;
-  }
-
-  .cart-title {
-    font-size: 1.1rem;
-  }
-
-  .cart-description {
-    font-size: 0.9rem;
-  }
 }
