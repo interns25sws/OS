@@ -9,7 +9,7 @@ import TrendProduct4 from "../assets/TrendproductImage4.jpg";
 
 export default function TrendProducts() {
   return (
-    <section>
+    <section className="trend-section">
       <div className="trend-productsImage">
         <img src={TrendingImage} alt="Trending Image" />
       </div>

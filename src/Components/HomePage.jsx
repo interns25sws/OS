@@ -24,7 +24,7 @@ export default function HomePage() {
   }, [current]);
 
   return (
-    <section className="section">
+    <section className="home-section">
       <div className="slider">
         <button className="slider-btn" onClick={prevSlide}>&lt;</button>
         <img

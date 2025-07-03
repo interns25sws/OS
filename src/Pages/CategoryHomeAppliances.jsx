@@ -68,7 +68,7 @@ function CategoryHomeAppliances() {
 
   return (
     <section className="category-section">
-      <h2>Explore Our Categories</h2>
+      <h2 className='category-heading'>Explore Our Categories</h2>
       <div className="category-grid">
         {categories.map((cat) => (
           <div className="category-card" key={cat.name}>

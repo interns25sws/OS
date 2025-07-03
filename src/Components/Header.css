@@ -1,6 +1,6 @@
 .header {
   /* background: rgba(255, 255, 255, 0.95); */
-  background-color: black;
+  background-color: #333;
   color: white;
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
@@ -24,13 +24,15 @@
 .logo h1 {
   font-size: 1.8rem;
   font-weight: 700;
-  /* color: #222; */
   text-decoration: none;
   letter-spacing: 2px;
   transition: color 0.3s ease;
 }
 
-
+.logo a:hover,
+.logo a:focus {
+  color: #007bff;
+}
 
 .nav {
   display: flex;
@@ -40,7 +42,6 @@
 }
 
 .nav a {
-  /* color: #333; */
   text-decoration: none;
   font-size: 1rem;
   padding: 8px 14px;
@@ -62,7 +63,7 @@
 }
 
 .search-input {
-  width: 480px;
+  width: 400px;
   max-width: 60vw;
   padding: 0.6rem 1.2rem;
   border: 1px solid #ddd;
@@ -71,7 +72,6 @@
   background: #fafafa;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
-  color: black;
 }
 
 .search-input:focus {
@@ -82,7 +82,6 @@
 
 .icon i {
   font-size: 1.6rem;
-  /* color: #333; */
   cursor: pointer;
   transition: transform 0.2s ease, color 0.2s ease;
 }
