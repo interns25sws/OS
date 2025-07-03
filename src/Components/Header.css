@@ -154,6 +154,11 @@
   z-index: 1500;
 }
 
+.user-location {
+  cursor: pointer;
+}
+
+
 @media (max-width: 1024px) {
   .header-container {
     flex-wrap: wrap;
