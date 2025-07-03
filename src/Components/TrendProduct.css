@@ -1,6 +1,5 @@
 .trend-section {
-    /* background: linear-gradient(135deg, #f7fafc 60%, #e3e9f9 100%); */
-  background-color: black;
+  background-color: #333;
   padding: 40px 20px;
   color: #fff;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -20,31 +19,31 @@
   gap: 30px;
   flex-wrap: wrap;
 }
-.trending-products-container h1{
-    color: #222;
-    font-size: 2.8rem;
-    font-weight: bold;
-    font-style: italic;
-    margin-top: 1rem;
-    text-align: center;
-    letter-spacing: 2px;
-    background: linear-gradient(90deg, #7f53ac 0%, #647dee 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 2px 2px 8px rgba(100, 125, 222, 0.15);
-    position: relative;
-    padding-bottom: 0.5rem;
+.trending-products-container h1 {
+  color: #222;
+  font-size: 2.8rem;
+  font-weight: bold;
+  font-style: italic;
+  margin-top: 1rem;
+  text-align: center;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #7f53ac 0%, #647dee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 8px rgba(100, 125, 222, 0.15);
+  position: relative;
+  padding-bottom: 0.5rem;
 }
 
 .trending-products-container h1::after {
-    content: "";
-    display: block;
-    margin: 0.5rem auto 0;
-    width: 80px;
-    height: 4px;
-    border-radius: 2px;
-    background: linear-gradient(90deg, #7f53ac 0%, #647dee 100%);
-    opacity: 0.7;
+  content: "";
+  display: block;
+  margin: 0.5rem auto 0;
+  width: 80px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #7f53ac 0%, #647dee 100%);
+  opacity: 0.7;
 }
 
 .trend_product {
@@ -80,9 +79,6 @@
   align-self: flex-start;
 }
 
-/* ...existing code... */
-
-/* Responsive Styles */
 @media (max-width: 1200px) {
   .trending-products {
     gap: 20px;
@@ -129,5 +125,3 @@
     height: 80px;
   }
 }
-
-

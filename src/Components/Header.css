@@ -12,13 +12,11 @@
 }
 
 .header-container {
-  max-width: 1400px;
-  margin: 0 auto;
   padding: 16px 24px;
   display: flex;
+  justify-content: space-evenly;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  gap: 2rem;
 }
 
 .logo h1 {
@@ -34,41 +32,38 @@
   color: #007bff;
 }
 
-.nav {
+.user-location {
   display: flex;
+}
+.user-location i {
+  display: flex;
+  padding: 5px;
   align-items: center;
-  gap: 1rem;
-  transition: max-height 0.3s ease;
+  font-size: 1.9rem;
 }
 
-.nav a {
-  text-decoration: none;
-  font-size: 1rem;
-  padding: 8px 14px;
-  border-radius: 6px;
-  transition: background 0.2s ease, color 0.2s ease;
+.normal-text {
+  font-size: 0.8rem;
+  margin-bottom: 0px;
 }
-
-.nav a:hover,
-.nav a:focus {
-  background: #007bff;
-  color: #fff;
+.bold-text {
+  font-weight: bolder;
+  font-size: 1.1rem;
+  margin-top: 0px;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
 }
 
 .search-input {
-  width: 400px;
-  max-width: 60vw;
+  width: 1000px;
   padding: 0.6rem 1.2rem;
   border: 1px solid #ddd;
   border-radius: 25px;
   font-size: 1rem;
+  color: #333;
   background: #fafafa;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
@@ -80,16 +75,37 @@
   outline: none;
 }
 
-.icon i {
-  font-size: 1.6rem;
+.user-icon {
+  display: flex;
+}
+
+.signin-icon {
+  font-size: 1.9rem;
   cursor: pointer;
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.icon i:hover,
-.icon i:focus {
+.user-icon p {
+  font-size: 0.8rem;
+}
+
+.signin-icon:hover,
+.signin-icon:focus {
   color: #007bff;
   transform: scale(1.1);
+}
+
+.user-cart {
+  display: flex;
+}
+.user-cart i {
+  font-size: 1.9rem;
+}
+.user-cart p {
+  display: flex;
+  font-size: 1rem;
+  font-weight: 700;
+  align-items: end;
 }
 
 .hamburger {
