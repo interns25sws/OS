@@ -4,7 +4,7 @@ import "./Header.css";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [locationText, setLocationText] = useState("Delivering to vadodara 390001");
+  const [locationText, setLocationText] = useState("User Location");
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
