@@ -26,13 +26,13 @@ export default function HomePage() {
   return (
     <section className="section">
       <div className="slider">
-        {/* <button className="slider-btn" onClick={prevSlide}>&lt;</button> */}
+        <button className="slider-btn" onClick={prevSlide}>&lt;</button>
         <img
           src={sliderImages[current].src}
           alt={sliderImages[current].alt}
           className="slider-image"
         />
-        {/* <button className="slider-btn" onClick={nextSlide}>&gt;</button> */}
+        <button className="slider-btn" onClick={nextSlide}>&gt;</button>
       </div>
     </section>
   );
