@@ -7,10 +7,10 @@
 .recommendations-container {
   display: grid;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: #f9f9f9;
   padding: 0px 30px;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); */
 }
 
 .recommendations-heading {
@@ -25,8 +25,9 @@
 .recommendations-button {
   background-color: #ff9900;
   width: 260px;
-  height: 30px;
-  color: #fff;
+  height: 33px;
+  font-weight: 500;
+  color: black;
   border: none;
   padding: 12px 24px;
   font-size: 16px;
@@ -43,6 +44,7 @@
 
 .recommendations-button:hover {
   background-color: #e68a00;
+  color: white;
 }
 
 .recommendations-paragraph {

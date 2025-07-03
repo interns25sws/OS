@@ -12,6 +12,7 @@ import ElectronicGadgets from './Pages/ElectronicGadgets.jsx'
 import AutomativeEssentials from './Pages/CategoryAutomativeEssentials.jsx'
 import Recommendations from './Components/Recommendations.jsx'
 import TrendingProducts from './Components/TrendProducts.jsx'
+import UserLogin from './Pages/UserLogin.jsx'
 
 function Home() {
   return (
@@ -20,7 +21,7 @@ function Home() {
       <HomePage />
       <ItemsPage />
       <TrendingProducts />
-      <Recommendations />
+      <Recommendations  />
     </>
   )
 }
@@ -35,6 +36,7 @@ function App() {
         <Route path='/WomensClothing' element={<WomensClothing />}/>
         <Route path='/ElectronicGadgets' element={<ElectronicGadgets />}/>
         <Route path='/AutomativeEssentials' element={<AutomativeEssentials />}/>
+        <Route path="/UserLogin" element={<UserLogin />} />
       </Routes>
     </Router>
   )

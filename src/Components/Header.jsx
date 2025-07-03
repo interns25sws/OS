@@ -6,7 +6,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
-    setMenuOpen(prev => !prev);
+    setMenuOpen((prev) => !prev);
   };
 
   const closeMenu = () => {
@@ -23,10 +23,18 @@ export default function Header() {
         </div>
 
         <nav className={`nav ${menuOpen ? "open" : ""}`}>
-          <Link to="/" onClick={closeMenu}>Home</Link>
-          <Link to="/shop" onClick={closeMenu}>Shop</Link>
-          <Link to="/about" onClick={closeMenu}>About</Link>
-          <Link to="/contact" onClick={closeMenu}>Contact</Link>
+          <Link to="/" onClick={closeMenu}>
+            Home
+          </Link>
+          <Link to="/shop" onClick={closeMenu}>
+            Shop
+          </Link>
+          <Link to="/about" onClick={closeMenu}>
+            About
+          </Link>
+          <Link to="/contact" onClick={closeMenu}>
+            Contact
+          </Link>
         </nav>
 
         <div className="header-right">
@@ -37,10 +45,16 @@ export default function Header() {
           />
 
           <div className="icon">
-            <i className="fas fa-user" tabIndex="0"></i>
+            <Link to="/UserLogin">
+              <i className="fas fa-user" tabIndex="0"></i>
+            </Link>
           </div>
 
-          <button className="hamburger" onClick={toggleMenu} aria-label="Toggle Menu">
+          <button
+            className="hamburger"
+            onClick={toggleMenu}
+            aria-label="Toggle Menu"
+          >
             <i className="fas fa-bars"></i>
           </button>
         </div>
