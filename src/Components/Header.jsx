@@ -1,43 +1,55 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./Header.css"; 
+import "./Header.css";
 
-export default function  Header () {
+export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(prev => !prev);
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
 
   return (
     <header className="header">
       <div className="header-container">
         <div className="logo">
-          <Link to="/">OnlineBazzar</Link>
+          <h1>
+            <Link to="/">OnlineBazzar</Link>
+          </h1>
         </div>
 
         <nav className={`nav ${menuOpen ? "open" : ""}`}>
-          <Link to="/">Home</Link>
-          <Link to="/shop">Shop</Link>
-          <Link to="/about">About</Link>
-          <Link to="/contact">Contact</Link>
+          <Link to="/" onClick={closeMenu}>Home</Link>
+          <Link to="/shop" onClick={closeMenu}>Shop</Link>
+          <Link to="/about" onClick={closeMenu}>About</Link>
+          <Link to="/contact" onClick={closeMenu}>Contact</Link>
         </nav>
 
         <div className="header-right">
-          <input type="text" placeholder="Search..." className="search-input" />
-          <Link to="/wishlist" className="icon">
-            <i class="fa-solid fa-heart"></i>
-          </Link>
-          <Link to="/cart" className="icon">
-            <i class="fa-solid fa-cart-shopping"></i>
-          </Link>
-          <Link to="/login" className="icon">
-            <i class="fa-solid fa-user"></i>
-          </Link>
-        </div>
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search products..."
+          />
 
-        <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-          <i class="fa-solid fa-bars"></i>
+          <div className="icon">
+            <i className="fas fa-user" tabIndex="0"></i>
+          </div>
+
+          <button className="hamburger" onClick={toggleMenu} aria-label="Toggle Menu">
+            <i className="fas fa-bars"></i>
+          </button>
         </div>
       </div>
+
+      <div
+        className={`overlay ${menuOpen ? "active" : ""}`}
+        onClick={closeMenu}
+      ></div>
     </header>
   );
-};
-
-
+}

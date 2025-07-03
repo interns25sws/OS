@@ -55,10 +55,20 @@ export default function ItemsPage() {
         </Link>
       </div>
       <div className="cart-container">
-        <h2 className="cart-title">Sound System</h2>
-        <p>All sound wears with all brands| upto 30% discount </p>
-        <img src={Sound} alt="" />
-        <Link to="/mens-clothing" className="see-more-btn">
+        <h2 className="cart-title"> Home Appliances</h2>
+        <p className="cart-description">
+          Appliances for your home | upto 50% discount
+        </p>
+        <img src={CartImage} alt="" />
+        <Link to="/HomeAppliances" className="see-more-btn">
+          See More
+        </Link>
+      </div>
+      <div className="cart-container">
+        <h2 className="cart-title"> Mens Clothing</h2>
+        <p>Mens clothing with proper set | upto 30% discount </p>
+        <img src={MensClothing} alt="" />
+        <Link to="/MensClothing" className="see-more-btn">
           See More
         </Link>
       </div>
@@ -66,18 +76,73 @@ export default function ItemsPage() {
         <h2 className="cart-title"> Womens Clothing</h2>
         <p>Mens clothing with proper set | upto 30% discount </p>
         <img src={WomensClothing} alt="" />
-        <Link to="/womens-clothing" className="see-more-btn">
+        <Link to="/WomensClothing" className="see-more-btn">
           See More
         </Link>
       </div>
       <div className="cart-container">
         <h2 className="cart-title"> Electonic Gadgets</h2>
-        <p>Latest gadgets for your family| upto 35% discount </p>
+        <p>Latest gadgets for your family | upto 35% discount </p>
         <img src={ElectronicGadgets} alt="" />
-        <Link to="/electonic-gadgets" className="see-more-btn">
+        <Link to="/ElectronicGadgets" className="see-more-btn">
           See More
         </Link>
       </div>
+      <div className="cart-container">
+        <h2 className="cart-title">Automative Essentials</h2>
+        <p className="cart-description">
+          Automotive essentials your vechiles | Up to 60% off
+        </p>
+        <img src={AutomativeEssentials} alt="" />
+        <Link to="/AutomativeEssentials" className="see-more-btn">
+          See More
+        </Link>
+      </div>
+      <div className="cart-container">
+        <h2 className="cart-title"> Home Appliances</h2>
+        <p className="cart-description">
+          Appliances for your home | upto 50% discount
+        </p>
+        <img src={CartImage} alt="" />
+        <Link to="/HomeAppliances" className="see-more-btn">
+          See More
+        </Link>
+      </div>
+      <div className="cart-container">
+        <h2 className="cart-title"> Mens Clothing</h2>
+        <p>Mens clothing with proper set | upto 30% discount </p>
+        <img src={MensClothing} alt="" />
+        <Link to="/MensClothing" className="see-more-btn">
+          See More
+        </Link>
+      </div>
+      <div className="cart-container">
+        <h2 className="cart-title"> Womens Clothing</h2>
+        <p>Mens clothing with proper set | upto 30% discount </p>
+        <img src={WomensClothing} alt="" />
+        <Link to="/WomensClothing" className="see-more-btn">
+          See More
+        </Link>
+      </div>
+      <div className="cart-container">
+        <h2 className="cart-title"> Electonic Gadgets</h2>
+        <p>Latest gadgets for your family | upto 35% discount </p>
+        <img src={ElectronicGadgets} alt="" />
+        <Link to="/ElectronicGadgets" className="see-more-btn">
+          See More
+        </Link>
+      </div>
+      <div className="cart-container">
+        <h2 className="cart-title">Automative Essentials</h2>
+        <p className="cart-description">
+          Automotive essentials your vechiles | Up to 60% off
+        </p>
+        <img src={AutomativeEssentials} alt="" />
+        <Link to="/AutomativeEssentials" className="see-more-btn">
+          See More
+        </Link>
+      </div>
+      
       
     </section>
   );
