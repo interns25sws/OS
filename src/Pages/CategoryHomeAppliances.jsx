@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './CategoryHomeAppliances.css';
-import { Link } from 'react-router-dom';
 
 import KitchenImage from '../assets/HomeAppliancesImages/KitchenImage.jpg';
 import LaundryImage from '../assets/HomeAppliancesImages/LaundryImage.jpg';
@@ -15,77 +14,30 @@ import VacuumCleanerImage from '../assets/HomeAppliancesImages/Vacuum Cleaners.j
 import FanImage from '../assets/HomeAppliancesImages/Fans & Coolers.jpg';
 import LightingImage from '../assets/HomeAppliancesImages/Lighting Fixtures.jpg';
 
+const categories = [
+  { name: 'Kitchen Appliances', image: KitchenImage },
+  { name: 'Laundry Essentials', image: LaundryImage },
+  { name: 'Cleaning Solutions', image: CleaningImage },
+  { name: 'Furniture Products', image: FurnitureImage },
+  { name: 'Air Conditioners', image: AirConditionerImage },
+  { name: 'Water Purifiers', image: WaterPurifierImage },
+  { name: 'Heaters & Geysers', image: HeaterImage },
+  { name: 'Refrigerators', image: RefrigeratorImage },
+  { name: 'Microwaves', image: MicrowaveImage },
+  { name: 'Vacuum Cleaners', image: VacuumCleanerImage },
+  { name: 'Fans & Coolers', image: FanImage },
+  { name: 'Lighting Fixtures', image: LightingImage },
+];
+
 function CategoryHomeAppliances() {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    const fetchedCategories = [
-      {
-        name: 'Kitchen Appliances',
-        image: { src: KitchenImage, alt: 'Kitchen Appliances' },
-      },
-      {
-        name: 'Laundry Essentials',
-        image: { src: LaundryImage, alt: 'Laundry Essentials' },
-      },
-      {
-        name: 'Cleaning Solutions',
-        image: { src: CleaningImage, alt: 'Cleaning Solutions' },
-      },
-      {
-        name: 'Furniture Products',
-        image: { src: FurnitureImage, alt: 'Furniture Products' },
-      },
-      {
-        name: 'Air Conditioners',
-        image: { src: AirConditionerImage, alt: 'Air Conditioners' },
-      },
-      {
-        name: 'Water Purifiers',
-        image: { src: WaterPurifierImage, alt: 'Water Purifiers' },
-      },
-      {
-        name: 'Heaters & Geysers',
-        image: { src: HeaterImage, alt: 'Heaters & Geysers' },
-      },
-      {
-        name: 'Refrigerators',
-        image: { src: RefrigeratorImage, alt: 'Refrigerators' },
-      },
-      {
-        name: 'Microwaves',
-        image: { src: MicrowaveImage, alt: 'Microwaves' },
-      },
-      {
-        name: 'Vacuum Cleaners',
-        image: { src: VacuumCleanerImage, alt: 'Vacuum Cleaners' },
-      },
-      {
-        name: 'Fans & Coolers',
-        image: { src: FanImage, alt: 'Fans & Coolers' },
-      },
-      {
-        name: 'Lighting Fixtures',
-        image: { src: LightingImage, alt: 'Lighting Fixtures' },
-      },
-    ];
-
-    setCategories(fetchedCategories);
-  }, []);
-
   return (
     <section className="category-section">
       <h2 className="category-heading">Explore Our Categories</h2>
       <div className="category-grid">
-        {categories.map((cat) => (
-          <div className="category-card" key={cat.name}>
-            <img
-              src={cat.image.src}
-              alt={cat.image.alt}
-              loading='medium'
-              className="fade-in"
-            />
-            <h3>{cat.name}</h3>
+        {categories.map(({ name, image }) => (
+          <div className="category-card" key={name}>
+            <img src={image} alt={name} className="fade-in" />
+            <h3>{name}</h3>
           </div>
         ))}
       </div>

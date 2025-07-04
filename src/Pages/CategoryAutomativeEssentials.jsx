@@ -1,4 +1,6 @@
 import React from "react";
+import "./CategoryHomeAppliances.css";
+
 import CarCleaningImage from "../assets/AutomativeEssentialsImages/CarCleaning.jpeg";
 import InteriorAccessoriesImage from "../assets/AutomativeEssentialsImages/Interior.jpeg";
 import ExteriorAccessoriesImage from "../assets/AutomativeEssentialsImages/Exterior.jpeg";
@@ -11,68 +13,31 @@ import TiresImage from "../assets/AutomativeEssentialsImages/Tires.jpeg";
 import CarChargersImage from "../assets/AutomativeEssentialsImages/CarCharger.jpeg";
 import MotorOilImage from "../assets/AutomativeEssentialsImages/MotorOil.jpeg";
 import BatteryImage from "../assets/AutomativeEssentialsImages/Battery.jpeg";
-import "./CategoryHomeAppliances.css";
 
-function CategoryHomeAppliances() {
-  const categories = [
-    {
-      name: "Car Care & Cleaning",
-      image: { src: CarCleaningImage, alt: "Car Care & Cleaning" },
-    },
-    {
-      name: "Interior Accessories",
-      image: { src: InteriorAccessoriesImage, alt: "Interior Accessories" },
-    },
-    {
-      name: "Exterior Accessories",
-      image: { src: ExteriorAccessoriesImage, alt: "Exterior Accessories" },
-    },
-    {
-      name: "Car Electronics",
-      image: { src: CarElectronicsImage, alt: "Car Electronics" },
-    },
-    {
-      name: "Tools & Maintenance",
-      image: { src: ToolsMaintenanceImage, alt: "Tools & Maintenance" },
-    },
-    {
-      name: "Lighting & Bulbs",
-      image: { src: LightingImage, alt: "Lighting & Bulbs" },
-    },
-    {
-      name: "Safety & Emergency Gear",
-      image: { src: SafetyGearImage, alt: "Safety & Emergency Gear" },
-    },
-    {
-      name: "Performance & Engine Add-ons",
-      image: { src: PerformanceImage, alt: "Performance & Engine Add-ons" },
-    },
-    {
-      name: "Tires & Wheel Accessories",
-      image: { src: TiresImage, alt: "Tires & Wheel Accessories" },
-    },
-    {
-      name: "Car Chargers & Mobile Holders",
-      image: { src: CarChargersImage, alt: "Car Chargers & Mobile Holders" },
-    },
-    {
-      name: "Motor Oils & Fluids",
-      image: { src: MotorOilImage, alt: "Motor Oils & Fluids" },
-    },
-    {
-      name: "Battery & Electrical",
-      image: { src: BatteryImage, alt: "Battery & Electrical" },
-    },
-  ];
+const categories = [
+  { name: "Car Care & Cleaning", image: CarCleaningImage },
+  { name: "Interior Accessories", image: InteriorAccessoriesImage },
+  { name: "Exterior Accessories", image: ExteriorAccessoriesImage },
+  { name: "Car Electronics", image: CarElectronicsImage },
+  { name: "Tools & Maintenance", image: ToolsMaintenanceImage },
+  { name: "Lighting & Bulbs", image: LightingImage },
+  { name: "Safety & Emergency Gear", image: SafetyGearImage },
+  { name: "Performance & Engine Add-ons", image: PerformanceImage },
+  { name: "Tires & Wheel Accessories", image: TiresImage },
+  { name: "Car Chargers & Mobile Holders", image: CarChargersImage },
+  { name: "Motor Oils & Fluids", image: MotorOilImage },
+  { name: "Battery & Electrical", image: BatteryImage },
+];
 
+function CategoryAutomotiveEssentials() {
   return (
     <section className="category-section">
       <h2 className="category-heading">Explore Our Categories</h2>
       <div className="category-grid">
-        {categories.map((cat) => (
-          <div className="category-card" key={cat.name}>
-            <img src={cat.image.src} alt={cat.image.alt} />
-            <h3>{cat.name}</h3>
+        {categories.map(({ name, image }) => (
+          <div className="category-card" key={name}>
+            <img src={image} alt={name} />
+            <h3>{name}</h3>
           </div>
         ))}
       </div>
@@ -80,4 +45,4 @@ function CategoryHomeAppliances() {
   );
 }
 
-export default CategoryHomeAppliances;
+export default CategoryAutomotiveEssentials;

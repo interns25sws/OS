@@ -1,4 +1,6 @@
 import React from 'react';
+import './CategoryHomeAppliances.css'; 
+
 import Tops from '../assets/WomensClothingImages/Tops.jpeg';
 import SweatersCardigans from '../assets/WomensClothingImages/Sweaters.jpeg';
 import JacketsCoats from '../assets/WomensClothingImages/Coats.jpeg';
@@ -16,82 +18,34 @@ import LingerieIntimates from '../assets/WomensClothingImages/LingeriaImages.jpe
 import Swimwear from '../assets/WomensClothingImages/SwimWear.jpeg';
 import EthnicTraditionalWear from '../assets/WomensClothingImages/EthnicWear.jpeg';
 
-function CategoryWomensClothing() {
-  const categories = [
-    {
-      name: 'Tops',
-      image: { src: Tops, alt: 'Tops' }
-    },
-    {
-      name: 'Sweaters & Cardigans',
-      image: { src: SweatersCardigans, alt: 'Sweaters & Cardigans' },
-    },
-    {
-      name: 'Jackets & Coats',
-      image: { src: JacketsCoats, alt: 'Jackets & Coats' },
-    },
-    {
-      name: 'Blazers',
-      image: { src: Blazers, alt: 'Blazers' },
-    },
-    {
-      name: 'Dresses',
-      image: { src: Dresses, alt: 'Dresses' },
-    },
-    {
-      name: 'Skirts',
-      image: { src: Skirts, alt: 'Skirts' },
-    },
-    {
-      name: 'Jeans & Trousers',
-      image: { src: JeansTrousers, alt: 'Jeans & Trousers' },
-    },
-    {
-      name: 'Leggings & Jeggings',
-      image: { src: LeggingsJeggings, alt: 'Leggings & Jeggings' },
-    },
-    {
-      name: 'Shorts & Capris',
-      image: { src: ShortsCapris, alt: 'Shorts & Capris' },
-    },
-    {
-      name: 'Jumpsuits & Rompers',
-      image: { src: JumpsuitsRompers, alt: 'Jumpsuits & Rompers' },
-    },
-    {
-      name: 'Activewear',
-      image: { src: Activewear, alt: 'Activewear' },
-    },
-    {
-      name: 'Loungewear',
-      image: { src: Loungewear, alt: 'Loungewear' },
-    },
-    {
-      name: 'Sleepwear & Pajamas',
-      image: { src: SleepwearPajamas, alt: 'Sleepwear & Pajamas' },
-    },
-    {
-      name: 'Lingerie & Intimates',
-      image: { src: LingerieIntimates, alt: 'Lingerie & Intimates' },
-    },
-    {
-      name: 'Swimwear',
-      image: { src: Swimwear, alt: 'Swimwear' },
-    },
-    {
-      name: 'Ethnic & Traditional Wear',
-      image: { src: EthnicTraditionalWear, alt: 'Ethnic & Traditional Wear' },
-    },
-  ];
+const categories = [
+  { name: 'Tops', image: Tops },
+  { name: 'Sweaters & Cardigans', image: SweatersCardigans },
+  { name: 'Jackets & Coats', image: JacketsCoats },
+  { name: 'Blazers', image: Blazers },
+  { name: 'Dresses', image: Dresses },
+  { name: 'Skirts', image: Skirts },
+  { name: 'Jeans & Trousers', image: JeansTrousers },
+  { name: 'Leggings & Jeggings', image: LeggingsJeggings },
+  { name: 'Shorts & Capris', image: ShortsCapris },
+  { name: 'Jumpsuits & Rompers', image: JumpsuitsRompers },
+  { name: 'Activewear', image: Activewear },
+  { name: 'Loungewear', image: Loungewear },
+  { name: 'Sleepwear & Pajamas', image: SleepwearPajamas },
+  { name: 'Lingerie & Intimates', image: LingerieIntimates },
+  { name: 'Swimwear', image: Swimwear },
+  { name: 'Ethnic & Traditional Wear', image: EthnicTraditionalWear },
+];
 
+function CategoryWomensClothing() {
   return (
     <section className="category-section">
-      <h2 className='category-heading'>Explore Our Categories</h2>
+      <h2 className="category-heading">Explore Our Categories</h2>
       <div className="category-grid">
-        {categories.map((cat) => (
-          <div className="category-card" key={cat.name}>
-            <img src={cat.image.src} alt={cat.image.alt} />
-            <h3>{cat.name}</h3>
+        {categories.map(({ name, image }) => (
+          <div className="category-card" key={name}>
+            <img src={image} alt={name} />
+            <h3>{name}</h3>
           </div>
         ))}
       </div>
