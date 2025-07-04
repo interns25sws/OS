@@ -35,14 +35,8 @@ function App() {
         <Route path={ROUTES.HOME_APPLIANCES} element={<HomeAppliances />} />
         <Route path={ROUTES.MENS_CLOTHING} element={<MensClothing />} />
         <Route path={ROUTES.WOMENS_CLOTHING} element={<WomensClothing />} />
-        <Route
-          path={ROUTES.ELECTRONIC_GADGETS}
-          element={<ElectronicGadgets />}
-        />
-        <Route
-          path={ROUTES.AUTOMOTIVE_ESSENTIALS}
-          element={<AutomativeEssentials />}
-        />
+        <Route path={ROUTES.ELECTRONIC_GADGETS} element={<ElectronicGadgets />}/>
+        <Route path={ROUTES.AUTOMOTIVE_ESSENTIALS} element={<AutomativeEssentials />}/>
         <Route path={ROUTES.USER_LOGIN} element={<UserLogin />} />
       </Routes>
     </Router>
