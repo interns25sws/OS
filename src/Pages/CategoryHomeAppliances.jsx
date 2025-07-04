@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import './CategoryHomeAppliances.css';
+import { Link } from 'react-router-dom';
+
 import KitchenImage from '../assets/HomeAppliancesImages/KitchenImage.jpg';
 import LaundryImage from '../assets/HomeAppliancesImages/LaundryImage.jpg';
 import CleaningImage from '../assets/HomeAppliancesImages/Cleaning.jpg';
@@ -11,68 +14,77 @@ import MicrowaveImage from '../assets/HomeAppliancesImages/Microwaves.jpg';
 import VacuumCleanerImage from '../assets/HomeAppliancesImages/Vacuum Cleaners.jpg';
 import FanImage from '../assets/HomeAppliancesImages/Fans & Coolers.jpg';
 import LightingImage from '../assets/HomeAppliancesImages/Lighting Fixtures.jpg';
-import './CategoryHomeAppliances.css';
 
 function CategoryHomeAppliances() {
-  const categories = [
-    {
-      name: 'Kitchen Appliances',
-      image: { src: KitchenImage, alt: 'Kitchen Appliances' },
-    },
-    {
-      name: 'Laundry Essentials',
-      image: { src: LaundryImage, alt: 'Laundry Essentials' },
-    },
-    {
-      name: 'Cleaning Solutions',
-      image: { src: CleaningImage, alt: 'Cleaning Solutions' },
-    },
-    {
-      name: 'Furniture Products',
-      image: { src: FurnitureImage, alt: 'Furniture Products' },
-    },
-    {
-      name: 'Air Conditioners',
-      image: { src: AirConditionerImage, alt: 'Air Conditioners' },
-    },
-    {
-      name: 'Water Purifiers',
-      image: { src: WaterPurifierImage, alt: 'Water Purifiers' },
-    },
-    {
-      name: 'Heaters & Geysers',
-      image: { src: HeaterImage, alt: 'Heaters & Geysers' },
-    },
-    {
-      name: 'Refrigerators',
-      image: { src: RefrigeratorImage, alt: 'Refrigerators' },
-    },
-    {
-      name: 'Microwaves',
-      image: { src: MicrowaveImage, alt: 'Microwaves' },
-    },
-   
-    {
-      name: 'Vacuum Cleaners',
-      image: { src: VacuumCleanerImage, alt: 'Vacuum Cleaners' },
-    },
-    {
-      name: 'Fans & Coolers',
-      image: { src: FanImage , alt: 'Fans & Coolers' },
-    },
-    {
-      name: 'Lighting Fixtures',
-      image: { src: LightingImage, alt: 'Lighting Fixtures' },
-    },
-  ];
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchedCategories = [
+      {
+        name: 'Kitchen Appliances',
+        image: { src: KitchenImage, alt: 'Kitchen Appliances' },
+      },
+      {
+        name: 'Laundry Essentials',
+        image: { src: LaundryImage, alt: 'Laundry Essentials' },
+      },
+      {
+        name: 'Cleaning Solutions',
+        image: { src: CleaningImage, alt: 'Cleaning Solutions' },
+      },
+      {
+        name: 'Furniture Products',
+        image: { src: FurnitureImage, alt: 'Furniture Products' },
+      },
+      {
+        name: 'Air Conditioners',
+        image: { src: AirConditionerImage, alt: 'Air Conditioners' },
+      },
+      {
+        name: 'Water Purifiers',
+        image: { src: WaterPurifierImage, alt: 'Water Purifiers' },
+      },
+      {
+        name: 'Heaters & Geysers',
+        image: { src: HeaterImage, alt: 'Heaters & Geysers' },
+      },
+      {
+        name: 'Refrigerators',
+        image: { src: RefrigeratorImage, alt: 'Refrigerators' },
+      },
+      {
+        name: 'Microwaves',
+        image: { src: MicrowaveImage, alt: 'Microwaves' },
+      },
+      {
+        name: 'Vacuum Cleaners',
+        image: { src: VacuumCleanerImage, alt: 'Vacuum Cleaners' },
+      },
+      {
+        name: 'Fans & Coolers',
+        image: { src: FanImage, alt: 'Fans & Coolers' },
+      },
+      {
+        name: 'Lighting Fixtures',
+        image: { src: LightingImage, alt: 'Lighting Fixtures' },
+      },
+    ];
+
+    setCategories(fetchedCategories);
+  }, []);
 
   return (
     <section className="category-section">
-      <h2 className='category-heading'>Explore Our Categories</h2>
+      <h2 className="category-heading">Explore Our Categories</h2>
       <div className="category-grid">
         {categories.map((cat) => (
           <div className="category-card" key={cat.name}>
-            <img src={cat.image.src} alt={cat.image.alt} />
+            <img
+              src={cat.image.src}
+              alt={cat.image.alt}
+              loading='medium'
+              className="fade-in"
+            />
             <h3>{cat.name}</h3>
           </div>
         ))}

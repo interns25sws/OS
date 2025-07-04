@@ -78,6 +78,9 @@
 .user-icon {
   display: flex;
 }
+.user-icon:hover{
+  cursor: pointer;
+}
 
 .signin-icon {
   font-size: 1.9rem;
