@@ -8,30 +8,55 @@ const UserLogin = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
 
+  const handleEmailBlur = () => {
+    if (!email) {
+      setMessage(" Email cannot be empty.");
+    } 
+    else {
+      setMessage(""); 
+    }
+  };
+
+  const handlePasswordBlur = () => {
+    if (!password) {
+      setMessage(" Password cannot be empty.");
+    } else {
+      setMessage("");
+    }
+  };
+
+  const handleConfirmPasswordBlur = () => {
+    if (!confirmPassword) {
+      setMessage(" Confirm Password cannot be empty.");
+    } else if (password !== confirmPassword) {
+      setMessage(" Passwords do not match.");
+    } 
+    else {
+      setMessage("");
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Clear any previous message
     setMessage("");
 
     if (isLogin) {
-      // Dummy login validation
       const validEmail = "user@example.com";
       const validPassword = "password123";
 
       if (email === validEmail && password === validPassword) {
-        setMessage("✅ Login successful!");
+        setMessage(" Login successful!");
       } else {
-        setMessage("❌ Invalid email or password.");
+        setMessage(" Invalid email or password.");
       }
     } else {
-      // Dummy sign-up validation
       if (!email || !password || !confirmPassword) {
-        setMessage("❌ Please fill out all fields.");
+        setMessage(" Please fill out all fields.");
       } else if (password !== confirmPassword) {
-        setMessage("❌ Passwords do not match.");
+        setMessage(" Passwords do not match.");
       } else {
-        setMessage("✅ Sign up successful! You can now log in.");
+        setMessage(" Sign up successful! You can now log in.");
         setIsLogin(true);
         setEmail("");
         setPassword("");
@@ -49,6 +74,7 @@ const UserLogin = () => {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onBlur={handleEmailBlur}
           required
           className="login-input"
         />
@@ -57,6 +83,7 @@ const UserLogin = () => {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onBlur={handlePasswordBlur}
           required
           className="login-input"
         />
@@ -66,6 +93,7 @@ const UserLogin = () => {
             placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            onBlur={handleConfirmPasswordBlur}
             required
             className="login-input"
           />
