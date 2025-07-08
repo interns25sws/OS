@@ -5,10 +5,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const users = new Map();  // In-memory store: email → password
+const users = new Map(); 
 
 app.get("/", (req, res) => {
-  res.send("🟢 Server is up and running!");
+  res.send(" Server is up and running!");
 });
 
 app.post("/api/signup", (req, res) => {
@@ -34,5 +34,5 @@ app.post("/api/login", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🟢 Server running at http://localhost:${PORT}`);
+  console.log(` Server running at http://localhost:${PORT}`);
 });
