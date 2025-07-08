@@ -11,24 +11,27 @@ const UserLogin = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Clear any previous message
+    setMessage("");
+
     if (isLogin) {
       // Dummy login validation
       const validEmail = "user@example.com";
       const validPassword = "password123";
 
       if (email === validEmail && password === validPassword) {
-        setMessage("Login successful!");
+        setMessage("✅ Login successful!");
       } else {
-        setMessage("Invalid email or password");
+        setMessage("❌ Invalid email or password.");
       }
     } else {
       // Dummy sign-up validation
       if (!email || !password || !confirmPassword) {
-        setMessage("Please fill out all fields");
+        setMessage("❌ Please fill out all fields.");
       } else if (password !== confirmPassword) {
-        setMessage("Passwords do not match");
+        setMessage("❌ Passwords do not match.");
       } else {
-        setMessage("Sign up successful! You can now log in.");
+        setMessage("✅ Sign up successful! You can now log in.");
         setIsLogin(true);
         setEmail("");
         setPassword("");
