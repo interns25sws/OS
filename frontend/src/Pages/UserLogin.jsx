@@ -1,91 +1,115 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./UserLogin.css";
 
-const UserLogin = () => {
+const UserAuth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [statusType, setStatusType] = useState("info");
 
-  const handleEmailBlur = () => {
-    if (!email) {
-      setMessage(" Email cannot be empty.");
-    } 
-    else {
-      setMessage(""); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("loggedInUser");
+    if (storedUser) {
+      setIsLoggedIn(true);
+      setLoggedInUser(storedUser);
     }
+  }, []);
+
+  const resetForm = () => {
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
   };
 
-  const handlePasswordBlur = () => {
-    if (!password) {
-      setMessage(" Password cannot be empty.");
-    } else {
-      setMessage("");
-    }
+  const showMessage = (msg, type = "info") => {
+    setMessage(msg);
+    setStatusType(type);
   };
 
-  const handleConfirmPasswordBlur = () => {
-    if (!confirmPassword) {
-      setMessage(" Confirm Password cannot be empty.");
-    } else if (password !== confirmPassword) {
-      setMessage(" Passwords do not match.");
-    } 
-    else {
-      setMessage("");
-    }
+  const validate = () => {
+    if (!email || !password || (!isLogin && !confirmPassword))
+      return "All fields are required.";
+    if (!isLogin && password !== confirmPassword)
+      return "Passwords do not match.";
+    return null;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const error = validate();
+    if (error) return showMessage(error, "error");
 
-    setMessage("");
+    const url = isLogin
+      ? "http://localhost:5000/api/login"
+      : "http://localhost:5000/api/signup";
 
-    if (isLogin) {
-      const validEmail = "user@example.com";
-      const validPassword = "password123";
-
-      if (email === validEmail && password === validPassword) {
-        setMessage(" Login successful!");
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showMessage(data.message, "success");
+        if (isLogin) {
+          localStorage.setItem("loggedInUser", email);
+          setIsLoggedIn(true);
+          setLoggedInUser(email);
+        }
+        if (!isLogin) {
+          setIsLogin(true);
+          resetForm();
+        }
       } else {
-        setMessage(" Invalid email or password.");
+        throw new Error(data.message);
       }
-    } else {
-      if (!email || !password || !confirmPassword) {
-        setMessage(" Please fill out all fields.");
-      } else if (password !== confirmPassword) {
-        setMessage(" Passwords do not match.");
-      } else {
-        setMessage(" Sign up successful! You can now log in.");
-        setIsLogin(true);
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-      }
+    } catch (err) {
+      showMessage(err.message, "error");
     }
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("loggedInUser");
+    setIsLoggedIn(false);
+    setLoggedInUser(null);
+    resetForm();
+    setMessage("");
+  };
+
+  if (isLoggedIn) {
+    return (
+      <div className="welcome-container">
+        <h2>Welcome, {loggedInUser}!</h2>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+    );
+  }
 
   return (
-    <div className="login-container">
+    <div className="auth-container">
       <h2>{isLogin ? "Login" : "Sign Up"}</h2>
-      <form onSubmit={handleSubmit} className="login-form">
+      <form onSubmit={handleSubmit} className="auth-form">
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          onBlur={handleEmailBlur}
+          className="auth-input"
           required
-          className="login-input"
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          onBlur={handlePasswordBlur}
+          className="auth-input"
           required
-          className="login-input"
         />
         {!isLogin && (
           <input
@@ -93,26 +117,28 @@ const UserLogin = () => {
             placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            onBlur={handleConfirmPasswordBlur}
+            className="auth-input"
             required
-            className="login-input"
           />
         )}
-        <button type="submit" className="login-button">
+        <button type="submit" className="auth-button">
           {isLogin ? "Login" : "Sign Up"}
         </button>
       </form>
-
-      {message && <p className="login-message">{message}</p>}
-
+      {message && <p className={`auth-message auth-${statusType}`}>{message}</p>}
       <p className="toggle-text">
         {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-        <span className="toggle-link" onClick={() => setIsLogin(!isLogin)}>
-          {isLogin ? "Sign up" : "Login"}
+        <span
+          onClick={() => {
+            setIsLogin(!isLogin);
+            setMessage("");
+          }}
+        >
+          {isLogin ? "Sign Up" : "Login"}
         </span>
       </p>
     </div>
   );
 };
 
-export default UserLogin;
+export default UserAuth;
