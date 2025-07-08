@@ -67,8 +67,8 @@ export default function Header() {
         <div className="user-icon">
           <Link className="signin-icon" to="/UserLogin">
             <i className="fas fa-user" tabIndex="0"></i>
-          </Link>
           <p>Hello, Sign in</p>
+          </Link>
         </div>
 
         <div className="user-cart">
