@@ -1,5 +1,5 @@
 import React from 'react';
-import './CategoryHomeAppliances.css'; 
+import './Category.css'; 
 
 import Tops from '../assets/WomensClothingImages/Tops.jpeg';
 import SweatersCardigans from '../assets/WomensClothingImages/Sweaters.jpeg';

@@ -1,5 +1,6 @@
 import React from "react";
 import CategoryMensClothing from "./CategoryMensClothing";
+import './Clothing.css'
 
 export default function MensClothing() {
   return (
