@@ -11,6 +11,7 @@ import Recommendations from "./Components/Recommendations.jsx";
 import UserLogin from "./Pages/UserLogin.jsx";
 import ROUTES from "./Constants/routes.jsx";
 import DemandingProdcuts from "./Components/Demandingproducts.jsx"
+import HowItWorks from "./Components/HIW.jsx"
 
 function Home() {
   return (
@@ -21,6 +22,7 @@ function Home() {
       <MensCloth />
       <WomensCloth />
       <DemandingProdcuts />
+      <HowItWorks />
       <Recommendations />
     </>
   );
