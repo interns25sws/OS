@@ -1,7 +1,7 @@
 .collection-container {
   padding: 40px 20px;
   margin: 0 auto;
-  font-family: 'Helvetica Neue', sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
   background-color: #f9f9f9;
 }
 
@@ -13,8 +13,8 @@
   margin-bottom: 16px;
 }
 
-.collection-description{
-   font-size: 14px;
+.collection-description {
+  font-size: 14px;
   font-weight: 600;
   color: #444;
   letter-spacing: 1px;
@@ -23,16 +23,26 @@
   text-align: center;
 }
 
+/* === UPDATED: make horizontal slider on small screens === */
 .collection-grid {
   display: flex;
-  justify-content: center;
   gap: 20px;
+  justify-content: flex-start; /* align left for scroll */
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
 }
 
+/* Each item snaps */
 .collection-item {
+  flex: 0 0 auto; /* fix width, no shrink */
+  scroll-snap-align: start;
   justify-content: center;
   display: flex;
   flex-direction: column;
+  background: #f9f9f9;
+  border-radius: 8px;
 }
 
 .collection-image {
@@ -40,35 +50,155 @@
   height: 550px;
   object-fit: cover;
   border-radius: 6px;
+  transition:
+    transform 0.5s cubic-bezier(0.4,0,0.2,1),
+    box-shadow 0.5s cubic-bezier(0.4,0,0.2,1),
+    filter 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+.collection-image:hover {
+  transform: scale(1.04) translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+  filter: brightness(1.04);
 }
 
 .collection-item-title {
-  font-size: 16px;
-  margin-top: 10px;
+  font-size: 20px;
+  margin-top: 16px;
   text-align: center;
+  font-weight: 700;
+  color: #222;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+}
+
+.collection-item-title:hover {
+  color: #0070f3;
 }
 
 .collection-item-price {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
-  margin: 8px 0 0 0;
+  margin: 10px 0 0 0;
+  color: #00796b;
+  letter-spacing: 0.5px;
 }
 
 .browse-button {
   padding: 10px 20px;
-  color: black;                
-  border: 1px solid black;
+  color: black;
+  border: 1.5px solid black;
   font-size: 16px;
   cursor: pointer;
   margin-top: 10px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  background: none;
+  border-radius: 4px;
+  transition: 
+    background-color 0.3s cubic-bezier(0.4,0,0.2,1),
+    color 0.3s cubic-bezier(0.4,0,0.2,1),
+    border-color 0.3s cubic-bezier(0.4,0,0.2,1),
+    box-shadow 0.3s cubic-bezier(0.4,0,0.2,1),
+    transform 0.2s cubic-bezier(0.4,0,0.2,1);
 }
 
 .browse-button:hover {
-  transform: translateY(0px);   
+  background: #222;
+  color: #fff;
+  border-color: #222;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  transform: translateY(-2px) scale(1.04);
 }
 
 .browse-button:active {
-  transform: scale(0.98);           
+  transform: scale(0.98);
+}
+
+/* Scrollbar styling for desktop */
+.collection-grid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.collection-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.collection-grid::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .collection-image {
+    width: 400px;
+    height: 420px;
+  }
+  .collection-title {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 900px) {
+  .collection-grid {
+    /* on smaller screens: keep slider */
+    gap: 16px;
+  }
+  .collection-image {
+    width: 90vw;
+    max-width: 350px;
+    height: 350px;
+  }
+  .collection-title {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .collection-container {
+    padding: 20px 5px;
+  }
+  .collection-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  .collection-description {
+    font-size: 12px;
+    margin-bottom: 1rem;
+  }
+  .collection-item {
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .collection-image {
+    width: 100vw;
+    max-width: 95vw;
+    height: 220px;
+    border-radius: 4px;
+  }
+  .collection-item-title {
+    font-size: 14px;
+  }
+  .collection-item-price {
+    font-size: 15px;
+  }
+  .browse-button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}
+
+/* LARGE SCREENS: switch back to grid style */
+
+@media (min-width: 901px) {
+  .collection-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: visible; /* disable horizontal scroll */
+  }
+  .collection-item {
+    flex: 0 0 auto;
+    margin-bottom: 30px;
+  }
 }

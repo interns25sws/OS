@@ -7,6 +7,7 @@ import HomePage from "./Components/HomePage.jsx";
 import Description from "./Components/Desscription.jsx";
 import DisplayCloth from "./Components/DisplayCloth.jsx"
 import MensCloth from "./Components/DisplayMensCloth.jsx"
+import WomensCloth from "./Components/DisplayWomenCloth.jsx"
 import ItemsPage from "./Components/ItemsPage.jsx";
 import MensClothing from "./Pages/MensClothing.jsx";
 import WomensClothing from "./Pages/WomensClothing.jsx";
@@ -23,8 +24,9 @@ function Home() {
       <Description />
       <DisplayCloth />
       <MensCloth />
-      <ItemsPage />
-      <TrendingProducts />
+      <WomensCloth />
+      {/* <ItemsPage /> */}
+      {/* <TrendingProducts /> */}
       <Recommendations />
     </>
   );

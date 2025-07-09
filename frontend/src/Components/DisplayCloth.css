@@ -2,78 +2,167 @@
   padding: 3rem 1rem;
   background-color: #f9f9f9;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
-.desc-heading{
-    font-size: 52px;
-    margin-bottom: 1rem;
+.desc-heading {
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.5rem;
+  font-size: 3.25rem;
+  line-height: 1.1;
 }
 
 .section-title {
-  font-size: 14px;
   font-weight: 600;
-  color: #444;
+  color: #444444cb;
   letter-spacing: 1px;
   text-transform: uppercase;
   margin-bottom: 2rem;
+  font-size: 1rem; /* Default */
 }
 
+/* PRODUCT GRID - responsive horizontal slider on small screens */
 .product-grid {
   display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* No wrapping - horizontal scroll */
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+  justify-content: flex-start;
+  width: 100%;
 }
 
+/* Each product card snap and fixed width */
 .product-card {
+  scroll-snap-align: start;
+  flex: 0 0 250px; /* Fixed width, no shrinking */
   position: relative;
-  width: 250px;
-  overflow: hidden;
   background-color: #f9f9f9;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
 
 .product-card img {
-  width: 300px;
+  width: 100%;
   height: 400px;
-  display: block;
   object-fit: cover;
+  display: block;
   transition: transform 0.3s ease;
-}
-
-.product-card:hover img {
-  transform: scale(1.03);
 }
 
 .product-name {
   position: absolute;
   bottom: 12px;
   left: 12px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
-  color: white;
+  color: #fff;
   text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.8);
   text-transform: uppercase;
+  pointer-events: none;
 }
 
-
+/* Browse button styles */
 .browse-button-container {
-    margin-top: 2.5rem;
+  margin-top: 2.5rem;
 }
 
 .browse-button {
-    padding: 12px 28px;
-    font-size: 16px;
-    color: #333;
-    border: 1px solid #333;
-    cursor: pointer;
-    transition: 
-        border-color 0.3s,
-        border-width 0.3s,
-        color 0.3s,
-        background 0.3s;
-    background: none;
+  padding: 0.75rem 1.75rem;
+  font-size: 1rem;
+  color: #333;
+  border: 1px solid #333;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
 }
 
 .browse-button:hover {
-    border: 2px solid black;
+  border-width: 2px;
+  color: #000;
+  border-color: #000;
+  background-color: #fff;
+}
+
+/* Scrollbar styling for desktop */
+.product-grid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.product-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.product-grid::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+@media (min-width: 425px) {
+  .desc-heading {
+    font-size: 1.7rem; 
+  }
+  .section-title {
+    font-size: 0.6rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .desc-heading {
+    font-size: 3rem;
+  }
+  .section-title {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .desc-heading {
+    font-size: 3rem;
+  }
+  .section-title {
+    font-size: 1.1rem;
+  }
+  
+  .product-grid {
+    flex-wrap: wrap;      
+    overflow-x: visible; 
+    justify-content: center;
+  }
+
+  .product-card {
+    flex: 1 0 250px;     
+  }
+}
+
+@media (min-width: 1024px) {
+  .desc-heading {
+    font-size: 2.6rem;
+  }
+  .section-title {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .desc-heading {
+    font-size: 3.2rem;
+  }
+  .section-title {
+    font-size: 1.25rem;
+  }
 }

@@ -4,19 +4,19 @@ import './Description.css';
 export default function Description() {
     return (
         <section className="description-section">
-            <div className="description-block">
-                <h2>MODEST CLOTHING <br /> ONLY</h2>
-                <p>Carefully curated <br /> modest clothing <br /> pieces.</p>
+            <div className="description-block fade-in delay-0">
+                <h2>MODEST CLOTHING ONLY</h2>
+                <p>Carefully curated modest clothing pieces for every occasion.</p>
             </div>
 
-            <div className="description-block">
+            <div className="description-block fade-in delay-1">
                 <h2>ONE STOP SHOP</h2>
-                <p>Browse all modest <br /> options through <br /> Jenatti. <br /> No more switching <br /> tabs & endless <br /> searching.</p>
+                <p>Explore all modest fashion in one place  no more switching tabs.</p>
             </div>
 
-            <div className="description-block">
+            <div className="description-block fade-in delay-2">
                 <h2>DISCOVER YOUR STYLE</h2>
-                <p>Find modest <br /> fashion that fits <br /> your vibe, curated <br /> just for you.</p>
+                <p>Find modest fashion that fits your vibe, curated just for you.</p>
             </div>
         </section>
     );
