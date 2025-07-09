@@ -1,5 +1,4 @@
 import React from "react";
-import "./Mens.css";
 import WomenDisplay1 from "../assets/WomensDiplayimage1.jpg";
 import WomenDisplay2 from "../assets/WomensDiplayimage2.jpg";
 import WomenDisplay3 from "../assets/WomensDiplayimage3.jpg";

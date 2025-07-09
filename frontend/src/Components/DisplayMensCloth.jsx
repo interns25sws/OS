@@ -1,5 +1,4 @@
 import React from 'react';
-import './Mens.css';
 import Display1 from '../assets/MensDisplayImage1.jpg';
 import Display2 from '../assets/MensDisplayImage2.jpg';
 import Display3 from '../assets/MensDisplayImage3.jpg';

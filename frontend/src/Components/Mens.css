@@ -72,10 +72,6 @@
   transition: color 0.3s;
 }
 
-.collection-item-title:hover {
-  color: #0070f3;
-}
-
 .collection-item-price {
   font-size: 18px;
   font-weight: 600;

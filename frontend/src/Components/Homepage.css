@@ -4,16 +4,16 @@
   justify-content: center;
   background-color: #f9f9f9;
   min-height: 60vh;
-  padding: 0 2rem;
+  padding: 2rem;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   flex-wrap: wrap;
-  gap: 3rem;
   box-sizing: border-box;
   overflow: hidden;
 }
 
+/* Content Section */
 .content-wrapper {
-  flex: 1 1 500px;
+  flex: 1 1 100%;
   max-width: 600px;
   display: flex;
   flex-direction: column;
@@ -21,21 +21,25 @@
   animation: fadeInUp 1s ease forwards;
 }
 
+/* Headline Styling */
 .headline {
-  font-size: 2.75rem;
+  font-size: 2.5rem;
   font-weight: 800;
   line-height: 1.2;
-  margin-bottom: 1rem;
+  margin-bottom: 0px;
   color: #111;
 }
 
+/* Subtext Styling */
 .subtext {
   font-size: 1.125rem;
   color: #555;
   margin-bottom: 2rem;
   line-height: 1.6;
+  margin-top: 0%;
 }
 
+/* Button Styling */
 .shop-btn {
   padding: 0.9rem 2.5rem;
   font-size: 1rem;
@@ -53,8 +57,9 @@
   background-color: #333;
 }
 
+/* Image Wrapper */
 .image-wrapper {
-  flex: 1 1 500px;
+  flex: 1 1 100%;
   max-width: 600px;
   display: flex;
   justify-content: center;
@@ -62,6 +67,7 @@
   animation: zoomIn 1.5s ease forwards;
 }
 
+/* Product Image Styling */
 .product-image {
   width: 100%;
   max-width: 100%;
@@ -71,41 +77,12 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ------------------------------
+   Media Queries for Responsiveness
+---------------------------------- */
 
-@keyframes zoomIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .minimalist-homepage {
-    flex-direction: column;
-    text-align: center;
-    padding: 3rem 1.5rem;
-  }
-
-  .content-wrapper {
-    align-items: center;
-  }
-
+/* Tablets and below */
+@media (max-width: 1024px) {
   .headline {
     font-size: 2.2rem;
   }
@@ -115,16 +92,50 @@
   }
 
   .shop-btn {
+    font-size: 0.95rem;
+    padding: 0.8rem 2rem;
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  .minimalist-homepage {
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+  }
+
+  .content-wrapper,
+  .image-wrapper {
+    flex: 1 1 100%;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .shop-btn {
     align-self: center;
   }
 
-  .image-wrapper {
-    margin-top: 2rem;
-    max-width: 100%;
+  .headline {
+    font-size: 2rem;
   }
 
-  .product-image {
-    max-height: 350px;
-    width: auto;
+  .subtext {
+    font-size: 1rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .headline {
+    font-size: 1.75rem;
+  }
+
+  .subtext {
+    font-size: 0.95rem;
+  }
+
+  .shop-btn {
+    font-size: 0.9rem;
+    padding: 0.75rem 1.5rem;
   }
 }
