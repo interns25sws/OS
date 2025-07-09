@@ -50,3 +50,65 @@
   font-weight: bold;
   margin-top: 1.5rem;
 }
+
+/* ...existing code... */
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+  .card {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+  .title {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .how-it-works {
+    padding: 1.2rem;
+  }
+  .card {
+    max-width: 100%;
+    padding: 1.2rem;
+  }
+  .title {
+    font-size: 1.7rem;
+    margin-bottom: 1.2rem;
+  }
+  .card h3 {
+    font-size: 1rem;
+  }
+  .card h4 {
+    font-size: 0.85rem;
+  }
+  .card p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .how-it-works {
+    padding: 0.7rem;
+  }
+  .card {
+    padding: 0.8rem;
+    border-radius: 10px;
+  }
+  .title {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+  .card h3 {
+    font-size: 0.95rem;
+  }
+  .card h4 {
+    font-size: 0.8rem;
+  }
+  .card p {
+    font-size: 0.9rem;
+    letter-spacing: 0.8px;
+  }
+}
+
+/* ...existing code... */

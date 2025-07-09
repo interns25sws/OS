@@ -77,27 +77,44 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* ------------------------------
-   Media Queries for Responsiveness
----------------------------------- */
+
 
 /* Tablets and below */
 @media (max-width: 1024px) {
+  .minimalist-homepage {
+    justify-content: center;      /* Center horizontally */
+    align-items: center;          /* Center vertically */
+    flex-direction: column;       /* Stack content vertically */
+    padding: 2rem 1rem;           /* Slightly reduce side padding */
+    text-align: center;           /* Center text for all children */
+  }
+
   .headline {
-    font-size: 2.2rem;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
   }
 
   .subtext {
-    font-size: 1rem;
+    font-size: 0.98rem;
+    margin-bottom: 1.5rem;
   }
 
   .shop-btn {
-    font-size: 0.95rem;
-    padding: 0.8rem 2rem;
+    font-size: 0.93rem;
+    padding: 0.7rem 1.7rem;
+    border-radius: 24px;
+    align-self: center;   
+    margin-bottom: 10px;
+  }
+
+  .content-wrapper,
+  .image-wrapper {
+    max-width: 80vw;
+    justify-content: center;      /* Center content inside wrappers */
+    align-items: center;
+    text-align: center;
   }
 }
-
-/* Mobile devices */
 @media (max-width: 768px) {
   .minimalist-homepage {
     flex-direction: column;
@@ -113,6 +130,7 @@
 
   .shop-btn {
     align-self: center;
+    margin-bottom: 10px;
   }
 
   .headline {
@@ -137,5 +155,6 @@
   .shop-btn {
     font-size: 0.9rem;
     padding: 0.75rem 1.5rem;
+    margin-bottom: 10px;
   }
 }

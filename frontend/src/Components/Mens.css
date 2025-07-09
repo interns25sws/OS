@@ -123,7 +123,6 @@
   background-color: rgba(0, 0, 0, 0.15);
   border-radius: 4px;
 }
-
 /* Responsive Styles */
 @media (max-width: 1200px) {
   .collection-image {
@@ -184,8 +183,30 @@
   }
 }
 
-/* LARGE SCREENS: switch back to grid style */
+/* EXTRA SMALL DEVICES */
+@media (max-width: 400px) {
+  .collection-title {
+    font-size: 15px;
+  }
+  .collection-description {
+    font-size: 11px;
+  }
+  .collection-image {
+    height: 180px;
+  }
+  .collection-item-title {
+    font-size: 13px;
+  }
+  .collection-item-price {
+    font-size: 14px;
+  }
+  .browse-button {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
 
+/* LARGE SCREENS: switch back to grid style */
 @media (min-width: 901px) {
   .collection-grid {
     display: flex;

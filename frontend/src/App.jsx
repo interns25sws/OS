@@ -12,6 +12,7 @@ import UserLogin from "./Pages/UserLogin.jsx";
 import ROUTES from "./Constants/routes.jsx";
 import DemandingProdcuts from "./Components/Demandingproducts.jsx"
 import HowItWorks from "./Components/HIW.jsx"
+import Footer from "./Components/Footer.jsx"
 
 function Home() {
   return (
@@ -24,6 +25,7 @@ function Home() {
       <DemandingProdcuts />
       <HowItWorks />
       <Recommendations />
+      <Footer />
     </>
   );
 }

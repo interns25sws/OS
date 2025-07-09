@@ -1,0 +1,144 @@
+/* Base Styles */
+.footer {
+  background-color: black;
+  color: white;
+  padding: 40px 5vw 20px;
+  font-family: Arial, sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 24px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 220px;
+  margin: 20px 0;
+}
+
+.footer-section h4 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 8px;
+}
+
+.footer-section ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 0.95rem;
+}
+
+.footer-section ul li a:hover {
+  color: white;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 16px;
+}
+
+.social-icons a {
+  font-size: 1.2rem;
+  margin-right: 10px;
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: white;
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+  color: white;
+}
+
+/* Medium Screens */
+@media (max-width: 1200px) {
+  .footer-container {
+    padding: 0 4vw;
+    gap: 20px;
+  }
+  .footer-section {
+    min-width: 180px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 0 6vw;
+  }
+  .footer-section {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    margin: 24px 0;
+  }
+  .social-icons {
+    justify-content: center;
+    margin-top: 16px;
+  }
+}
+
+/* Small Devices */
+@media (max-width: 600px) {
+  .footer {
+    padding: 24px 4vw 12px;
+  }
+  .footer-section h4 {
+    font-size: 1rem;
+  }
+  .footer-bottom {
+    font-size: 0.85rem;
+    padding-top: 12px;
+  }
+  .social-icons a {
+    font-size: 1rem;
+    margin: 0 5px;
+  }
+}
+
+/* Extra Small Devices */
+@media (max-width: 400px) {
+  .footer {
+    padding: 16px 2vw 10px;
+  }
+  .footer-section h4 {
+    font-size: 0.9rem;
+  }
+  .footer-section ul li a {
+    font-size: 0.85rem;
+  }
+  .footer-bottom {
+    font-size: 0.75rem;
+    padding-top: 8px;
+  }
+  .social-icons a {
+    font-size: 0.9rem;
+    margin: 0 3px;
+  }
+}
