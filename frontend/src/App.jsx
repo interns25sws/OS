@@ -22,7 +22,7 @@ function Home() {
     <>
       <Header />
       <HomePage />
-      <Description />
+      {/* <Description /> */}
       <DisplayCloth />
       <MensCloth />
       <WomensCloth />

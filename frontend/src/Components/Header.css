@@ -3,9 +3,10 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  background-color: #1c1e1f;
+  background-color: #f9f9f9;
   position: relative;
   z-index: 1000;
+  padding-top: 20px;
 }
 
 /* Navigation Bar */
@@ -15,7 +16,7 @@
   padding: 15px 30px;
   display: flex;
   color: white;
-  gap: 7rem;
+  gap: 3rem;
 }
 
 .nav-top {
@@ -68,7 +69,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 10px;
   flex-wrap: wrap;
   gap: 20px;
 }
@@ -76,8 +76,9 @@
 /* Search Bar (visible only on large screens) */
 .search-bar {
   display: flex;
+  justify-content: center;
   align-items: center;
-  background: #232526;
+  background: #333;
   border-radius: 20px;
   padding: 4px 12px;
   transition: all 0.3s ease;
