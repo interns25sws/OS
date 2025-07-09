@@ -25,7 +25,7 @@ const items = [
 const SummerCollection = () => {
   return (
     <div className="collection-container">
-      <h1 className="collection-title">Women's Branded Collection</h1>
+      <h1 className="collection-title">WOMENS BRANDED COLLECTION</h1>
       <p className="collection-description">
         Stride with Confidence, Grace, and Style
       </p>

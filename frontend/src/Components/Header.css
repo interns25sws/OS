@@ -1,22 +1,30 @@
+/* Main Header Container */
 .custom-header {
   width: 100%;
   display: flex;
   justify-content: center;
   background-color: #1c1e1f;
+  position: relative;
+  z-index: 1000;
 }
 
+/* Navigation Bar */
 .nav-bar {
   background-color: #1c1e1f;
   border-radius: 40px;
   padding: 15px 30px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 90%;
-  max-width: 1200px;
   color: white;
+  gap: 7rem;
 }
 
+.nav-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo */
 .logo a {
   font-family: serif;
   font-size: 28px;
@@ -29,13 +37,50 @@
   color: #c4a484;
 }
 
+/* Search Icon for Mobile */
+.search-icon-mobile {
+  display: none;
+  font-size: 18px;
+  color: #c4a484;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Hamburger Menu Button */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 24px;
+  height: 2px;
+  background: white;
+  display: block;
+  transition: 0.3s ease;
+}
+
+/* Bottom Section: Search + Cart + Login */
+.nav-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Search Bar (visible only on large screens) */
 .search-bar {
   display: flex;
   align-items: center;
   background: #232526;
   border-radius: 20px;
   padding: 4px 12px;
-  margin-left: 30px;
+  transition: all 0.3s ease;
 }
 
 .search-input {
@@ -66,6 +111,7 @@
   color: #fff;
 }
 
+/* Right side (login & cart) */
 .nav-right {
   display: flex;
   align-items: center;
@@ -96,48 +142,57 @@
   font-size: 12px;
 }
 
-/* Responsive styles */
+/* -------------- Responsive Styles -------------- */
+
+/* Tablets & Small Screens (≤ 900px) */
 @media (max-width: 900px) {
   .nav-bar {
+    padding: 15px 20px;
+  }
+
+  .search-bar {
+    display: none;
+  }
+
+  .search-icon-mobile {
+    display: inline-block;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-bottom {
+    display: none;
     flex-direction: column;
     align-items: flex-start;
-    padding: 15px 10px;
-    gap: 15px;
-  }
-  .search-bar {
-    margin-left: 0;
     width: 100%;
-    margin-top: 10px;
+    padding-top: 10px;
   }
-  .search-input {
-    width: 120px;
+
+  .nav-bar.active .nav-bottom {
+    display: flex;
   }
+
   .nav-right {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: flex-start;
+    gap: 16px;
   }
 }
 
+/* Phones (≤ 600px) */
 @media (max-width: 600px) {
-  .nav-bar {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 10px 5px;
-    gap: 10px;
-  }
   .logo a {
     font-size: 22px;
   }
-  .search-bar {
-    width: 100%;
-    padding: 4px 6px;
-  }
+
   .search-input {
-    width: 90px;
+    width: 120px;
     font-size: 13px;
   }
+
   .nav-right {
-    gap: 10px;
-    justify-content: flex-end;
+    gap: 12px;
   }
 }

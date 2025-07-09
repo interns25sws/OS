@@ -15,6 +15,7 @@ import Recommendations from "./Components/Recommendations.jsx";
 import TrendingProducts from "./Components/TrendProducts.jsx";
 import UserLogin from "./Pages/UserLogin.jsx";
 import ROUTES from "./Constants/routes.jsx";
+import DemandingProdcuts from "./Components/Demandingproducts.jsx"
 
 function Home() {
   return (
@@ -25,6 +26,7 @@ function Home() {
       <DisplayCloth />
       <MensCloth />
       <WomensCloth />
+      <DemandingProdcuts />
       {/* <ItemsPage /> */}
       {/* <TrendingProducts /> */}
       <Recommendations />
@@ -37,8 +39,8 @@ function App() {
     <Router>
       <Routes>
         <Route path={ROUTES.HOME} element={<Home />} />
-        <Route path={ROUTES.MENS_CLOTHING} element={<MensClothing />} />
-        <Route path={ROUTES.WOMENS_CLOTHING} element={<WomensClothing />} />
+        {/* <Route path={ROUTES.MENS_CLOTHING} element={<MensClothing />} /> */}
+        {/* <Route path={ROUTES.WOMENS_CLOTHING} element={<WomensClothing />} /> */}
         <Route path={ROUTES.USER_LOGIN} element={<UserLogin />} />
       </Routes>
     </Router>
