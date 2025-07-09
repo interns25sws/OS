@@ -4,6 +4,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Header from "./Components/Header.jsx";
 import HomePage from "./Components/HomePage.jsx";
+import Description from "./Components/Desscription.jsx";
+import DisplayCloth from "./Components/DisplayCloth.jsx"
+import MensCloth from "./Components/DisplayMensCloth.jsx"
 import ItemsPage from "./Components/ItemsPage.jsx";
 import HomeAppliances from "./Pages/HomeAppliances.jsx";
 import MensClothing from "./Pages/MensClothing.jsx";
@@ -20,6 +23,9 @@ function Home() {
     <>
       <Header />
       <HomePage />
+      <Description />
+      <DisplayCloth />
+      <MensCloth />
       <ItemsPage />
       <TrendingProducts />
       <Recommendations />

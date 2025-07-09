@@ -4,7 +4,7 @@ import "./Header.css";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [locationText, setLocationText] = useState("User Location");
+  const [locationText, setLocationText] = useState("Your location");
   const [searchQuery, setSearchQuery] = useState("");
 
   const toggleMenu = () => {
@@ -35,12 +35,12 @@ export default function Header() {
             data.address.village ||
             "Unknown";
           const postcode = data.address.postcode || "";
-          setLocationText(`Delivering to ${city} ${postcode}`);
+          setLocationText(`Shipping to ${city} ${postcode}`);
         } catch (error) {
-          setLocationText("Location fetch failed");
+          setLocationText("Unable to fetch location");
         }
       },
-      (error) => {
+      () => {
         setLocationText("Location access denied");
       }
     );
@@ -63,7 +63,7 @@ export default function Header() {
     <header className="header">
       <div className="header-container">
         <div className="logo">
-          <h1>OnlineBazzar</h1>
+          <h1>FashionFiesta</h1>
         </div>
 
         <div
@@ -74,7 +74,7 @@ export default function Header() {
           <i className="fa-solid fa-location-dot"></i>
           <div className="location-description">
             <p className="normal-text">{locationText}</p>
-            <p className="bold-text">Updated Location</p>
+            <p className="bold-text">Tap to update</p>
           </div>
         </div>
 
@@ -83,10 +83,10 @@ export default function Header() {
             <input
               type="text"
               className="search-input"
-              placeholder="Search products..."
+              placeholder="Search clothing, brands, styles..."
               value={searchQuery}
               onChange={handleSearchChange}
-              aria-label="Search products"
+              aria-label="Search fashion items"
             />
           </form>
         </div>
@@ -94,13 +94,13 @@ export default function Header() {
         <div className="user-icon desktop-only">
           <Link className="signin-icon" to="/UserLogin">
             <i className="fas fa-user" tabIndex="0"></i>
-            <p>Hello, Sign in</p>
+            <p>Sign In</p>
           </Link>
         </div>
 
         <div className="user-cart desktop-only">
-          <i className="fa-solid fa-cart-shopping"></i>
-          <p>Cart</p>
+          <i className="fa-solid fa-bag-shopping"></i>
+          <p>My Bag</p>
         </div>
 
         <button
@@ -124,7 +124,7 @@ export default function Header() {
           <i className="fa-solid fa-location-dot"></i>
           <div className="location-description">
             <p className="normal-text">{locationText}</p>
-            <p className="bold-text">Updated Location</p>
+            <p className="bold-text">Tap to update</p>
           </div>
         </div>
 
@@ -134,12 +134,12 @@ export default function Header() {
           onClick={closeMenu}
         >
           <i className="fas fa-user"></i>
-          <p>Hello, Sign in</p>
+          <p>Sign In</p>
         </Link>
 
         <div className="user-cart menu-item" onClick={closeMenu}>
-          <i className="fa-solid fa-cart-shopping"></i>
-          <p>Cart</p>
+          <i className="fa-solid fa-bag-shopping"></i>
+          <p>My Bag</p>
         </div>
       </nav>
 
