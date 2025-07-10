@@ -4,16 +4,18 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Header from "./Components/Header.jsx";
 import HomePage from "./Components/HomePage.jsx";
-import DisplayCloth from "./Components/DisplayCloth.jsx"
-import Categories from "./Components/Categories.jsx"
-import MensCloth from "./Components/DisplayMensCloth.jsx"
-import WomensCloth from "./Components/DisplayWomenCloth.jsx"
-import DemandingProdcuts from "./Components/Demandingproducts.jsx"
-import Combination from "./Components/Combination.jsx"
-import HowItWorks from "./Components/HIW.jsx"
+import DisplayCloth from "./Components/DisplayCloth.jsx";
+import Categories from "./Components/Categories.jsx";
+import MensCloth from "./Components/DisplayMensCloth.jsx";
+import WomensCloth from "./Components/DisplayWomenCloth.jsx";
+import DemandingProducts from "./Components/DemandingProducts.jsx";
+import Combination from "./Components/Combination.jsx";
+import HowItWorks from "./Components/HIW.jsx";
 import Recommendations from "./Components/Recommendations.jsx";
-import Footer from "./Components/Footer.jsx"
+import Footer from "./Components/Footer.jsx";
+
 import UserLogin from "./Pages/UserLogin.jsx";
+import Cart from "./Pages/Cart.jsx";
 import ROUTES from "./Constants/routes.jsx";
 
 function Home() {
@@ -25,7 +27,7 @@ function Home() {
       <Categories />
       <MensCloth />
       <WomensCloth />
-      <DemandingProdcuts />
+      <DemandingProducts />
       <Combination />
       <HowItWorks />
       <Recommendations />
@@ -40,6 +42,7 @@ function App() {
       <Routes>
         <Route path={ROUTES.HOME} element={<Home />} />
         <Route path={ROUTES.USER_LOGIN} element={<UserLogin />} />
+        <Route path={ROUTES.CART} element={<Cart />} />
       </Routes>
     </Router>
   );

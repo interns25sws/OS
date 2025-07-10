@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import './DisplayCloth.css';
 
 import TrendingImage1 from "../assets/Images/TrendProductImage1.jpg";
@@ -18,7 +19,7 @@ const products = [
     image: TrendingImage2,
   },
   {
-    name: "earrings",
+    name: "Earrings",
     image: TrendingImage3,
   },
   {
@@ -26,31 +27,42 @@ const products = [
     image: TrendingImage4,
   },
   {
-    name: "active wear",
+    name: "Active Wear",
     image: ActiveWear,
   },
   {
-    name: "LONG SLEEVE hoodies",
+    name: "Long Sleeve Hoodies",
     image: HoodiesImage,
   },
 ];
 
 export default function ProductShowcase() {
+  const navigate = useNavigate();
+
   return (
     <section className="product-section">
       <h1 className="desc-heading">MODESTY x AESTHETIC</h1>
       <p className="section-title">WORKOUT WITH ELEGANCE & COMFORT</p>
+
       <div className="product-grid">
         {products.map((item, index) => (
           <div className="product-card" key={index}>
-            <img src={item.image} alt={item.name} />
+            <img
+              src={item.image}
+              alt={`Product image of ${item.name}`}
+              loading="lazy"
+            />
             <div className="product-name">{item.name}</div>
           </div>
         ))}
       </div>
-      
+
       <div className="browse-button-container">
-        <button className="browse-button" onClick={() => window.location.href = '/shop'}>
+        <button
+          className="browse-button"
+          onClick={() => navigate("/shop")}
+          aria-label="Go to shop page"
+        >
           Browse Now
         </button>
       </div>

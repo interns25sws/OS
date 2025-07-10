@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate(); // React Router navigation
 
   return (
     <header className="custom-header">
@@ -42,7 +43,15 @@ export default function Header() {
             <Link to="/UserLogin" className="login-link">
               Log In
             </Link>
-            <div className="cart-icon">
+
+            <div
+              className="cart-icon"
+              onClick={() => navigate("/cart")}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === "Enter" && navigate("/cart")}
+              aria-label="Go to cart"
+            >
               <i className="fa-solid fa-bag-shopping"></i>
               <span className="cart-count">0</span>
             </div>
