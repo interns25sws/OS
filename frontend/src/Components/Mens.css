@@ -207,15 +207,16 @@
 }
 
 /* LARGE SCREENS: switch back to grid style */
+/* 
 @media (min-width: 901px) {
   .collection-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    overflow-x: visible; /* disable horizontal scroll */
+    overflow-x: visible;
   }
   .collection-item {
     flex: 0 0 auto;
     margin-bottom: 30px;
   }
-}
+} */
