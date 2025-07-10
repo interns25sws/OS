@@ -1,7 +1,7 @@
 import React from "react";
-import WomenDisplay1 from "../assets/WomensDiplayimage1.jpg";
-import WomenDisplay2 from "../assets/WomensDiplayimage2.jpg";
-import WomenDisplay3 from "../assets/WomensDiplayimage3.jpg";
+import WomenDisplay1 from "../assets/Images/WomensDiplayimage1.jpg";
+import WomenDisplay2 from "../assets/Images/WomensDiplayimage2.jpg";
+import WomenDisplay3 from "../assets/Images/WomensDiplayimage3.jpg";
 
 const items = [
   {

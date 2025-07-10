@@ -1,12 +1,12 @@
 import React from "react";
 import './DisplayCloth.css';
 
-import TrendingImage1 from "../assets/TrendProductImage1.jpg";
-import TrendingImage2 from "../assets/TrendProductImage2.jpg";
-import TrendingImage3 from "../assets/TrendProductImage3.jpg";
-import TrendingImage4 from "../assets/TrendProductImage4.jpg";
-import ActiveWear from "../assets/ActiveWear.jpeg";
-import HoodiesImage from "../assets/Newhoodie.jpg";
+import TrendingImage1 from "../assets/Images/TrendProductImage1.jpg";
+import TrendingImage2 from "../assets/Images/TrendProductImage2.jpg";
+import TrendingImage3 from "../assets/Images/TrendProductImage3.jpg";
+import TrendingImage4 from "../assets/Images/TrendProductImage4.jpg";
+import ActiveWear from "../assets/Images/ActiveWear.jpeg";
+import HoodiesImage from "../assets/Images/Newhoodie.jpg";
 
 const products = [
   {

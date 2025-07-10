@@ -1,6 +1,6 @@
 import React from "react";
 import "./Homepage.css";
-import productImage from "../assets/ClothImage1.jpg"; 
+import productImage from "../assets/Images/ClothImage1.jpg"; 
 
 export default function HomePage() {
   return (

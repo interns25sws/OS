@@ -1,14 +1,14 @@
 import React from "react";
 import "./Categories.css";
 
-import OverSized from "../assets/Oversized.jpg";
-import AllBottom from "../assets/Allbottom.jpg";
-import shirts from "../assets/shirts.jpg";
-import Polos from "../assets/polos.jpg";
-import Shorts from "../assets/shorts.jpg";
-import Sneakers from "../assets/sneakers.jpg";
-import Slides from "../assets/slides.jpg";
-import jackets from "../assets/jackets.jpg";
+import OverSized from "../assets/Images/Oversized.jpg";
+import AllBottom from "../assets/Images/Allbottom.jpg";
+import shirts from "../assets/Images/shirts.jpg";
+import Polos from "../assets/Images/polos.jpg";
+import Shorts from "../assets/Images/shorts.jpg";
+import Sneakers from "../assets/Images/sneakers.jpg";
+import Slides from "../assets/Images/slides.jpg";
+import jackets from "../assets/Images/jackets.jpg";
 
 const categories = [
   { title: "OVERSIZED T-SHIRTS", img: OverSized },

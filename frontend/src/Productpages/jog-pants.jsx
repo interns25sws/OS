@@ -1,5 +1,5 @@
 import React from "react";
-import jogPantsImage from "../assets/TrendProductImage1.jpg"; 
+import jogPantsImage from "../assets/Images/TrendProductImage1.jpg"; 
 
 export default function ProductDetail() {
   const styles = {

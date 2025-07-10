@@ -1,8 +1,8 @@
 import React from 'react';
 import './Mens.css';
-import MensTrend from '../assets/menstrend.jpg';
-import Shoes from '../assets/Jordan.jpg';
-import Womenstrend from '../assets/womentrend.jpg';
+import MensTrend from '../assets/Images/menstrend.jpg';
+import Shoes from '../assets/Images/Jordan.jpg';
+import Womenstrend from '../assets/Images/womentrend.jpg';
 
 const items = [
   {

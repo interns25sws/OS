@@ -1,11 +1,11 @@
 import React from 'react';
 import './Combination.css';
-import KoreaLook from "../assets/Korealook.jpg";
-import TexturedPolos from "../assets/texturepolos.jpg";
-import Plaidshirts from "../assets/plaidshirts.jpg";
-import ClassicBottoms from "../assets/classicbottom.jpg";
-import UrbanShirt from "../assets/urbanshirt.jpg"
-import BlazeSneakers from "../assets/blaze sneakers.jpg"
+import KoreaLook from "../assets/Images/Korealook.jpg";
+import TexturedPolos from "../assets/Images/texturepolos.jpg";
+import Plaidshirts from "../assets/Images/plaidshirts.jpg";
+import ClassicBottoms from "../assets/Images/classicbottom.jpg";
+import UrbanShirt from "../assets/Images/urbanshirt.jpg"
+import BlazeSneakers from "../assets/Images/blaze sneakers.jpg"
 
 const items = [
   {
