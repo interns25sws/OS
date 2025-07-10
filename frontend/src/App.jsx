@@ -16,6 +16,7 @@ import Footer from "./Components/Footer.jsx";
 
 import UserLogin from "./Pages/UserLogin.jsx";
 import Cart from "./Pages/Cart.jsx";
+import Shop from "./ShopProducts/shop.jsx"
 import ROUTES from "./Constants/routes.jsx";
 
 function Home() {
@@ -43,6 +44,7 @@ function App() {
         <Route path={ROUTES.HOME} element={<Home />} />
         <Route path={ROUTES.USER_LOGIN} element={<UserLogin />} />
         <Route path={ROUTES.CART} element={<Cart />} />
+        <Route path={ROUTES.SHOP} element={<Shop />} />
       </Routes>
     </Router>
   );

@@ -1,7 +1,8 @@
 const ROUTES = {
   HOME: "/",
   USER_LOGIN: "/UserLogin",
-  CART:"/Cart"
+  CART:"/Cart",
+  SHOP:"/shop",
 };
 
 export default ROUTES;
