@@ -1,6 +1,6 @@
 import React from "react";
 import "./Homepage.css";
-import productImage from "../assets/ClothImage1.jpg"; // pick your favorite impactful image
+import productImage from "../assets/ClothImage1.jpg"; 
 
 export default function HomePage() {
   return (
