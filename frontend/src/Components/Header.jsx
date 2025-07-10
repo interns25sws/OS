@@ -4,7 +4,7 @@ import "./Header.css";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate(); // React Router navigation
+  const navigate = useNavigate();
 
   return (
     <header className="custom-header">
