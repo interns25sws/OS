@@ -14,7 +14,7 @@ import HowItWorks from "./Components/HIW.jsx";
 import Recommendations from "./Components/Recommendations.jsx";
 import Footer from "./Components/Footer.jsx";
 
-import UserLogin from "./Pages/UserLogin.jsx";
+import Login from "./Pages/login.jsx";
 import Cart from "./Pages/Cart.jsx";
 import Shop from "./ShopProducts/shop.jsx"
 import ROUTES from "./Constants/routes.jsx";
@@ -42,7 +42,7 @@ function App() {
     <Router>
       <Routes>
         <Route path={ROUTES.HOME} element={<Home />} />
-        <Route path={ROUTES.USER_LOGIN} element={<UserLogin />} />
+        <Route path={ROUTES.USER_LOGIN} element={<Login/>} />
         <Route path={ROUTES.CART} element={<Cart />} />
         <Route path={ROUTES.SHOP} element={<Shop />} />
       </Routes>

@@ -1,6 +1,6 @@
 const ROUTES = {
   HOME: "/",
-  USER_LOGIN: "/UserLogin",
+  USER_LOGIN: "/login",
   CART:"/Cart",
   SHOP:"/shop",
 };

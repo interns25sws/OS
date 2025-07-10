@@ -40,7 +40,7 @@ export default function Header() {
           </div>
 
           <div className="nav-right">
-            <Link to="/UserLogin" className="login-link">
+            <Link to="/login" className="login-link">
               Log In
             </Link>
 
