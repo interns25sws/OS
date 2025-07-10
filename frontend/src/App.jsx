@@ -5,14 +5,16 @@ import "./App.css";
 import Header from "./Components/Header.jsx";
 import HomePage from "./Components/HomePage.jsx";
 import DisplayCloth from "./Components/DisplayCloth.jsx"
+import Categories from "./Components/Categories.jsx"
 import MensCloth from "./Components/DisplayMensCloth.jsx"
 import WomensCloth from "./Components/DisplayWomenCloth.jsx"
+import DemandingProdcuts from "./Components/Demandingproducts.jsx"
+import Combination from "./Components/Combination.jsx"
+import HowItWorks from "./Components/HIW.jsx"
 import Recommendations from "./Components/Recommendations.jsx";
+import Footer from "./Components/Footer.jsx"
 import UserLogin from "./Pages/UserLogin.jsx";
 import ROUTES from "./Constants/routes.jsx";
-import DemandingProdcuts from "./Components/Demandingproducts.jsx"
-import HowItWorks from "./Components/HIW.jsx"
-import Footer from "./Components/Footer.jsx"
 
 function Home() {
   return (
@@ -20,9 +22,11 @@ function Home() {
       <Header />
       <HomePage />
       <DisplayCloth />
+      <Categories />
       <MensCloth />
       <WomensCloth />
       <DemandingProdcuts />
+      <Combination />
       <HowItWorks />
       <Recommendations />
       <Footer />

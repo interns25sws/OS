@@ -6,7 +6,6 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
-        {/* Branding / About */}
         <div className="footer-section">
           <h4>About Clothing4U</h4>
           <p>
@@ -14,7 +13,6 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Navigation Links */}
         <div className="footer-section">
           <h4>Quick Links</h4>
           <ul>
@@ -26,7 +24,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Newsletter Subscription */}
         <div className="footer-section">
           <h4>Stay Updated</h4>
           <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
@@ -43,7 +40,6 @@ const Footer = () => {
           <p className="newsletter-info">Join our newsletter for updates and offers.</p>
         </div>
 
-        {/* Social Media */}
         <div className="footer-section">
           <h4>Follow Us</h4>
           <div className="social-icons">
@@ -60,7 +56,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Note */}
       <div className="footer-bottom">
         &copy; {new Date().getFullYear()} Clothing4U. All rights reserved.
       </div>
