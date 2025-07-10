@@ -1,4 +1,3 @@
-/* Container for the full section */
 .sharp-dressing-container {
   width: 100%;
   margin: 0%;
@@ -7,7 +6,6 @@
   background-color: #f9f9f9;
 }
 
-/* Heading text */
 .heading {
   text-align: center;
   font-size: 32px;
@@ -22,28 +20,56 @@
   flex-wrap: nowrap;
   justify-content: center;
   gap: 2rem;
-  overflow-x: hidden; /* hide scrollbar */
+  overflow-x: hidden; 
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
   position: relative;
 }
 
-/* Each individual image card */
 .card-sharp {
    flex: 0 0 auto;
-  width: 250px; /* adjust width as needed */
-  height: 300px; /* adjust height as needed */
+  width: 250px; 
+  height: 250px;
   border-radius: 8px;
   overflow: hidden;
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
-/* Image styling */
 .card-image {
   width: 100%;
   height: auto;
   display: block;
   object-fit: cover;
   user-select: none;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .cards-container {
+    overflow-x: auto;    padding: 0 1rem;
+    gap: 1rem;     
+  }
+
+  .card-sharp {
+    width: 180px;  
+    height: 180px; 
+  }
+}
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 24px;  
+    padding: 20px 10px 2rem;
+  }
+
+  .cards-container {
+    gap: 0.75rem;
+    padding: 0 0.5rem;
+  }
+
+  .card-sharp {
+    width: 140px;
+    height: 140px;
+    border-radius: 6px;
+  }
 }

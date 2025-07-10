@@ -14,18 +14,19 @@
 }
 
 .categories-grid {
-    display: flex;
+  display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 25px;
   padding-bottom: 10px;
+  
 }
 
 .category-card {
   position: relative;
   overflow: hidden;
-  width: 356px;
-  height: 335px;
+  width: 350px;
+  height: 350px;
   border-radius: 12px;
   background-color: #f9f9f9;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -34,7 +35,7 @@
 }
 
 .category-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.07);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
@@ -77,32 +78,61 @@
   background: #999;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 1024px) {
+
+@media (max-width: 768px) {
   .categories-container {
     padding: 40px 30px;
   }
 
+  .categories-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding-bottom: 10px;
+    
+  }
+
   .category-card {
-    width: 280px;
-    height: auto;
+    flex: 0 0 auto;
+    width: 240px;
+    height: 300px;
+    scroll-snap-align: end;
+  }
+
+  .categories-grid::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .categories-grid::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+
+  .categories-grid:hover::-webkit-scrollbar-thumb {
+    background: #999;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .categories-container {
-    padding: 30px 20px;
+    padding: 20px 15px; 
   }
 
-  .categories-title {
-    font-size: 28px;
+  .categories-grid {
+    flex-wrap: nowrap;
+    overflow-x: auto; 
+    gap: 12px;
   }
 
   .category-card {
-    width: 45vw;
-    height: auto;
+    width: 180px; 
+    height: 250px;
   }
 }
+
 
 @media (max-width: 480px) {
   .categories-container {
@@ -115,7 +145,29 @@
   }
 
   .category-card {
-    width: 50vw;
+    width: 200px;
+    height: 260px;
+  }
+}
+
+
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .categories-container {
+    padding: 40px 30px;
+  }
+
+  .categories-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    overflow-x: visible;
+  }
+
+  .category-card {
+    width: 280px;
     height: auto;
+    flex-shrink: 0;
   }
 }

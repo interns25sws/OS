@@ -10,7 +10,7 @@ const items = [
     price: '$49.99'
   },
   {
-    title: 'Formal Suits',
+    title: 'Formal Wear',
     image: Display2,
     price: '$129.99'
   },
