@@ -8,7 +8,7 @@ export default function Recommendations() {
   const navigate = useNavigate();
 
   const handleSignIn = () => {
-    navigate("/UserLogin");
+    navigate("/login");
   };
 
   return (

@@ -91,7 +91,7 @@
 
   .headline {
     font-size: 2rem;
-    margin-bottom: 0.5rem;
+    /* margin-bottom: 0.5rem; */
   }
 
   .subtext {
@@ -109,7 +109,7 @@
 
   .content-wrapper,
   .image-wrapper {
-    max-width: 80vw;
+    max-width: 70vw;
     justify-content: center;      /* Center content inside wrappers */
     align-items: center;
     text-align: center;

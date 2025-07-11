@@ -1,34 +1,31 @@
-/* Main Header Container */
+/* Header Wrapper */
 .custom-header {
   width: 100%;
+  background-color: #f9f9f9;
+  padding: 20px 0;
   display: flex;
   justify-content: center;
-  background-color: #f9f9f9;
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 1000;
-  padding-top: 30px;
 }
 
 /* Navigation Bar */
 .nav-bar {
   background-color: #1c1e1f;
   border-radius: 40px;
-  padding: 15px 30px;
+  padding: 10px 30px;
   display: flex;
-  color: white;
-  gap: 3rem;
-}
-
-.nav-top {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
+  max-width: 1200px;
+  color: white;
+  gap: 2rem;
 }
 
 /* Logo */
 .logo a {
   font-family: serif;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
   text-decoration: none;
   color: white;
@@ -38,66 +35,15 @@
   color: #c4a484;
 }
 
-/* Search Icon for Mobile */
-.search-icon-mobile {
-  display: none;
-  font-size: 18px;
-  color: #c4a484;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-/* Hamburger Menu Button */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  transition: background 0.2s;
-  position: relative;
-  z-index: 1100;
-  box-shadow: 0 2px 8px rgba(44, 44, 44, 0.08);
-}
-
-.hamburger:hover {
-  background: rgba(200, 200, 200, 0.15);
-}
-
-.hamburger span {
-  width: 26px;
-  height: 3px;
-  background: white;
-  display: block;
-  border-radius: 2px;
-  transition: all 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-  position: relative;
-}
-
-
-
-/* Bottom Section: Search + Cart + Login */
-.nav-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-/* Search Bar (visible only on large screens) */
+/* Search Bar */
 .search-bar {
+  flex: 1;
   display: flex;
-  justify-content: center;
   align-items: center;
   background: #333;
   border-radius: 20px;
   padding: 4px 12px;
-  transition: all 0.3s ease;
+  max-width: 400px;
 }
 
 .search-input {
@@ -105,9 +51,9 @@
   outline: none;
   background: transparent;
   color: #fff;
-  font-size: 15px;
+  font-size: 14px;
   padding: 6px 8px;
-  width: 180px;
+  width: 100%;
 }
 
 .search-input::placeholder {
@@ -118,17 +64,15 @@
   background: none;
   border: none;
   color: #c4a484;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
-  margin-left: 6px;
-  transition: color 0.2s;
 }
 
 .search-btn:hover {
   color: #fff;
 }
 
-/* Right side (login & cart) */
+/* Right-side Icons */
 .nav-right {
   display: flex;
   align-items: center;
@@ -139,6 +83,12 @@
   text-decoration: none;
   color: #c4d6f3;
   font-size: 14px;
+}
+
+.user-icon-link {
+  color: #c4d6f3;
+  display: flex;
+  align-items: center;
 }
 
 .cart-icon {
@@ -157,87 +107,30 @@
   border-radius: 50%;
   padding: 2px 6px;
   font-size: 12px;
+  font-weight: bold;
 }
 
-@media (max-width: 900px) {
+/* Responsive */
+@media (max-width: 768px) {
   .nav-bar {
-    padding: 10px 8vw; /* Use viewport width for better scaling */
-    flex-direction: column; /* Stack nav items vertically */
+    flex-direction: column;
     align-items: stretch;
-    gap: 1.5rem;
-  }
-
-  .nav-top {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
+    gap: 1rem;
+    border-radius: 20px;
+    padding: 15px;
   }
 
   .search-bar {
-    display: none; /* Hide desktop search */
-  }
-
-  .search-icon-mobile {
-    display: inline-block; 
-  }
-
-  .hamburger {
-    display: flex;
-  }
-
-  .nav-bottom {
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: max-height 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
-      opacity 0.3s;
-  }
-
-  .nav-bar.active .nav-bottom {
-     display: flex;
-    max-height: 500px;
-    opacity: 1;
-    transition: max-height 0.5s cubic-bezier(.68,-0.55,.27,1.55), opacity 0.3s;
-  }
-
-  .nav-right {
     width: 100%;
-    justify-content: center; 
-    gap: 14px;
-  }
-}
-
-@media (max-width: 600px) {
-  .custom-header {
-    padding-top: 16px; /* Reduce top padding */
-  }
-
-  .nav-bar {
-    padding: 8px 2vw;
-    border-radius: 10px;
-    gap: 1rem;
-  }
-
-  .logo a {
-    font-size: 18px;
-  }
-
-  .search-input {
-    width: 90px;
-    font-size: 12px;
-  }
-
-  .nav-bottom {
-    gap: 12px;
-    padding-top: 8px;
+    max-width: 100%;
   }
 
   .nav-right {
-    gap: 8px;
+    justify-content: center;
+    gap: 16px;
   }
 
-  .hamburger span {
-    width: 20px;
+  .logo {
+    text-align: center;
   }
 }

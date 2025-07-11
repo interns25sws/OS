@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./login.css";
 
-const UserAuth = () => {
+const UserAuth = ({ setLoggedInUser }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -10,7 +10,6 @@ const UserAuth = () => {
   const [statusType, setStatusType] = useState("info");
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loggedInUser, setLoggedInUser] = useState(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
@@ -18,7 +17,7 @@ const UserAuth = () => {
       setIsLoggedIn(true);
       setLoggedInUser(storedUser);
     }
-  }, []);
+  }, [setLoggedInUser]);
 
   const resetForm = () => {
     setEmail("");
@@ -85,8 +84,15 @@ const UserAuth = () => {
   if (isLoggedIn) {
     return (
       <div className="welcome-container">
-        <h2>Welcome, {loggedInUser}!</h2>
-        <button onClick={handleLogout}>Logout</button>
+        <div className="welcome-card">
+          <h2 className="welcome-message">🎉 Welcome, {email}!</h2>
+          <p className="welcome-text">
+            You're now logged in. Explore your dashboard or log out anytime.
+          </p>
+          <button className="logout-button" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </div>
     );
   }

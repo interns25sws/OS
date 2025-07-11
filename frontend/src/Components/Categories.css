@@ -156,6 +156,10 @@
   .categories-container {
     padding: 40px 30px;
   }
+  .categories-title{
+    font-size: 30px;
+    margin-top: 0%;
+  }
 
   .categories-grid {
     display: flex;
@@ -166,7 +170,7 @@
   }
 
   .category-card {
-    width: 280px;
+    width: 200px;
     height: auto;
     flex-shrink: 0;
   }
