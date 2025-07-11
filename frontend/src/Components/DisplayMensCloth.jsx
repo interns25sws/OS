@@ -7,7 +7,7 @@ import Display3 from "../assets/images/MensDisplayImage3.jpg";
 
 const items = [
   {
-    title: "Casual Wear",
+    title: "Street Wear",
     image: Display1,
     price: "$49.99",
   },

@@ -1,11 +1,12 @@
 import fs from "fs";
 import express from "express";
 import cors from "cors";
+import bcrypt from "bcryptjs";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-  
+
 const USERS_FILE = "./users.json";
 
 // Load users from file on startup
@@ -13,6 +14,7 @@ let users = new Map();
 try {
   const data = fs.readFileSync(USERS_FILE, "utf-8");
   const obj = JSON.parse(data);
+  // obj is { email: { firstName, lastName, passwordHash } }
   users = new Map(Object.entries(obj));
   console.log("Loaded users from file.");
 } catch (error) {
@@ -29,26 +31,50 @@ app.get("/", (req, res) => {
   res.send("Server is up and running!");
 });
 
+// Signup route
 app.post("/api/signup", (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ message: "Invalid input!" });
+  const { email, password, firstName, lastName } = req.body;
+
+  if (!email || !password || !firstName || !lastName) {
+    return res.status(400).json({ message: "All fields are required." });
   }
+
   if (users.has(email)) {
     return res.status(409).json({ message: "Email already registered." });
   }
-  users.set(email, password);
-  saveUsers();  // Save to file after registering new user
+
+  users.set(email, { password, firstName, lastName });
+  saveUsers();
+
   res.json({ message: "Sign up successful! Please log in." });
 });
 
+
+// Login route
 app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
-  if (!users.has(email) || users.get(email) !== password) {
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password required." });
+  }
+
+  if (!users.has(email)) {
     return res.status(401).json({ message: "Invalid email or password." });
   }
-  res.json({ message: "Login successful! Welcome back." });
+
+  const user = users.get(email); 
+
+  if (user.password !== password) {
+    return res.status(401).json({ message: "Invalid email or password." });
+  }
+
+  return res.json({
+    message: "Login successful! Welcome back.",
+    firstName: user.firstName,
+    lastName: user.lastName,
+  });
 });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

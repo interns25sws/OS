@@ -7,7 +7,7 @@ import Womenstrend from '../assets/Images/womentrend.jpg';
 
 const items = [
   {
-    title: 'Formal Wear ',
+    title: 'Costom T-shirts',
     image: MensTrend,
     price: '$49.99'
   },

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./cart.css";
 
 import TrendproductImage1 from "../assets/Images/TrendproductImage1.jpg";
@@ -21,10 +22,10 @@ const initialCartItems = [
   },
 ];
 
-
-
 export default function Cart() {
   const [cartItems, setCartItems] = useState(initialCartItems);
+  const navigate = useNavigate();
+  const [hover, setHover] = React.useState(false);
 
   const updateQuantity = (id, delta) => {
     setCartItems((prevItems) =>
@@ -47,7 +48,18 @@ export default function Cart() {
 
   return (
     <div className="cart-page">
-      <h1>Your Cart</h1>
+      <h1
+        onClick={() => navigate("/")}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        style={{
+          cursor: "pointer",
+          color: hover ? "#007bff" : "black",
+          transition: "color 0.3s ease",
+        }}
+      >
+        Your Cart
+      </h1>
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (

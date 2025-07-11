@@ -1,6 +1,7 @@
 {
-  "new@gmail.com": "new123456",
-  "oweish27@gmail.com": "123456",
-  "test@gmail.com": "test123456",
-  "hello@gmail.com": "hello123456"
+  "oweish27@gmail.com": {
+    "password": "123456",
+    "firstName": "Oweish ",
+    "lastName": "Shaikh"
+  }
 }
