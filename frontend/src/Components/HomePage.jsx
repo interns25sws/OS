@@ -27,7 +27,7 @@ export default function HomePage() {
         <img
           src={productImage}
           alt="Featured Product"
-          className="product-image"
+          className="product-image-display"
           loading="lazy"
           />
       </div>

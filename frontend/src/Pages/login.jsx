@@ -36,7 +36,11 @@ const UserAuth = ({ setLoggedInUser }) => {
   };
 
   const validate = () => {
-    if (!email || !password || (!isLogin && (!firstName || !lastName || !confirmPassword))) {
+    if (
+      !email ||
+      !password ||
+      (!isLogin && (!firstName || !lastName || !confirmPassword))
+    ) {
       return "All fields are required.";
     }
     if (!isLogin && password !== confirmPassword) {

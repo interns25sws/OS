@@ -14,8 +14,7 @@ let users = new Map();
 try {
   const data = fs.readFileSync(USERS_FILE, "utf-8");
   const obj = JSON.parse(data);
-  // obj is { email: { firstName, lastName, passwordHash } }
-  users = new Map(Object.entries(obj));
+    users = new Map(Object.entries(obj));
   console.log("Loaded users from file.");
 } catch (error) {
   console.log("No users file found, starting fresh.");

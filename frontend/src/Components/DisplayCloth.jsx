@@ -46,7 +46,7 @@ export default function ProductShowcase() {
       {/* your content */}
     <section className="product-section">
       <h1 className="desc-heading">MODESTY x AESTHETIC</h1>
-      <p className="section-title">WORKOUT WITH ELEGANCE & COMFORT</p>
+      <p className="section-title">WALKOUT WITH ELEGANCE & COMFORT</p>
 
       <div className="product-grid">
         {products.map((item, index) => (
