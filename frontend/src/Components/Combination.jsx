@@ -1,4 +1,5 @@
 import React from 'react';
+import useInView from "../hooks/useInView";
 import './Combination.css';
 import KoreaLook from "../assets/Images/Korealook.jpg";
 import TexturedPolos from "../assets/Images/texturepolos.jpg";
@@ -35,7 +36,10 @@ const items = [
 ];
 
 const SharpDressing = () => {
+    const [ref, isInView] = useInView();
   return (
+    <div ref={ref} className={`fade-up ${isInView ? "animate" : ""}`}>
+      {/* your content */}
     <div className="sharp-dressing-container">
       <h2 className="heading">SHARP DRESSING</h2>
       <div className="cards-container">
@@ -46,6 +50,7 @@ const SharpDressing = () => {
         ))}
       </div>
     </div>
+        </div>
   );
 };
 

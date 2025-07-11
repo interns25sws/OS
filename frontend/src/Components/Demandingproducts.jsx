@@ -1,4 +1,5 @@
 import React from 'react';
+import useInView from "../hooks/useInView";
 import './Mens.css';
 import MensTrend from '../assets/Images/menstrend.jpg';
 import Shoes from '../assets/Images/Jordan.jpg';
@@ -23,7 +24,10 @@ const items = [
 ];
 
 const SummerCollection = () => {
+    const [ref, isInView] = useInView();
   return (
+    <div ref={ref} className={`fade-up ${isInView ? "animate" : ""}`}>
+      {/* your content */}
     <div className="collection-container">
       <h1 className="collection-title">DEMANDING PRODUCTS</h1>
       <p className="collection-description">For those who know what they want.</p>
@@ -38,6 +42,7 @@ const SummerCollection = () => {
         ))}
       </div>
     </div>
+        </div>
   );
 };
 

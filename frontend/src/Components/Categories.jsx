@@ -1,4 +1,5 @@
 import React from "react";
+import useInView from "../hooks/useInView";
 import "./Categories.css";
 
 import OverSized from "../assets/Images/Oversized.jpg";
@@ -22,7 +23,10 @@ const categories = [
 ];
 
 const Categories = () => {
+    const [ref, isInView] = useInView();
   return (
+    <div ref={ref} className={`fade-up ${isInView ? "animate" : ""}`}>
+      {/* your content */}
     <div className="categories-container">
       <h2 className="categories-title">CATEGORIES</h2>
 
@@ -35,6 +39,7 @@ const Categories = () => {
         ))}
       </div>
     </div>
+        </div>
   );
 };
 

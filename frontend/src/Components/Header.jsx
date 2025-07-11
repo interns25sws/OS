@@ -1,12 +1,17 @@
 import React, { useState } from "react";
+import useInView from "../hooks/useInView";
 import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 
 export default function Header() {
+    const [ref, isInView] = useInView();
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   return (
+    <div ref={ref} className={`fade-up ${isInView ? "animate" : ""}`}>
+      {/* your content */}
+    
     <header className="custom-header">
       <div className={`nav-bar ${menuOpen ? "active" : ""}`}>
         <div className="nav-top">
@@ -51,7 +56,7 @@ export default function Header() {
               tabIndex={0}
               onKeyDown={(e) => e.key === "Enter" && navigate("/cart")}
               aria-label="Go to cart"
-            >
+              >
               <i className="fa-solid fa-bag-shopping"></i>
               <span className="cart-count">0</span>
             </div>
@@ -59,5 +64,6 @@ export default function Header() {
         </div>
       </div>
     </header>
+              </div>
   );
 }

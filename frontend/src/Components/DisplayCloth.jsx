@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import useInView from "../hooks/useInView";
 import './DisplayCloth.css';
 
 import TrendingImage1 from "../assets/Images/TrendProductImage1.jpg";
@@ -37,9 +38,12 @@ const products = [
 ];
 
 export default function ProductShowcase() {
+    const [ref, isInView] = useInView();
   const navigate = useNavigate();
 
   return (
+    <div ref={ref} className={`fade-up ${isInView ? "animate" : ""}`}>
+      {/* your content */}
     <section className="product-section">
       <h1 className="desc-heading">MODESTY x AESTHETIC</h1>
       <p className="section-title">WORKOUT WITH ELEGANCE & COMFORT</p>
@@ -51,7 +55,7 @@ export default function ProductShowcase() {
               src={item.image}
               alt={`Product image of ${item.name}`}
               loading="lazy"
-            />
+              />
             <div className="product-name">{item.name}</div>
           </div>
         ))}
@@ -62,10 +66,11 @@ export default function ProductShowcase() {
           className="browse-button"
           onClick={() => navigate("/shop")}
           aria-label="Go to shop page"
-        >
+          >
           Browse Now
         </button>
       </div>
     </section>
+          </div>
   );
 }

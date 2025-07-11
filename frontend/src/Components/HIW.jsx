@@ -1,8 +1,12 @@
 import React from 'react';
+import useInView from "../hooks/useInView";
 import './HIW.css';
 
 const HowItWorks = () => {
+    const [ref, isInView] = useInView();
   return (
+    <div ref={ref} className={`fade-up ${isInView ? "animate" : ""}`}>
+      {/* your content */}
     <section className="how-it-works">
       <h2 className="title">HOW IT WORKS</h2>
       <div className="card">
@@ -19,6 +23,7 @@ const HowItWorks = () => {
         </p>
       </div>
     </section>
+    </div>
   );
 };
 

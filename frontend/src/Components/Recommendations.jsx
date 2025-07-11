@@ -1,8 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import useInView from "../hooks/useInView";
 import "./Recommendations.css";
 
 export default function Recommendations() {
+    const [ref, isInView] = useInView();
   const navigate = useNavigate();
 
   const handleSignIn = () => {
@@ -10,6 +12,8 @@ export default function Recommendations() {
   };
 
   return (
+    <div ref={ref} className={`fade-up ${isInView ? "animate" : ""}`}>
+      {/* your content */}
     <section className="recommendations-section">
       <div className="recommendations-container">
         <h1 className="recommendations-heading">
@@ -26,11 +30,12 @@ export default function Recommendations() {
             className="recommendations-start"
             onClick={handleSignIn}
             style={{ cursor: "pointer" }}
-          >
+            >
             Start Here
           </span>
         </p>
       </div>
     </section>
+            </div>
   );
 }
