@@ -80,6 +80,21 @@ app.post("/api/login", async (req, res) => {
   });
 });
 
+// New route: Get all users (excluding passwords)
+app.get("/api/users", (req, res) => {
+  const allUsers = Array.from(users.entries()).map(([email, user]) => ({
+    email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  }));
+
+  res.status(200).json({
+    total: allUsers.length,
+    users: allUsers,
+  });
+});
+
+
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
