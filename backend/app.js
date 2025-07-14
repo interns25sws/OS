@@ -1,7 +1,7 @@
 const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs");
 
 const app = express();
 app.use(cors());
@@ -13,11 +13,11 @@ const USERS_FILE = "./users.json";
 let users = new Map();
 try {
   const data = fs.readFileSync(USERS_FILE, "utf-8");
-  const obj = JSON.parse(data);
-    users = new Map(Object.entries(obj));
-  console.log("Loaded users from file.");
+  const parsed = JSON.parse(data);
+  users = new Map(Object.entries(parsed));
+  console.log("✅ Loaded users from file.");
 } catch (error) {
-  console.log("No users file found, starting fresh.");
+  console.log("⚠️ No users file found, starting fresh.");
 }
 
 // Helper to save users to file
@@ -26,12 +26,13 @@ function saveUsers() {
   fs.writeFileSync(USERS_FILE, JSON.stringify(obj, null, 2));
 }
 
+// Root route
 app.get("/", (req, res) => {
-  res.send("Server is up and running!");
+  res.send("🚀 Server is up and running!");
 });
 
 // Signup route
-app.post("/api/signup", (req, res) => {
+app.post("/api/signup", async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
 
   if (!email || !password || !firstName || !lastName) {
@@ -42,40 +43,45 @@ app.post("/api/signup", (req, res) => {
     return res.status(409).json({ message: "Email already registered." });
   }
 
-  users.set(email, { password, firstName, lastName });
-  saveUsers();
-
-  res.json({ message: "Sign up successful! Please log in." });
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    users.set(email, { password: hashedPassword, firstName, lastName });
+    saveUsers();
+    return res.status(201).json({ message: "Signup successful! Please log in." });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error during signup." });
+  }
 });
 
-
 // Login route
-app.post("/api/login", (req, res) => {
+app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: "Email and password required." });
+    return res.status(400).json({ message: "Email and password are required." });
   }
 
-  if (!users.has(email)) {
+  const user = users.get(email);
+
+  if (!user) {
     return res.status(401).json({ message: "Invalid email or password." });
   }
 
-  const user = users.get(email); 
+  const isMatch = await bcrypt.compare(password, user.password);
 
-  if (user.password !== password) {
+  if (!isMatch) {
     return res.status(401).json({ message: "Invalid email or password." });
   }
 
-  return res.json({
+  return res.status(200).json({
     message: "Login successful! Welcome back.",
     firstName: user.firstName,
     lastName: user.lastName,
   });
 });
 
-
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`✅ Server running at http://localhost:${PORT}`);
 });
