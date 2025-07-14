@@ -29,7 +29,7 @@ app.post("/api/signup", async (req, res) => {
   }
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 5);
     const newUser = new User({ email, password: hashedPassword, firstName, lastName });
     await newUser.save();
     res.status(201).json({ message: "Signup successful! Please log in." });
@@ -62,6 +62,49 @@ app.post("/api/login", async (req, res) => {
     lastName: user.lastName,
   });
 });
+
+// Update user info
+app.put("/api/users/:id", async (req, res) => {
+  const { firstName, lastName } = req.body;
+  const { id } = req.params;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { firstName, lastName },
+      { new: true, select: "-password" } // exclude password
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({
+      message: "User updated successfully.",
+      user: updatedUser,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Error updating user." });
+  }
+});
+
+// Delete user
+app.delete("/api/users/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({ message: "User deleted successfully." });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting user." });
+  }
+});
+
 
 // Get all users (without passwords)
 app.get("/api/users", async (req, res) => {
