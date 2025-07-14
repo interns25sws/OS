@@ -1,7 +1,7 @@
-import fs from "fs";
-import express from "express";
-import cors from "cors";
-import bcrypt from "bcryptjs";
+const fs = require("fs");
+const express = require("express");
+const cors = require("cors");
+const bcrypt = require("bcryptjs")
 
 const app = express();
 app.use(cors());
