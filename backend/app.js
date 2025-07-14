@@ -3,9 +3,11 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const { connectDB, User } = require("./mongo");
 
+
 const app = express();
 app.use(cors());
 app.use(express.json());
+
 
 // Connect to MongoDB
 connectDB();
@@ -14,6 +16,7 @@ connectDB();
 app.get("/", (req, res) => {
   res.send("🚀 Server is up and running with MongoDB!");
 });
+
 
 // Signup route
 app.post("/api/signup", async (req, res) => {
@@ -37,6 +40,7 @@ app.post("/api/signup", async (req, res) => {
     res.status(500).json({ message: "Server error during signup." });
   }
 });
+
 
 // Login route
 app.post("/api/login", async (req, res) => {
@@ -63,6 +67,7 @@ app.post("/api/login", async (req, res) => {
   });
 });
 
+
 // Update user info
 app.put("/api/users/:id", async (req, res) => {
   const { firstName, lastName } = req.body;
@@ -72,7 +77,7 @@ app.put("/api/users/:id", async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       id,
       { firstName, lastName },
-      { new: true, select: "-password" } // exclude password
+      { new: true, select: "-password" } 
     );
 
     if (!updatedUser) {
@@ -87,6 +92,7 @@ app.put("/api/users/:id", async (req, res) => {
     res.status(500).json({ message: "Error updating user." });
   }
 });
+
 
 // Delete user
 app.delete("/api/users/:id", async (req, res) => {
@@ -108,12 +114,13 @@ app.delete("/api/users/:id", async (req, res) => {
 
 // Get all users (without passwords)
 app.get("/api/users", async (req, res) => {
-  const users = await User.find({}, "-password"); // Exclude password
+  const users = await User.find({}, "-password"); 
   res.status(200).json({
     total: users.length,
     users,
   });
 });
+
 
 // Start server
 const PORT = process.env.PORT || 5000;

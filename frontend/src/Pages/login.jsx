@@ -4,15 +4,18 @@ import "./login.css";
 
 const UserAuth = ({ setLoggedInUser }) => {
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    firstName: "",
+    lastName: "",
+  });
   const [message, setMessage] = useState("");
   const [statusType, setStatusType] = useState("info");
+  const [hover, setHover] = useState(false);
+
   const navigate = useNavigate();
-  const [hover, setHover] = React.useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
@@ -23,11 +26,18 @@ const UserAuth = ({ setLoggedInUser }) => {
   }, [setLoggedInUser, navigate]);
 
   const resetForm = () => {
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-    setFirstName("");
-    setLastName("");
+    setFormData({
+      email: "",
+      password: "",
+      confirmPassword: "",
+      firstName: "",
+      lastName: "",
+    });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const showMessage = (msg, type = "info") => {
@@ -36,11 +46,8 @@ const UserAuth = ({ setLoggedInUser }) => {
   };
 
   const validate = () => {
-    if (
-      !email ||
-      !password ||
-      (!isLogin && (!firstName || !lastName || !confirmPassword))
-    ) {
+    const { email, password, confirmPassword, firstName, lastName } = formData;
+    if (!email || !password || (!isLogin && (!firstName || !lastName || !confirmPassword))) {
       return "All fields are required.";
     }
     if (!isLogin && password !== confirmPassword) {
@@ -58,9 +65,8 @@ const UserAuth = ({ setLoggedInUser }) => {
       ? "http://localhost:5000/api/login"
       : "http://localhost:5000/api/signup";
 
-    const body = isLogin
-      ? { email, password }
-      : { email, password, firstName, lastName };
+    const { email, password, firstName, lastName } = formData;
+    const body = isLogin ? { email, password } : { email, password, firstName, lastName };
 
     try {
       const res = await fetch(url, {
@@ -68,13 +74,13 @@ const UserAuth = ({ setLoggedInUser }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
+
       const data = await res.json();
 
       if (res.ok) {
         showMessage(data.message, "success");
 
         if (isLogin) {
-          // Save user info in localStorage and state
           const user = {
             email,
             firstName: data.firstName || "",
@@ -109,49 +115,55 @@ const UserAuth = ({ setLoggedInUser }) => {
       >
         {isLogin ? "Login" : "Sign Up"}
       </h2>
+
       <form onSubmit={handleSubmit} className="auth-form">
         {!isLogin && (
           <>
             <input
               type="text"
+              name="firstName"
               placeholder="First Name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              value={formData.firstName}
+              onChange={handleChange}
               className="auth-input"
-              required={!isLogin ? true : false}
+              required
             />
             <input
               type="text"
+              name="lastName"
               placeholder="Last Name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              value={formData.lastName}
+              onChange={handleChange}
               className="auth-input"
-              required={!isLogin ? true : false}
+              required
             />
           </>
         )}
         <input
           type="email"
+          name="email"
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={formData.email}
+          onChange={handleChange}
           className="auth-input"
           required
         />
         <input
           type="password"
+          name="password"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={formData.password}
+          onChange={handleChange}
           className="auth-input"
           required
         />
         {!isLogin && (
           <input
             type="password"
+            name="confirmPassword"
             placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={formData.confirmPassword}
+            onChange={handleChange}
             className="auth-input"
             required
           />
@@ -160,9 +172,9 @@ const UserAuth = ({ setLoggedInUser }) => {
           {isLogin ? "Login" : "Sign Up"}
         </button>
       </form>
-      {message && (
-        <p className={`auth-message auth-${statusType}`}>{message}</p>
-      )}
+
+      {message && <p className={`auth-message auth-${statusType}`}>{message}</p>}
+
       <p className="toggle-text">
         {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
         <span

@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Profile = ({ user, setLoggedInUser }) => {
   const navigate = useNavigate();
-  const [hover, setHover] = React.useState(false);
+  const [hover, setHover] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("loggedInUser");
@@ -13,61 +13,88 @@ const Profile = ({ user, setLoggedInUser }) => {
 
   if (!user) {
     return (
-      <p style={{ padding: "2rem" }}>
-        Please <a href="/login">log in</a> to view your profile.
-      </p>
+      <div style={styles.container}>
+        <p style={styles.loginPrompt}>
+          Please <a href="/login" style={styles.loginLink}>log in</a> to view your profile.
+        </p>
+      </div>
     );
   }
 
   return (
-    <div
-      style={{
-        maxWidth: "400px",
-        margin: "2rem auto",
-        padding: "2rem",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-        textAlign: "center",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-      }}
-    >
+    <div style={styles.profileBox}>
       <h2
         onClick={() => navigate("/")}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         style={{
-          cursor: "pointer",
-          color: hover ? "#007bff" : "#333",
-          transition: "color 0.3s ease",
-          marginBottom: "1.5rem",
+          ...styles.title,
+          color: hover ? "#007bff" : "#2c3e50",
         }}
       >
         👤 Profile
       </h2>
-      <p style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>
-        <strong>Name:</strong> {user.firstName} {user.lastName}
-      </p>
-      <p style={{ fontSize: "1.1rem", marginBottom: "1.5rem" }}>
-        <strong>Email:</strong> {user.email}
-      </p>
+      <p style={styles.text}><strong>Name:</strong> {user.firstName} {user.lastName}</p>
+      <p style={styles.text}><strong>Email:</strong> {user.email}</p>
+
       <button
         onClick={handleLogout}
-        style={{
-          padding: "10px 20px",
-          backgroundColor: "#e53935",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-          fontWeight: "600",
-          fontSize: "1rem",
-        }}
+        style={styles.logoutButton}
+        onMouseEnter={(e) => e.target.style.backgroundColor = "#c62828"}
+        onMouseLeave={(e) => e.target.style.backgroundColor = "#e53935"}
       >
         Logout
       </button>
     </div>
   );
+};
+
+const styles = {
+  container: {
+    padding: "2rem",
+    textAlign: "center",
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+  },
+  loginPrompt: {
+    fontSize: "1.1rem",
+  },
+  loginLink: {
+    color: "#007bff",
+    textDecoration: "underline",
+  },
+  profileBox: {
+    maxWidth: "420px",
+    margin: "3rem auto",
+    padding: "2rem",
+    border: "1px solid #ccc",
+    borderRadius: "12px",
+    boxShadow: "0 6px 20px rgba(0, 0, 0, 0.1)",
+    backgroundColor: "#fdfdfd",
+    textAlign: "center",
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+  },
+  title: {
+    fontSize: "1.8rem",
+    cursor: "pointer",
+    transition: "color 0.3s ease",
+    marginBottom: "1.5rem",
+  },
+  text: {
+    fontSize: "1.1rem",
+    margin: "0.8rem 0",
+  },
+  logoutButton: {
+    marginTop: "1.5rem",
+    padding: "10px 24px",
+    backgroundColor: "#e53935",
+    color: "#fff",
+    border: "none",
+    borderRadius: "6px",
+    fontSize: "1rem",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "background-color 0.3s ease",
+  },
 };
 
 export default Profile;
