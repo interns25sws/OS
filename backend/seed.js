@@ -25,6 +25,14 @@ async function seedProducts() {
         description: "Stylish denim jeans",
         sizes: ["M", "L", "XL"],
         images: ["http://localhost:5000/images/Allbottom.jpg"]
+      },
+
+      {
+        name: "Sneakers",
+        price: 60,
+        description: "Comfortable sneakers",
+        sizes: ["M", "L", "XL"],
+        images: ["http://localhost:5000/images/sneak  ers.jpg"]
       }
     ];
 
