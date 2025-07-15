@@ -1,58 +1,62 @@
-import React from "react";
-import DisplayImage from "../assets/shopimages/maindisplay.jpg";
-import image1 from "../assets/Images/oversized.jpg"
-import image2 from "../assets/Images/polos.jpg"
-import image3 from "../assets/Images/Newhoodie.jpg"
-import "./shop.css";
+import React, { useEffect, useState } from "react";
+import "./shop.css"; // optional for custom styling
 
-const products = [
-  {
-    id: 1,
-    name: "Custom Over-sized",
-    category: "T-shirt",
-    price: 299,
-    image: image1,
-  },
-  {
-    id: 1,
-    name: "Polo ",
-    category: "T-shirt",
-    price: 799,
-    image: image2,
-  },
-  {
-    id: 1,
-    name: "Hoodies",
-    category: "T-shirt",
-    price: 1199,
-    image: image3,
-  },
-];
+const Shop = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-export default function Shop() {
+  useEffect(() => {
+    fetch("http://localhost:5000/api/products") // Make sure this matches your backend port
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("Failed to load products.");
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <div className="shop-loading">Loading products...</div>;
+  if (error) return <div className="shop-error">{error}</div>;
+
   return (
-    <div className="shop-section">
-      <section className="shop-container">
-        <img src={DisplayImage} alt="Main Display" className="shop-image" />
-        <h1 className="shop-heading">Style yourself with proper fit</h1>
-      </section>
-
-      <section className="shop-products">
-        <div className="shop-product-types">
-          {products.map((product) => (
-            <div className="product-card-all" key={product.id}>
-              <img
-                src={product.image}
-                alt={product.name}
-                className="product-image"
-              />
-              <h3 className="product-title">{product.name}</h3>
-              <p className="product-category">{product.category}</p>
-              <p className="product-price">₹ {product.price}</p>
-            </div>
-          ))}
+   <div className="shop-container-">
+  <h1 className="shop-title">Shop Products</h1>
+  <div className="product-grid-db">
+    {products.map((product) => (
+      <div className="product-card-db" key={product._id}>
+        <div className="product-image-wrapper">
+          {product.images?.[0] ? (
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="product-image-db"
+            />
+          ) : (
+            <div className="no-image">No image</div>
+          )}
         </div>
-      </section>
-    </div>
+        <div className="product-info">
+          <h3>{product.name}</h3>
+          <p>{product.description}</p>
+          <p><strong>Price:</strong> ${product.price}</p>
+          <p><strong>Sizes:</strong> {product.sizes.join(", ")}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
   );
-}
+};
+
+export default Shop;
