@@ -13,7 +13,12 @@ exports.signup = async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 5);
-    const newUser = new User({ email, password: hashedPassword, firstName, lastName });
+    const newUser = new User({
+      email,
+      password: hashedPassword,
+      firstName,
+      lastName,
+    });
     await newUser.save();
     res.status(201).json({ message: "Signup successful! Please log in." });
   } catch (err) {
@@ -25,7 +30,9 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password)
-    return res.status(400).json({ message: "Email and password are required." });
+    return res
+      .status(400)
+      .json({ message: "Email and password are required." });
 
   const user = await User.findOne({ email });
   if (!user || !(await bcrypt.compare(password, user.password)))
@@ -54,7 +61,9 @@ exports.updateUser = async (req, res) => {
       { new: true, select: "-password" }
     );
     if (!updated) return res.status(404).json({ message: "User not found." });
-    res.status(200).json({ message: "User updated successfully.", user: updated });
+    res
+      .status(200)
+      .json({ message: "User updated successfully.", user: updated });
   } catch {
     res.status(500).json({ message: "Error updating user." });
   }
