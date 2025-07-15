@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css"; // Custom CSS styling
+import "./login.css"; 
 
-/**
- * UserAuth Component
- * - Handles user login and signup
- * - Communicates with backend API
- * - Persists login session using localStorage
- */
+
 const UserAuth = ({ setLoggedInUser }) => {
   // Toggle between login and signup mode
   const [isLogin, setIsLogin] = useState(true);
