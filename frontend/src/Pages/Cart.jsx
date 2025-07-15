@@ -1,50 +1,98 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./cart.css";
 
-import TrendproductImage1 from "../assets/Images/TrendproductImage1.jpg";
-import TrendproductImage4 from "../assets/Images/TrendproductImage4.jpg";
-
-const initialCartItems = [
-  {
-    id: 1,
-    name: "JOG 2.0 PANTS",
-    image: TrendproductImage1,
-    price: 49.99,
-    quantity: 1,
-  },
-  {
-    id: 2,
-    name: "Branded Shoes",
-    image: TrendproductImage4,
-    price: 89.99,
-    quantity: 2,
-  },
-];
-
-export default function Cart() {
-  const [cartItems, setCartItems] = useState(initialCartItems);
+export default function Cart({ user }) {
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [hover, setHover] = useState(false);
   const navigate = useNavigate();
-  const [hover, setHover] = React.useState(false);
 
-  const updateQuantity = (id, delta) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
-    );
+  // Get token from user object
+  const token = user?.token;
+
+  useEffect(() => {
+    if (!user || !user._id) {
+      navigate("/login");
+      return;
+    }
+    fetchCart();
+  }, [user]);
+
+  const fetchCart = async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await axios.get(`/api/cart/${user._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("Cart response:", response.data);
+
+      const items =
+        response.data.items?.map((item) => ({
+          id: item.productId,
+          name: item.name,
+          image: item.image,
+          price: item.price,
+          quantity: item.quantity,
+        })) || [];
+
+      setCartItems(items);
+    } catch (error) {
+      console.error("Failed to fetch cart:", error.response?.data || error.message);
+      setError("Failed to load cart items.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const removeItem = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  const updateQuantity = async (id, delta) => {
+    const item = cartItems.find((item) => item.id === id);
+    if (!item) return;
+    const newQuantity = Math.max(1, item.quantity + delta);
+
+    try {
+      await axios.post(
+        `/api/cart/${user._id}`,
+        {
+          productId: id,
+          name: item.name,
+          image: item.image,
+          price: item.price,
+          quantity: newQuantity - item.quantity,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setCartItems((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update quantity:", error.response?.data || error.message);
+    }
   };
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const removeItem = async (id) => {
+    try {
+      await axios.delete(`/api/cart/${user._id}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setCartItems((prev) => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Failed to remove item:", error.response?.data || error.message);
+    }
+  };
+
+  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <div className="cart-page">
@@ -60,7 +108,12 @@ export default function Cart() {
       >
         Your Cart
       </h1>
-      {cartItems.length === 0 ? (
+
+      {loading ? (
+        <p>Loading your cart...</p>
+      ) : error ? (
+        <p style={{ color: "red" }}>{error}</p>
+      ) : cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <div className="cart-container">
@@ -75,10 +128,7 @@ export default function Cart() {
                   <span>{item.quantity}</span>
                   <button onClick={() => updateQuantity(item.id, 1)}>+</button>
                 </div>
-                <button
-                  className="remove-btn"
-                  onClick={() => removeItem(item.id)}
-                >
+                <button className="remove-btn" onClick={() => removeItem(item.id)}>
                   Remove
                 </button>
               </div>

@@ -1,17 +1,15 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useInView from "../hooks/useInView";
-import { FaUserCircle } from "react-icons/fa";
+import { FaUserCircle, FaShoppingBag } from "react-icons/fa"; // use react-icons for cart too
 import "./Header.css";
 
-const Header = ({ loggedInUser }) => {
+const Header = ({ loggedInUser, cartItemCount = 0 }) => {
   const [ref, isInView] = useInView();
   const navigate = useNavigate();
 
   return (
     <div ref={ref} className={`fade-up ${isInView ? "animate" : ""}`}>
-      {/* your content */}
-
       <header className="custom-header">
         <div className="nav-bar">
           <div className="logo">
@@ -26,7 +24,7 @@ const Header = ({ loggedInUser }) => {
               placeholder="Search products..."
               className="search-input"
             />
-            <button className="search-btn">
+            <button className="search-btn" aria-label="Search products">
               <i className="fa fa-search" />
             </button>
           </div>
@@ -37,11 +35,12 @@ const Header = ({ loggedInUser }) => {
                 to="/profile"
                 className="user-icon-link"
                 title="Go to Profile"
+                aria-label="User Profile"
               >
                 <FaUserCircle size={28} />
               </Link>
             ) : (
-              <Link to="/login" className="login-link">
+              <Link to="/login" className="login-link" aria-label="Log in">
                 Log In
               </Link>
             )}
@@ -54,8 +53,12 @@ const Header = ({ loggedInUser }) => {
               onKeyDown={(e) => e.key === "Enter" && navigate("/cart")}
               aria-label="Go to cart"
             >
-              <i className="fa-solid fa-bag-shopping" />
-              <span className="cart-count">0</span>
+              <FaShoppingBag size={22} />
+              {cartItemCount > 0 && (
+                <span className="cart-count" aria-live="polite">
+                  {cartItemCount}
+                </span>
+              )}
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@ import HowItWorks from "./Components/HIW.jsx";
 import Recommendations from "./Components/Recommendations.jsx";
 import Footer from "./Components/Footer.jsx";
 
-import UserAuth from "./Pages/login.jsx"; 
+import UserAuth from "./Pages/login.jsx";
 import Cart from "./Pages/Cart.jsx";
 import Shop from "./ShopProducts/shop.jsx";
 import Profile from "./Pages/profile.jsx";
@@ -44,7 +44,8 @@ function App() {
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
     if (storedUser) {
-      setLoggedInUser(storedUser);
+      setLoggedInUser(JSON.parse(storedUser));
+      
     }
   }, []);
 
@@ -60,7 +61,10 @@ function App() {
           path={ROUTES.PROFILE}
           element={<Profile user={loggedInUser} setLoggedInUser={setLoggedInUser} />}
         />
-        <Route path={ROUTES.CART} element={<Cart />} />
+        <Route
+          path={ROUTES.CART}
+          element={<Cart user={loggedInUser} />}
+        />
         <Route path={ROUTES.SHOP} element={<Shop />} />
       </Routes>
     </Router>

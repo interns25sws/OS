@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css";
+import "./login.css"; // Custom CSS styling
 
 /**
  * UserAuth Component
