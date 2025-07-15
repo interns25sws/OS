@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css";
+import "./login.css"; // Importing the CSS for styling
 
+/**
+ * UserAuth Component
+ * Handles both Login and Sign Up functionality.
+ */
 const UserAuth = ({ setLoggedInUser }) => {
+  // State to toggle between login and sign up
   const [isLogin, setIsLogin] = useState(true);
+
+  // Form input state
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -11,12 +18,16 @@ const UserAuth = ({ setLoggedInUser }) => {
     firstName: "",
     lastName: "",
   });
+
+  // State for feedback messages
   const [message, setMessage] = useState("");
-  const [statusType, setStatusType] = useState("info");
-  const [hover, setHover] = useState(false);
+  const [statusType, setStatusType] = useState("info"); // can be "info", "success", or "error"
 
   const navigate = useNavigate();
 
+  /**
+   * useEffect hook: Check if user is already logged in.
+   */
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
     if (storedUser) {
@@ -25,48 +36,57 @@ const UserAuth = ({ setLoggedInUser }) => {
     }
   }, [setLoggedInUser, navigate]);
 
-  const resetForm = () => {
-    setFormData({
-      email: "",
-      password: "",
-      confirmPassword: "",
-      firstName: "",
-      lastName: "",
-    });
-  };
-
+  /**
+   * Handle input changes and update form data state.
+   */
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const showMessage = (msg, type = "info") => {
-    setMessage(msg);
-    setStatusType(type);
-  };
-
+  /**
+   * Validate the form fields.
+   */
   const validate = () => {
-    const { email, password, confirmPassword, firstName, lastName } = formData;
-    if (!email || !password || (!isLogin && (!firstName || !lastName || !confirmPassword))) {
-      return "All fields are required.";
+    if (!formData.email || !formData.password) {
+      return "Email and Password are required.";
     }
-    if (!isLogin && password !== confirmPassword) {
-      return "Passwords do not match.";
+
+    if (!isLogin) {
+      if (!formData.firstName || !formData.lastName || !formData.confirmPassword) {
+        return "All fields are required for sign up.";
+      }
+
+      if (formData.password !== formData.confirmPassword) {
+        return "Passwords do not match.";
+      }
     }
-    return null;
+
+    return null; // No errors
   };
 
+  /**
+   * Handle form submission for login or signup.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const error = validate();
-    if (error) return showMessage(error, "error");
+    if (error) {
+      setMessage(error);
+      setStatusType("error");
+      return;
+    }
 
-    const url = isLogin
-      ? "http://localhost:5000/api/login"
-      : "http://localhost:5000/api/signup";
+    const url = `http://localhost:5000/api/${isLogin ? "login" : "signup"}`;
 
-    const { email, password, firstName, lastName } = formData;
-    const body = isLogin ? { email, password } : { email, password, firstName, lastName };
+    const body = isLogin
+      ? { email: formData.email, password: formData.password }
+      : {
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+        };
 
     try {
       const res = await fetch(url, {
@@ -78,11 +98,14 @@ const UserAuth = ({ setLoggedInUser }) => {
       const data = await res.json();
 
       if (res.ok) {
-        showMessage(data.message, "success");
+        // Success message
+        setMessage(data.message);
+        setStatusType("success");
 
         if (isLogin) {
+          // Save user info in localStorage and update global state
           const user = {
-            email,
+            email: formData.email,
             firstName: data.firstName || "",
             lastName: data.lastName || "",
           };
@@ -90,37 +113,52 @@ const UserAuth = ({ setLoggedInUser }) => {
           setLoggedInUser(user);
           navigate("/");
         } else {
+          // If signed up, reset form and switch to login
           setIsLogin(true);
           resetForm();
         }
       } else {
-        showMessage(data.message || "Something went wrong", "error");
+        setMessage(data.message || "Something went wrong");
+        setStatusType("error");
       }
     } catch (err) {
-      showMessage(err.message, "error");
+      setMessage("Network error");
+      setStatusType("error");
     }
   };
 
+  /**
+   * Reset all form fields.
+   */
+  const resetForm = () => {
+    setFormData({
+      email: "",
+      password: "",
+      confirmPassword: "",
+      firstName: "",
+      lastName: "",
+    });
+  };
+
+  /**
+   * Toggle between login and signup views.
+   */
+  const toggleMode = () => {
+    setIsLogin(!isLogin);
+    setMessage("");
+    resetForm();
+  };
+
+  // JSX UI for the component
   return (
     <div className="auth-container">
-      <h2
-        onClick={() => navigate("/")}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-        style={{
-          cursor: "pointer",
-          color: hover ? "#007bff" : "black",
-          transition: "color 0.3s ease",
-        }}
-      >
-        {isLogin ? "Login" : "Sign Up"}
-      </h2>
+      <h2>{isLogin ? "Login" : "Sign Up"}</h2>
 
       <form onSubmit={handleSubmit} className="auth-form">
+        {/* Show name fields only in sign up mode */}
         {!isLogin && (
           <>
             <input
-              type="text"
               name="firstName"
               placeholder="First Name"
               value={formData.firstName}
@@ -129,7 +167,6 @@ const UserAuth = ({ setLoggedInUser }) => {
               required
             />
             <input
-              type="text"
               name="lastName"
               placeholder="Last Name"
               value={formData.lastName}
@@ -139,6 +176,7 @@ const UserAuth = ({ setLoggedInUser }) => {
             />
           </>
         )}
+
         <input
           type="email"
           name="email"
@@ -148,6 +186,7 @@ const UserAuth = ({ setLoggedInUser }) => {
           className="auth-input"
           required
         />
+
         <input
           type="password"
           name="password"
@@ -157,6 +196,8 @@ const UserAuth = ({ setLoggedInUser }) => {
           className="auth-input"
           required
         />
+
+        {/* Confirm password field shown only in sign up mode */}
         {!isLogin && (
           <input
             type="password"
@@ -168,26 +209,21 @@ const UserAuth = ({ setLoggedInUser }) => {
             required
           />
         )}
+
         <button type="submit" className="auth-button">
           {isLogin ? "Login" : "Sign Up"}
         </button>
       </form>
 
+      {/* Feedback message */}
       {message && <p className={`auth-message auth-${statusType}`}>{message}</p>}
 
+      {/* Toggle link */}
       <p className="toggle-text">
         {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
         <span
-          onClick={() => {
-            setIsLogin(!isLogin);
-            setMessage("");
-            resetForm();
-          }}
-          style={{
-            cursor: "pointer",
-            color: "blue",
-            textDecoration: "underline",
-          }}
+          onClick={toggleMode}
+          style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}
         >
           {isLogin ? "Sign Up" : "Login"}
         </span>
