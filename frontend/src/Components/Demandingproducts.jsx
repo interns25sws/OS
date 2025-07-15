@@ -36,7 +36,7 @@ const SummerCollection = () => {
           <div className="collection-item" key={index}>
             <img src={item.image} alt={item.title} className="collection-image" />
             <p className="collection-item-title">{item.title}</p>
-            <p className="collection-item-price">{item.price}</p>
+            {/* <p className="collection-item-price">{item.price}</p> */}
             <button className="browse-button">Browse Now</button>
           </div>
         ))}

@@ -42,7 +42,7 @@ const SummerCollection = () => {
               className="collection-image"
               />
             <p className="collection-item-title">{item.title}</p>
-            <p className="collection-item-price">{item.price}</p>
+            {/* <p className="collection-item-price">{item.price}</p> */}
             <button
               className="browse-button"
               onClick={() => navigate("/shop")}
