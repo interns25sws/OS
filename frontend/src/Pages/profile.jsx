@@ -1,40 +1,28 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./AuthContext";
 
-/**
- * Profile component shows the logged-in user's information
- * and allows them to logout. Redirects if no user is logged in.
- */
-const Profile = () => {
+const Profile = ({ user, setLoggedInUser }) => {
   const navigate = useNavigate();
-
-  // Get user data and logout method from AuthContext
-  const { user, logout } = useContext(AuthContext);
-
-  // State to handle hover effect on profile title
   const [hover, setHover] = useState(false);
 
-  /**
-   * Handle logout:
-   *  - Clear user data from context/localStorage (via logout function)
-   *  - Redirect user to login page
-   */
   const handleLogout = () => {
-    logout();
+    localStorage.removeItem("loggedInUser");
+    setLoggedInUser(null);
     navigate("/login");
   };
 
-  // If user is not logged in (should be protected by route, but double-check)
   if (!user) {
-    // Redirect to login page immediately
-    navigate("/login");
-    return null; // Prevent rendering profile content
+    return (
+      <div style={styles.container}>
+        <p style={styles.loginPrompt}>
+          Please <a href="/login" style={styles.loginLink}>log in</a> to view your profile.
+        </p>
+      </div>
+    );
   }
 
   return (
     <div style={styles.profileBox}>
-      {/* Profile Title with hover color change and navigation to home on click */}
       <h2
         onClick={() => navigate("/")}
         onMouseEnter={() => setHover(true)}
@@ -46,21 +34,14 @@ const Profile = () => {
       >
         👤 Profile
       </h2>
+      <p style={styles.text}><strong>Name:</strong> {user.firstName} {user.lastName}</p>
+      <p style={styles.text}><strong>Email:</strong> {user.email}</p>
 
-      {/* User information display */}
-      <p style={styles.text}>
-        <strong>Name:</strong> {user.firstName} {user.lastName}
-      </p>
-      <p style={styles.text}>
-        <strong>Email:</strong> {user.email}
-      </p>
-
-      {/* Logout button with hover style changes */}
       <button
         onClick={handleLogout}
         style={styles.logoutButton}
-        onMouseEnter={(e) => (e.target.style.backgroundColor = "#c62828")}
-        onMouseLeave={(e) => (e.target.style.backgroundColor = "#e53935")}
+        onMouseEnter={(e) => e.target.style.backgroundColor = "#c62828"}
+        onMouseLeave={(e) => e.target.style.backgroundColor = "#e53935"}
       >
         Logout
       </button>
@@ -68,8 +49,19 @@ const Profile = () => {
   );
 };
 
-// Inline styles object for consistent styling
 const styles = {
+  container: {
+    padding: "2rem",
+    textAlign: "center",
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+  },
+  loginPrompt: {
+    fontSize: "1.1rem",
+  },
+  loginLink: {
+    color: "#007bff",
+    textDecoration: "underline",
+  },
   profileBox: {
     maxWidth: "420px",
     margin: "3rem auto",
