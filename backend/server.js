@@ -4,7 +4,8 @@ const path = require('path');
 require('dotenv').config();
 
 const connectDB = require('./config/db');
-const productRoutes = require('./routes/productRoutes');
+const productRoutes = require('./routes/productRoutes'); //This is the file that contains the routes for the products
+const userRoutes = require('./routes/userRoutes'); //This is the file that contains the routes for the users
 
 const app = express();
 
@@ -17,6 +18,9 @@ app.get('/', (req, res) => res.send('🚀 Server is up and running!'));
 
 // Use product routes for /api/products
 app.use('/api/products', productRoutes);
+
+// Use user routes for /api/users
+app.use('/api/users', userRoutes);  
 
 // Serve images statically
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
