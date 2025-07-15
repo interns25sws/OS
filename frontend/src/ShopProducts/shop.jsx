@@ -29,33 +29,36 @@ const Shop = () => {
   if (error) return <div className="shop-error">{error}</div>;
 
   return (
-   <div className="shop-container-">
-  <h1 className="shop-title">Shop Products</h1>
-  <div className="product-grid-db">
-    {products.map((product) => (
-      <div className="product-card-db" key={product._id}>
-        <div className="product-image-wrapper">
-          {product.images?.[0] ? (
-            <img
-              src={product.images[0]}
-              alt={product.name}
-              className="product-image-db"
-            />
-          ) : (
-            <div className="no-image">No image</div>
-          )}
-        </div>
-        <div className="product-info">
-          <h3>{product.name}</h3>
-          <p>{product.description}</p>
-          <p><strong>Price:</strong> ${product.price}</p>
-          <p><strong>Sizes:</strong> {product.sizes.join(", ")}</p>
-        </div>
+    <div className="shop-container-">
+      <h1 className="shop-title">Shop Products</h1>
+      <div className="product-grid-db">
+        {products.map((product) => (
+          <div className="product-card-db" key={product._id}>
+            <div className="product-image-wrapper">
+              {product.images?.[0] ? (
+                <img
+                  src={product.images[0]}
+                  alt={product.name}
+                  className="product-image-db"
+                />
+              ) : (
+                <div className="no-image">No image</div>
+              )}
+            </div>
+            <div className="product-info">
+              <h3>{product.name}</h3>
+              <p>{product.description}</p>
+              <p>
+                <strong>Price:</strong> ${product.price}
+              </p>
+              <p>
+                <strong>Sizes:</strong> {product.sizes.join(", ")}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
-</div>
-
+    </div>
   );
 };
 

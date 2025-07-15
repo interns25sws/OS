@@ -1,18 +1,54 @@
-.shop-container- {
+.shop-container {
   max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 20px;
-  font-family: 'Arial', sans-serif;
-  color: #222;
+  margin: 60px auto;
+  padding: 48px;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1a1a1a;
+
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(245, 245, 255, 0.6));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  transition: all 0.35s ease;
+}
+
+.shop-container:hover {
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
 }
 
 .shop-title {
-  text-align: left;
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: 24px;
-  color: #111;
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 32px;
+  padding-left: 24px;
+  position: relative;
+  letter-spacing: 0.8px;
+
+  background: linear-gradient(90deg, #000000, #ffb347);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
+
+/* Stylish left bar */
+.shop-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 6px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #000000, #ffb347);
+  box-shadow: 0 0 10px rgba(255, 179, 71, 0.3);
+}
+
 
 .product-grid-db {
   display: grid;
