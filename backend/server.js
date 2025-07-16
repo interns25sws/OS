@@ -1,33 +1,30 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
 const connectDB = require('./config/db');
-const productRoutes = require('./routes/productRoutes'); //This is the file that contains the routes for the products
-const userRoutes = require('./routes/userRoutes'); //This is the file that contains the routes for the users
-const cartRoutes = require("./routes/cartRoutes"); //This is the file that contains the routes for the cart
+const productRoutes = require('./routes/productRoutes');
+const userRoutes = require('./routes/userRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// Connect to MongoDB
 connectDB();
 
+// Root route to check server status
 app.get('/', (req, res) => res.send('🚀 Server is up and running!'));
 
-// Use product routes for /api/products
+// API Routes
 app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/cart', cartRoutes);
 
-// Use user routes for /api/users
-app.use('/api/users', userRoutes);  
-
-// Use cart routes for /api/cart
-app.use("/api/cart", cartRoutes);
-
-// Serve images statically
+// Serve images statically from /public/images
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
 const PORT = process.env.PORT || 5000;

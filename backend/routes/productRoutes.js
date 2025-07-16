@@ -1,51 +1,28 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Product = require('../models/productModel'); // adjust path if needed
+const Product = require("../models/productModel");
 
-// GET all products
-router.get('/', async (req, res) => {
+// GET /api/products?category=Shoes
+router.get("/", async (req, res) => {
   try {
-    const products = await Product.find();
+    const { category } = req.query;
+    const query = category && category !== "All" ? { category } : {};
+    const products = await Product.find(query);
     res.json(products);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch products" });
   }
 });
 
-// POST create new product
-router.post('/', async (req, res) => {
-  const newProduct = new Product(req.body);
+// GET /api/products/categories — to get list of categories
+router.get("/categories", async (req, res) => {
   try {
-    await newProduct.save();
-    res.status(201).json(newProduct);
+    const categories = await Product.distinct("category");
+    res.json(categories);
   } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
-
-// PATCH update product by ID
-router.patch('/:id', async (req, res) => {
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
-    if (!updatedProduct) return res.status(404).json({ message: 'Product not found' });
-    res.json(updatedProduct);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
-
-// DELETE product by ID
-router.delete('/:id', async (req, res) => {
-  try {
-    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
-    if (!deletedProduct) return res.status(404).json({ message: 'Product not found' });
-    res.json({ message: 'Product deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch categories" });
   }
 });
 
