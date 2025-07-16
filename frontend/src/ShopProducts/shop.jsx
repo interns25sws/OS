@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./shop.css";
 
-const Shop = ({ user }) => {
+const Shop = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState(["All"]);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -41,15 +41,9 @@ const Shop = ({ user }) => {
       });
   }, [selectedCategory]);
 
-  // ✅ Handle Add to Cart (with userId included)
+  // Handle Add to Cart click
   const handleAddToCart = (productId) => {
-    const userId = user?._id;
-    if (!userId) {
-      alert("Please log in first to add items to your cart.");
-      return;
-    }
-
-    fetch(`http://localhost:5000/api/cart/${userId}`, {
+    fetch("http://localhost:5000/api/cart", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ productId, quantity: 1 }),
@@ -60,7 +54,7 @@ const Shop = ({ user }) => {
       })
       .then((data) => {
         setCartMessage(data.message);
-        setTimeout(() => setCartMessage(""), 3000);
+        setTimeout(() => setCartMessage(""), 3000); // clear message after 3s
       })
       .catch(() => {
         setCartMessage("Error adding to cart.");
@@ -74,12 +68,6 @@ const Shop = ({ user }) => {
   return (
     <div className="shop-container-">
       <h1 className="shop-title">Shop Products</h1>
-      <button className="theme-toggle" onClick={() => {
-  document.body.classList.toggle("dark-mode");
-}}>
-  Toggle Dark Mode
-</button>
-
 
       {/* Category filter */}
       <div>
@@ -97,7 +85,7 @@ const Shop = ({ user }) => {
         </select>
       </div>
 
-      {/* Cart message feedback */}
+      {/* Show cart message */}
       {cartMessage && <div className="cart-message">{cartMessage}</div>}
 
       <div className="product-grid-db">
@@ -133,7 +121,6 @@ const Shop = ({ user }) => {
           </div>
         ))}
       </div>
-      
     </div>
   );
 };

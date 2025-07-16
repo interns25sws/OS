@@ -21,77 +21,57 @@ export default function Cart({ user }) {
     fetchCart();
   }, [user]);
 
-  const fetchCart = async () => {
-    setLoading(true);
-    setError("");
+ const fetchCart = async () => {
+  setLoading(true);
+  setError("");
 
-    try {
-      const response = await axios.get(`/api/cart/${user._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  try {
+    const response = await axios.get("/api/cart", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      console.log("Cart response:", response.data);
+    setCartItems(response.data.items || []);
+  } catch (error) {
+    console.error("Failed to fetch cart:", error);
+    setError(error.response?.data?.error || "Failed to load cart items.");
+  } finally {
+    setLoading(false);
+  }
+};
 
-      const items =
-        response.data.items?.map((item) => ({
-          id: item.productId,
-          name: item.name,
-          image: item.image,
-          price: item.price,
-          quantity: item.quantity,
-        })) || [];
+const updateQuantity = async (id, delta) => {
+  const item = cartItems.find((item) => item.id === id);
+  if (!item) return;
+  const newQuantity = Math.max(1, item.quantity + delta);
 
-      setCartItems(items);
-    } catch (error) {
-      console.error("Failed to fetch cart:", error.response?.data || error.message);
-      setError("Failed to load cart items.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    await axios.post(
+      "/api/cart",
+      { productId: id, quantity: delta },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-  const updateQuantity = async (id, delta) => {
-    const item = cartItems.find((item) => item.id === id);
-    if (!item) return;
-    const newQuantity = Math.max(1, item.quantity + delta);
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  } catch (error) {
+    console.error("Failed to update quantity:", error);
+  }
+};
 
-    try {
-      await axios.post(
-        `/api/cart/${user._id}`,
-        {
-          productId: id,
-          name: item.name,
-          image: item.image,
-          price: item.price,
-          quantity: newQuantity - item.quantity,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+const removeItem = async (id) => {
+  try {
+    await axios.delete(`/api/cart/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      setCartItems((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, quantity: newQuantity } : item
-        )
-      );
-    } catch (error) {
-      console.error("Failed to update quantity:", error.response?.data || error.message);
-    }
-  };
-
-  const removeItem = async (id) => {
-    try {
-      await axios.delete(`/api/cart/${user._id}/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setCartItems((prev) => prev.filter((item) => item.id !== id));
-    } catch (error) {
-      console.error("Failed to remove item:", error.response?.data || error.message);
-    }
-  };
-
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  } catch (error) {
+    console.error("Failed to remove item:", error);
+  }
+};
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (

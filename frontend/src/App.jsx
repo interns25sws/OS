@@ -65,7 +65,7 @@ function App() {
           path={ROUTES.CART}
           element={<Cart user={loggedInUser} />}
         />
-        <Route path={ROUTES.SHOP} element={<Shop />} />
+        <Route path={ROUTES.SHOP} element={<Shop user={loggedInUser} />} />
       </Routes>
     </Router>
   );

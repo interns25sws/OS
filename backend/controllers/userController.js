@@ -31,13 +31,10 @@ exports.login = async (req, res) => {
   if (!user || !(await bcrypt.compare(password, user.password)))
     return res.status(401).json({ message: "Invalid email or password." });
 
-   res.status(200).json({
+  res.status(200).json({
     message: "Login successful! Welcome back.",
-    _id: user._id, // Add this line to return the user ID
     firstName: user.firstName,
     lastName: user.lastName,
-    email: user.email, // Also return email for consistency if needed
-    gender: user.gender, // If you add gender to your User model
   });
 };
 
