@@ -10,69 +10,76 @@ export default function Cart({ user }) {
   const [hover, setHover] = useState(false);
   const navigate = useNavigate();
 
-  // Get token from user object
   const token = user?.token;
 
-  useEffect(() => {
-    if (!user || !user._id) {
-      navigate("/login");
-      return;
-    }
-    fetchCart();
-  }, [user]);
-
- const fetchCart = async () => {
-  setLoading(true);
-  setError("");
-
-  try {
-    const response = await axios.get("/api/cart", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    setCartItems(response.data.items || []);
-  } catch (error) {
-    console.error("Failed to fetch cart:", error);
-    setError(error.response?.data?.error || "Failed to load cart items.");
-  } finally {
+useEffect(() => {
+  console.log("User changed:", user);
+  if (!user || !user._id) {
+    setCartItems([]);
     setLoading(false);
+    setError("");
+    return;
   }
-};
+  fetchCart();
+}, [user]);
 
-const updateQuantity = async (id, delta) => {
-  const item = cartItems.find((item) => item.id === id);
-  if (!item) return;
-  const newQuantity = Math.max(1, item.quantity + delta);
 
-  try {
-    await axios.post(
-      "/api/cart",
-      { productId: id, quantity: delta },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+  const fetchCart = async () => {
+    setLoading(true);
+    setError("");
 
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  } catch (error) {
-    console.error("Failed to update quantity:", error);
-  }
-};
+    try {
+      const response = await axios.get("/api/cart", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-const removeItem = async (id) => {
-  try {
-    await axios.delete(`/api/cart/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+      setCartItems(response.data.items || []);
+    } catch (error) {
+      console.error("Failed to fetch cart:", error);
+      setError(error.response?.data?.error || "Failed to load cart items.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
-  } catch (error) {
-    console.error("Failed to remove item:", error);
-  }
-};
-  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const updateQuantity = async (id, delta) => {
+    const item = cartItems.find((item) => item.id === id);
+    if (!item) return;
+    const newQuantity = Math.max(1, item.quantity + delta);
+
+    try {
+      await axios.post(
+        "/api/cart",
+        { productId: id, quantity: delta },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setCartItems((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update quantity:", error);
+    }
+  };
+
+  const removeItem = async (id) => {
+    try {
+      await axios.delete(`/api/cart/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setCartItems((prev) => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Failed to remove item:", error);
+    }
+  };
+
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
     <div className="cart-page">
@@ -108,7 +115,10 @@ const removeItem = async (id) => {
                   <span>{item.quantity}</span>
                   <button onClick={() => updateQuantity(item.id, 1)}>+</button>
                 </div>
-                <button className="remove-btn" onClick={() => removeItem(item.id)}>
+                <button
+                  className="remove-btn"
+                  onClick={() => removeItem(item.id)}
+                >
                   Remove
                 </button>
               </div>

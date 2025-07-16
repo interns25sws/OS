@@ -42,25 +42,30 @@ const Shop = () => {
   }, [selectedCategory]);
 
   // Handle Add to Cart click
-  const handleAddToCart = (productId) => {
-    fetch("http://localhost:5000/api/cart", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ productId, quantity: 1 }),
+const userId = "68766e2fe0273da7925dcb70"; // Replace this with dynamic user ID in production
+
+const handleAddToCart = (productId) => {
+  fetch("http://localhost:5000/api/cart", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId, productId, quantity: 1 }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to add to cart");
+      return res.json();
     })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to add to cart");
-        return res.json();
-      })
-      .then((data) => {
-        setCartMessage(data.message);
-        setTimeout(() => setCartMessage(""), 3000); // clear message after 3s
-      })
-      .catch(() => {
-        setCartMessage("Error adding to cart.");
-        setTimeout(() => setCartMessage(""), 3000);
-      });
-  };
+    .then((data) => {
+      setCartMessage(data.message);
+      setTimeout(() => setCartMessage(""), 3000);
+    })
+    .catch((err) => {
+      console.error("❌ Error adding to cart:", err);
+      setCartMessage("Error adding to cart.");
+      setTimeout(() => setCartMessage(""), 3000);
+    });
+};
+
+
 
   if (loading) return <div className="shop-loading">Loading products...</div>;
   if (error) return <div className="shop-error">{error}</div>;
