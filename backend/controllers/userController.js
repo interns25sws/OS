@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
-// Signup
+// User Signup
 exports.signup = async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
   if (!email || !password || !firstName || !lastName)
@@ -21,7 +21,7 @@ exports.signup = async (req, res) => {
   }
 };
 
-// Login
+// User Login
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password)
@@ -44,7 +44,7 @@ exports.getAllUsers = async (req, res) => {
   res.status(200).json({ total: users.length, users });
 };
 
-// Update User
+// Update User 
 exports.updateUser = async (req, res) => {
   const { firstName, lastName } = req.body;
   try {
