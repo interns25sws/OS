@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css"; 
-
+import "./login.css";
 
 const UserAuth = ({ setLoggedInUser }) => {
   // Toggle between login and signup mode
@@ -49,7 +48,11 @@ const UserAuth = ({ setLoggedInUser }) => {
     }
 
     if (!isLogin) {
-      if (!formData.firstName || !formData.lastName || !formData.confirmPassword) {
+      if (
+        !formData.firstName ||
+        !formData.lastName ||
+        !formData.confirmPassword
+      ) {
         return "All fields are required for sign up.";
       }
       if (formData.password !== formData.confirmPassword) {
@@ -75,7 +78,9 @@ const UserAuth = ({ setLoggedInUser }) => {
     }
 
     // Prepare API URL and body
-    const url = `http://localhost:5000/api/users/${isLogin ? "login" : "signup"}`;
+    const url = `http://localhost:5000/api/users/${
+      isLogin ? "login" : "signup"
+    }`;
     const body = isLogin
       ? { email: formData.email, password: formData.password }
       : {
@@ -93,23 +98,26 @@ const UserAuth = ({ setLoggedInUser }) => {
       });
 
       const data = await res.json();
-
+      // login.jsx - modifications in handleSubmit
+      // login.jsx (Inside handleSubmit, after `const data = await res.json();`)
       if (res.ok) {
+        console.log("Login successful, API data:", data); // Check what backend sends
         setMessage(data.message);
         setStatusType("success");
 
         if (isLogin) {
-          // Save user data to localStorage
           const user = {
+            _id: data._id, // <--- VERIFY THIS LINE
             email: formData.email,
             firstName: data.firstName || "",
             lastName: data.lastName || "",
+            gender: data.gender || "", // If applicable
           };
-          localStorage.setItem("loggedInUser", JSON.stringify(user));
+          console.log("User object prepared for localStorage:", user); // Check what's about to be stored
+          localStorage.setItem("loggedInUser", JSON.stringify(user)); // <--- THIS IS THE LINE THAT SHOULD UPDATE LOCAL STORAGE
           setLoggedInUser(user);
           navigate("/");
         } else {
-          // After signup, switch to login mode
           setIsLogin(true);
           resetForm();
         }
@@ -212,14 +220,20 @@ const UserAuth = ({ setLoggedInUser }) => {
       </form>
 
       {/* Show success/error message */}
-      {message && <p className={`auth-message auth-${statusType}`}>{message}</p>}
+      {message && (
+        <p className={`auth-message auth-${statusType}`}>{message}</p>
+      )}
 
       {/* Switch between login and signup */}
       <p className="toggle-text">
         {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
         <span
           onClick={toggleMode}
-          style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}
+          style={{
+            cursor: "pointer",
+            color: "blue",
+            textDecoration: "underline",
+          }}
         >
           {isLogin ? "Sign Up" : "Login"}
         </span>
