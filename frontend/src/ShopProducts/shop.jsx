@@ -3,7 +3,7 @@ import "./shop.css";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState(["All"]);
+  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -11,11 +11,9 @@ const Shop = () => {
 
   const userId = "68766e2fe0273da7925dcb70";
 
+  // Static categories
   useEffect(() => {
-    fetch("http://localhost:5000/api/products/categories")
-      .then((res) => res.json())
-      .then((data) => setCategories(["All", ...data]))
-      .catch(() => setCategories(["All"]));
+    setCategories(["All", "Shirt", "T-Shirt", "Jeans", "Shoes", "Shorts", "Slides"]);
   }, []);
 
   useEffect(() => {
@@ -23,7 +21,7 @@ const Shop = () => {
     setError("");
     const url =
       selectedCategory !== "All"
-        ? `http://localhost:5000/api/products?category=${selectedCategory}`
+        ? `http://localhost:5000/api/products?category=${encodeURIComponent(selectedCategory)}`
         : "http://localhost:5000/api/products";
 
     fetch(url)
@@ -59,13 +57,6 @@ const Shop = () => {
         setCartMessage("Error adding to cart.");
         setTimeout(() => setCartMessage(""), 3000);
       });
-
-      useEffect(() => {
-  // Static clothing categories
-  const staticCategories = ["All", "Shirt", "T-Shirt", "Jeans", "Shoes", "Shorts", "Slides"];
-  setCategories(staticCategories);
-}, []);
-
   };
 
   return (
@@ -73,7 +64,7 @@ const Shop = () => {
       <h1 className="shop-header">🛒 Explore Our Products</h1>
 
       <div className="shop-filter-bar">
-        <label htmlFor="category-select">Category: </label>
+        <label htmlFor="category-select">Category:</label>
         <select
           id="category-select"
           className="shop-category-select"
@@ -104,9 +95,11 @@ const Shop = () => {
             </div>
             <div className="shop-product-info">
               <h3>{product.name}</h3>
-              <p>{product.description}</p>
-              <p><strong>Price:</strong> ${product.price}</p>
-              <p><strong>Sizes:</strong> {product.sizes.join(", ")}</p>
+              <p className="desc">{product.description}</p>
+              <div className="info-row">
+                <span className="sizes">{product.sizes.join(", ")}</span>
+                <span className="price">${product.price.toFixed(2)}</span>
+              </div>
               <button
                 className="shop-add-to-cart-btn"
                 onClick={() => handleAddToCart(product._id)}
