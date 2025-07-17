@@ -9,7 +9,7 @@ const Shop = () => {
   const [error, setError] = useState("");
   const [cartMessage, setCartMessage] = useState("");
 
-  const userId = "68766e2fe0273da7925dcb70"; // Replace with actual user ID
+  const userId = "68766e2fe0273da7925dcb70";
 
   useEffect(() => {
     fetch("http://localhost:5000/api/products/categories")
@@ -59,19 +59,24 @@ const Shop = () => {
         setCartMessage("Error adding to cart.");
         setTimeout(() => setCartMessage(""), 3000);
       });
+
+      useEffect(() => {
+  // Static clothing categories
+  const staticCategories = ["All", "Shirt", "T-Shirt", "Jeans", "Shoes", "Shorts", "Slides"];
+  setCategories(staticCategories);
+}, []);
+
   };
 
-  if (loading) return <div className="shop-loading">Loading products...</div>;
-  if (error) return <div className="shop-error">{error}</div>;
-
   return (
-    <div className="shop-container">
-      <h1 className="shop-title">Shop Products</h1>
+    <div className="shop-wrapper">
+      <h1 className="shop-header">🛒 Explore Our Products</h1>
 
-      <div className="category-filter">
-        <label htmlFor="category-select">Filter by Category: </label>
+      <div className="shop-filter-bar">
+        <label htmlFor="category-select">Category: </label>
         <select
           id="category-select"
+          className="shop-category-select"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
@@ -83,25 +88,27 @@ const Shop = () => {
         </select>
       </div>
 
-      {cartMessage && <div className="cart-message">{cartMessage}</div>}
+      {cartMessage && <div className="shop-cart-message">{cartMessage}</div>}
+      {loading && <div className="shop-loading">Loading products...</div>}
+      {error && <div className="shop-error">{error}</div>}
 
-      <div className="product-grid">
+      <div className="shop-product-grid">
         {products.map((product) => (
-          <div className="product-card" key={product._id}>
-            <div className="product-image">
+          <div className="shop-product-card" key={product._id}>
+            <div className="shop-product-image">
               {product.images?.[0] ? (
                 <img src={product.images[0]} alt={product.name} />
               ) : (
-                <div className="no-image">No image</div>
+                <div className="shop-no-image">No image</div>
               )}
             </div>
-            <div className="product-info">
+            <div className="shop-product-info">
               <h3>{product.name}</h3>
               <p>{product.description}</p>
               <p><strong>Price:</strong> ${product.price}</p>
               <p><strong>Sizes:</strong> {product.sizes.join(", ")}</p>
               <button
-                className="add-to-cart-btn"
+                className="shop-add-to-cart-btn"
                 onClick={() => handleAddToCart(product._id)}
               >
                 Add to Cart
