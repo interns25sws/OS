@@ -2,20 +2,21 @@ const express = require("express");
 const router = express.Router();
 const Cart = require("../models/Cart");
 
+// Add or update cart item
 router.post("/", async (req, res) => {
+  const { userId, productId, quantity } = req.body;
+  if (!userId || !productId || !quantity) {
+    return res.status(400).json({ message: "userId, productId, and quantity are required." });
+  }
+
   try {
-    const { userId, productId, quantity } = req.body;
-    console.log("Received:", { userId, productId, quantity });
-
-    if (!userId || !productId || !quantity) {
-      return res.status(400).json({ error: "Missing userId, productId, or quantity" });
-    }
-
     let cart = await Cart.findOne({ userId });
 
-    if (cart) {
+    if (!cart) {
+      cart = new Cart({ userId, items: [{ productId, quantity }] });
+    } else {
       const itemIndex = cart.items.findIndex(
-        item => item.productId && item.productId.toString() === productId
+        (item) => item.productId.toString() === productId
       );
 
       if (itemIndex > -1) {
@@ -23,21 +24,25 @@ router.post("/", async (req, res) => {
       } else {
         cart.items.push({ productId, quantity });
       }
-
-      await cart.save();
-      return res.json({ message: "Cart updated successfully", cart });
-    } else {
-      const newCart = new Cart({
-        userId,
-        items: [{ productId, quantity }],
-      });
-
-      await newCart.save();
-      return res.status(201).json({ message: "Cart created successfully", cart: newCart });
     }
+
+    await cart.save();
+    res.json({ message: "Product added to cart successfully.", cart });
   } catch (error) {
-    console.error("❌ Error in /api/cart POST:", error);
-    res.status(500).json({ error: "Server error" });
+    console.error("Error updating cart:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Get cart by userId
+router.get("/:userId", async (req, res) => {
+  try {
+    const cart = await Cart.findOne({ userId: req.params.userId }).populate("items.productId");
+    if (!cart) return res.status(404).json({ message: "Cart not found." });
+    res.json(cart);
+  } catch (error) {
+    console.error("Error fetching cart:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 

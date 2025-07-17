@@ -1,22 +1,18 @@
 const mongoose = require("mongoose");
-const Product = require("./models/productModel"); // Make sure this path matches your file
+const Product = require("./models/productModel");
 require("dotenv").config();
 
-async function seedProducts() {
+const seedProducts = async () => {
   try {
-    console.log("Connecting to DB...");
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("Connected to DB.");
-
     await Product.deleteMany();
-    console.log("Existing products deleted.");
 
     const products = [
       {
         name: "T-Shirt",
         price: 20,
         description: "Cool cotton t-shirt",
-        category: "Clothing",           // Added category here
+        category: "Clothing",
         sizes: ["S", "M", "L"],
         images: ["http://localhost:5000/images/Newhoodie.jpg"],
       },
@@ -31,13 +27,12 @@ async function seedProducts() {
     ];
 
     await Product.insertMany(products);
-    console.log("Products added!");
+    console.log("✅ Products seeded!");
   } catch (err) {
-    console.error("Error seeding products:", err);
+    console.error("Seeding error:", err);
   } finally {
     await mongoose.disconnect();
-    console.log("Disconnected from DB.");
   }
-}
+};
 
 seedProducts();

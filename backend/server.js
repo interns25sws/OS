@@ -23,6 +23,7 @@ app.get('/', (req, res) => res.send('🚀 Server is up and running!'));
 // API Routes
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
+
 app.use('/api/cart', cartRoutes);
 
 // Serve images statically from /public/images
