@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
-const jwt   = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const generateToken = require("../utils/generateToken");
-const User  = require("../models/user.model");
+const User = require("../models/user.model");
 
 const JWT_SECRET = process.env.JWT_SECRET || "replace_this_with_env_secret";
 const SALT_ROUNDS = 10;
@@ -34,6 +34,7 @@ exports.signup = async (req, res) => {
     await newUser.save();
     res.status(201).json({ message: "Signup successful. Please login." });
   } catch (err) {
+    console.error("Signup error:", err); // ADD THIS LINE
     res.status(500).json({ message: "Signup failed." });
   }
 };
@@ -58,7 +59,6 @@ exports.login = async (req, res) => {
     lastName: user.lastName,
   });
 };
-
 
 // Get All Users
 exports.getAllUsers = async (req, res) => {

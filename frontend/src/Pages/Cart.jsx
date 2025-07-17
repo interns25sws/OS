@@ -1,135 +1,81 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import "./cart.css";
+  import React, { useEffect, useState } from "react";
+  import axios from "axios";
 
-export default function Cart({ user }) {
-  const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [hover, setHover] = useState(false);
-  const navigate = useNavigate();
+  const Cart = ({ token }) => {
+    const [cartItems, setCartItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
-  const token = user?.token;
+    const fetchCart = async () => {
+      setLoading(true);
+      try {
+        // ✅ No need for userId – backend gets user from token
+        const res = await axios.get("/api/cart", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCartItems(res.data.items || []);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setError("Failed to load cart.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-useEffect(() => {
-  console.log("User changed:", user);
-  if (!user || !user._id) {
-    setCartItems([]);
-    setLoading(false);
-    setError("");
-    return;
-  }
-  fetchCart();
-}, [user]);
+    const updateQuantity = async (productId, delta) => {
+      try {
+        await axios.post(
+          "/api/cart",
+          { productId, quantity: delta },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setCartItems((prev) =>
+          prev.map((item) =>
+            item.productId._id === productId
+              ? { ...item, quantity: Math.max(1, item.quantity + delta) }
+              : item
+          )
+        );
+      } catch (err) {
+        console.error("Update error:", err);
+      }
+    };
 
+    const removeItem = async (productId) => {
+      try {
+        await axios.delete(`/api/cart/${productId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCartItems((prev) => prev.filter((item) => item.productId._id !== productId));
+      } catch (err) {
+        console.error("Remove error:", err);
+      }
+    };
 
-  const fetchCart = async () => {
-    setLoading(true);
-    setError("");
+    useEffect(() => {
+      fetchCart();
+    }, []);
 
-    try {
-      const response = await axios.get("/api/cart", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    if (loading) return <p>Loading cart...</p>;
+    if (error) return <p>{error}</p>;
 
-      setCartItems(response.data.items || []);
-    } catch (error) {
-      console.error("Failed to fetch cart:", error);
-      setError(error.response?.data?.error || "Failed to load cart items.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateQuantity = async (id, delta) => {
-    const item = cartItems.find((item) => item.id === id);
-    if (!item) return;
-    const newQuantity = Math.max(1, item.quantity + delta);
-
-    try {
-      await axios.post(
-        "/api/cart",
-        { productId: id, quantity: delta },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      setCartItems((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, quantity: newQuantity } : item
-        )
-      );
-    } catch (error) {
-      console.error("Failed to update quantity:", error);
-    }
-  };
-
-  const removeItem = async (id) => {
-    try {
-      await axios.delete(`/api/cart/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setCartItems((prev) => prev.filter((item) => item.id !== id));
-    } catch (error) {
-      console.error("Failed to remove item:", error);
-    }
-  };
-
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-
-  return (
-    <div className="cart-page">
-      <h1
-        onClick={() => navigate("/")}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-        style={{
-          cursor: "pointer",
-          color: hover ? "#007bff" : "black",
-          transition: "color 0.3s ease",
-        }}
-      >
-        Your Cart
-      </h1>
-
-      {loading ? (
-        <p>Loading your cart...</p>
-      ) : error ? (
-        <p style={{ color: "red" }}>{error}</p>
-      ) : cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        <div className="cart-container">
-          {cartItems.map((item) => (
-            <div className="cart-item" key={item.id}>
-              <img src={item.image} alt={item.name} />
-              <div className="cart-details">
-                <h2>{item.name}</h2>
-                <p>${item.price.toFixed(2)}</p>
-                <div className="quantity-controls">
-                  <button onClick={() => updateQuantity(item.id, -1)}>-</button>
-                  <span>{item.quantity}</span>
-                  <button onClick={() => updateQuantity(item.id, 1)}>+</button>
-                </div>
-                <button
-                  className="remove-btn"
-                  onClick={() => removeItem(item.id)}
-                >
-                  Remove
-                </button>
-              </div>
+    return (
+      <div className="cart">
+        {cartItems.map((item) => (
+          <div key={item.productId._id} className="cart-item">
+            <img src={item.productId.image} alt={item.productId.name} height={50} />
+            <div>{item.productId.name}</div>
+            <div>₹{item.productId.price}</div>
+            <div>
+              <button onClick={() => updateQuantity(item.productId._id, -1)}>-</button>
+              {item.quantity}
+              <button onClick={() => updateQuantity(item.productId._id, 1)}>+</button>
             </div>
-          ))}
-          <div className="cart-summary">
-            <h3>Total: ${total.toFixed(2)}</h3>
-            <button className="checkout-btn">Proceed to Checkout</button>
+            <button onClick={() => removeItem(item.productId._id)}>Remove</button>
           </div>
-        </div>
-      )}
-    </div>
-  );
-}
+        ))}
+      </div>
+    );
+  };
+
+  export default Cart;

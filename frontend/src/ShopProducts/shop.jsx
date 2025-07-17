@@ -9,11 +9,40 @@ const Shop = () => {
   const [error, setError] = useState("");
   const [cartMessage, setCartMessage] = useState("");
 
-  const userId = "68766e2fe0273da7925dcb70";
+ const getUserIdFromToken = () => {
+  try {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!loggedInUser || !loggedInUser.token) {
+      console.warn("Token not found in loggedInUser.");
+      return null;
+    }
+
+    const base64Payload = loggedInUser.token.split(".")[1];
+    const decodedPayload = JSON.parse(atob(base64Payload));
+
+    console.log("Decoded token payload:", decodedPayload);
+
+    return decodedPayload.userId || decodedPayload._id || decodedPayload.id;
+  } catch (err) {
+    console.error("Failed to parse token", err);
+    return null;
+  }
+};
+
+const userId = getUserIdFromToken();
+
 
   // Static categories
   useEffect(() => {
-    setCategories(["All", "Shirt", "T-Shirt", "Jeans", "Shoes", "Shorts", "Slides"]);
+    setCategories([
+      "All",
+      "Shirt",
+      "T-Shirt",
+      "Jeans",
+      "Shoes",
+      "Shorts",
+      "Slides",
+    ]);
   }, []);
 
   useEffect(() => {
@@ -21,7 +50,9 @@ const Shop = () => {
     setError("");
     const url =
       selectedCategory !== "All"
-        ? `http://localhost:5000/api/products?category=${encodeURIComponent(selectedCategory)}`
+        ? `http://localhost:5000/api/products?category=${encodeURIComponent(
+            selectedCategory
+          )}`
         : "http://localhost:5000/api/products";
 
     fetch(url)
