@@ -1,19 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Profile = ({ user, setLoggedInUser }) => {
   const navigate = useNavigate();
   const [hover, setHover] = useState(false);
+  const [avatarEmoji, setAvatarEmoji] = useState("🙂");
+
+  useEffect(() => {
+    if (user?.gender) {
+      switch (user.gender.toLowerCase()) {
+        case "female":
+          setAvatarEmoji("👩");
+          break;
+        case "male":
+          setAvatarEmoji("👨");
+          break;
+        case "other":
+          setAvatarEmoji("🧑");
+          break;
+        default:
+          setAvatarEmoji("🙂");
+      }
+    }
+  }, [user]);
 
   const handleLogout = () => {
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
+    if (!confirmLogout) return;
+
     localStorage.removeItem("loggedInUser");
     setLoggedInUser(null);
     navigate("/login");
   };
 
-  const goHome = () => {
-    navigate("/");
-  };
+  const goHome = () => navigate("/");
 
   if (!user) {
     return (
@@ -24,9 +44,6 @@ const Profile = ({ user, setLoggedInUser }) => {
       </div>
     );
   }
-
-  // Choose avatar emoji based on gender
-  const avatarEmoji = user.gender === "female" ? "👩" : "👨";
 
   return (
     <div style={styles.pageWrapper}>
@@ -55,13 +72,36 @@ const Profile = ({ user, setLoggedInUser }) => {
 
         <div style={styles.infoRow}>
           <span style={styles.label}>Name:</span>
-          <span style={styles.infoText}>{user.firstName} {user.lastName}</span>
+          <span style={styles.infoText}>
+            {user.firstName ?? "N/A"} {user.lastName ?? ""}
+          </span>
         </div>
 
         <div style={styles.infoRow}>
           <span style={styles.label}>Email:</span>
-          <span style={styles.infoText}>{user.email}</span>
+          <span style={styles.infoText}>{user.email ?? "N/A"}</span>
         </div>
+
+        {user.phone && (
+          <div style={styles.infoRow}>
+            <span style={styles.label}>Phone:</span>
+            <span style={styles.infoText}>{user.phone}</span>
+          </div>
+        )}
+
+        {user.dob && (
+          <div style={styles.infoRow}>
+            <span style={styles.label}>DOB:</span>
+            <span style={styles.infoText}>{user.dob}</span>
+          </div>
+        )}
+
+        {user.gender && (
+          <div style={styles.infoRow}>
+            <span style={styles.label}>Gender:</span>
+            <span style={styles.infoText}>{user.gender}</span>
+          </div>
+        )}
 
         <button
           onClick={handleLogout}
@@ -78,12 +118,10 @@ const Profile = ({ user, setLoggedInUser }) => {
 
 const styles = {
   pageWrapper: {
-    // minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "#f5f7fa",
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     padding: "2rem",
     position: "relative",
@@ -188,4 +226,4 @@ const styles = {
 };
 
 export default Profile;
- 
+  

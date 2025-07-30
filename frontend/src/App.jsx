@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
+// import "./index.css"
 import Header from "./Components/Header.jsx";
 import HomePage from "./Components/HomePage.jsx";
 import DisplayCloth from "./Components/DisplayCloth.jsx";
@@ -19,6 +20,8 @@ import Cart from "./Pages/Cart.jsx";
 import Shop from "./ShopProducts/shop.jsx";
 import Profile from "./Pages/profile.jsx";
 import ROUTES from "./Constants/routes.jsx";
+
+// import "./index.css"
 
 function Home({ loggedInUser }) {
   return (

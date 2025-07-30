@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import "./login.css"; 
+import { motion, AnimatePresence } from "framer-motion";
+import "./login.css";
 
 const UserAuth = ({ setLoggedInUser }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,8 +10,9 @@ const UserAuth = ({ setLoggedInUser }) => {
   const [statusType, setStatusType] = useState("info");
 
   const navigate = useNavigate();
+  const emailInputRef = useRef(null);
 
-  const [formData, setFormData] = useState({
+  const initialForm = {
     firstName: "",
     lastName: "",
     email: "",
@@ -21,7 +22,9 @@ const UserAuth = ({ setLoggedInUser }) => {
     dob: "",
     gender: "",
     termsAccepted: false,
-  });
+  };
+
+  const [formData, setFormData] = useState(initialForm);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
@@ -31,6 +34,10 @@ const UserAuth = ({ setLoggedInUser }) => {
     }
   }, [setLoggedInUser, navigate]);
 
+  useEffect(() => {
+    if (emailInputRef.current) emailInputRef.current.focus();
+  }, [isLogin]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -39,31 +46,28 @@ const UserAuth = ({ setLoggedInUser }) => {
     }));
   };
 
+  const validateEmail = (email) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
   const validate = () => {
-    if (!formData.email || !formData.password) {
-      return "Email and Password are required.";
-    }
+    const { email, password, confirmPassword, firstName, lastName, termsAccepted } = formData;
+
+    if (!email || !password) return "Email and Password are required.";
+    if (!validateEmail(email)) return "Invalid email format.";
+    if (password.length < 6) return "Password must be at least 6 characters.";
+
     if (!isLogin) {
-      if (
-        !formData.firstName ||
-        !formData.lastName ||
-        !formData.confirmPassword ||
-        !formData.termsAccepted
-      ) {
-        return "All fields are required and Terms must be accepted.";
-      }
-      if (formData.password !== formData.confirmPassword) {
-        return "Passwords do not match.";
-      }
-      if (formData.password.length < 6) {
-        return "Password should be at least 6 characters.";
-      }
+      if (!firstName || !lastName || !confirmPassword) return "All fields are required.";
+      if (password !== confirmPassword) return "Passwords do not match.";
+      if (!termsAccepted) return "You must accept the terms.";
     }
+
     return null;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage("");
     const error = validate();
     if (error) {
       setMessage(error);
@@ -73,14 +77,15 @@ const UserAuth = ({ setLoggedInUser }) => {
 
     setLoading(true);
     const url = `http://localhost:5000/api/users/${isLogin ? "login" : "signup"}`;
+
     const body = isLogin
       ? { email: formData.email, password: formData.password }
       : {
-          email: formData.email,
-          password: formData.password,
           firstName: formData.firstName,
           lastName: formData.lastName,
+          email: formData.email,
           phone: formData.phone,
+          password: formData.password,
           dob: formData.dob,
           gender: formData.gender,
         };
@@ -95,8 +100,8 @@ const UserAuth = ({ setLoggedInUser }) => {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage(data.message);
         setStatusType("success");
+        setMessage(data.message || (isLogin ? "Login successful." : "Registered successfully."));
 
         if (isLogin) {
           const user = {
@@ -110,59 +115,80 @@ const UserAuth = ({ setLoggedInUser }) => {
           setLoggedInUser(user);
           navigate("/");
         } else {
-          setIsLogin(true);
           resetForm();
+          setIsLogin(true);
         }
       } else {
-        setMessage(data.message || "Something went wrong.");
-        setStatusType("error");
+        throw new Error(data.message || "Something went wrong.");
       }
     } catch (err) {
-      setMessage("Network error");
       setStatusType("error");
+      setMessage(err.message || "Network error.");
     } finally {
       setLoading(false);
     }
   };
 
-  const resetForm = () => {
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      password: "",
-      confirmPassword: "",
-      dob: "",
-      gender: "",
-      termsAccepted: false,
-    });
-  };
+  const resetForm = () => setFormData(initialForm);
 
   const toggleMode = () => {
-    setIsLogin(!isLogin);
-    setMessage("");
+    setIsLogin((prev) => !prev);
     resetForm();
+    setMessage("");
   };
 
   return (
     <div className="auth-wrapper">
       <motion.div
         className="auth-card"
-        initial={{ y: -50, opacity: 0 }}
+        initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.5 }}
       >
-        <h2 className="auth-heading">{isLogin ? "🔐 Login" : "📝 Register"}</h2>
+        <h2 className="auth-heading">
+          {isLogin ? "🔐 Login to Your Account" : "📝 Create an Account"}
+        </h2>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           {!isLogin && (
             <>
-              <input className="auth-input" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} />
-              <input className="auth-input" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} />
-              <input className="auth-input" type="tel" name="phone" placeholder="Phone (optional)" value={formData.phone} onChange={handleChange} />
-              <input className="auth-input" type="date" name="dob" value={formData.dob} onChange={handleChange} />
-              <select className="auth-input" name="gender" value={formData.gender} onChange={handleChange}>
+              <input
+                className="auth-input"
+                name="firstName"
+                placeholder="First Name"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className="auth-input"
+                name="lastName"
+                placeholder="Last Name"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className="auth-input"
+                type="tel"
+                name="phone"
+                placeholder="Phone"
+                value={formData.phone}
+                onChange={handleChange}
+              />
+              <input
+                className="auth-input"
+                type="date"
+                name="dob"
+                value={formData.dob}
+                onChange={handleChange}
+              />
+              <select
+                className="auth-input"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+              >
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -171,35 +197,82 @@ const UserAuth = ({ setLoggedInUser }) => {
             </>
           )}
 
-          <input className="auth-input" type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
-          <input className="auth-input" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} />
+          <input
+            className="auth-input"
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            ref={emailInputRef}
+            required
+          />
+
+          <input
+            className="auth-input"
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
 
           {!isLogin && (
             <>
-              <input className="auth-input" type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} />
+              <input
+                className="auth-input"
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
               <label className="auth-checkbox">
-                <input type="checkbox" name="termsAccepted" checked={formData.termsAccepted} onChange={handleChange} />
-                I accept the <a href="/terms" target="_blank">Terms and Conditions</a>
+                <input
+                  type="checkbox"
+                  name="termsAccepted"
+                  checked={formData.termsAccepted}
+                  onChange={handleChange}
+                />
+                I agree to the{" "}
+                <a href="/terms" target="_blank" rel="noopener noreferrer">
+                  Terms and Conditions
+                </a>
               </label>
             </>
           )}
 
           <motion.button
             whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
+            whileTap={{ scale: 0.97 }}
             className="auth-button"
             type="submit"
             disabled={loading}
           >
-            {loading ? "Please wait..." : isLogin ? "Login" : "Register"}
+            {loading ? "Processing..." : isLogin ? "Login" : "Register"}
           </motion.button>
         </form>
 
-        {message && <p className={`auth-message ${statusType}`}>{message}</p>}
+        <AnimatePresence>
+          {message && (
+            <motion.p
+              className={`auth-message ${statusType}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {message}
+            </motion.p>
+          )}
+        </AnimatePresence>
 
         <p className="auth-toggle">
-          {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-          <span onClick={toggleMode}>{isLogin ? "Register" : "Login"}</span>
+          {isLogin ? "Don't have an account?" : "Already registered?"}{" "}
+          <span onClick={toggleMode}>
+            {isLogin ? "Register here" : "Login here"}
+          </span>
         </p>
       </motion.div>
     </div>

@@ -9,4 +9,5 @@ const productSchema = new mongoose.Schema({
   images: [String],
 }, { timestamps: true });
 
-module.exports = mongoose.model("Product", productSchema, "products");
+// Fix: Check if already compiled
+module.exports = mongoose.models.Product || mongoose.model("Product", productSchema);

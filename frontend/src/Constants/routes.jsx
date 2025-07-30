@@ -3,7 +3,7 @@ const ROUTES = {
   USER_LOGIN: "/login",
   PROFILE: "/profile",
   CART: "/cart",
-  SHOP: "/shop",  
+  SHOP: "/shop", 
 };
 
 export default ROUTES;

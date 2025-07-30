@@ -40,7 +40,7 @@ const Header = ({ loggedInUser, cartItemCount = 0 }) => {
                 <FaUserCircle size={28} />
               </Link>
             ) : (
-              <Link to="/login" className="login-link" aria-label="Log in">
+              <Link to="/login" className="login-link " aria-label="Log in">
                 Log In
               </Link>
             )}
