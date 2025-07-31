@@ -21,6 +21,7 @@ const UserAuth = ({ setLoggedInUser }) => {
     confirmPassword: "",
     dob: "",
     gender: "",
+    role: "user",
     termsAccepted: false,
   };
 
@@ -46,18 +47,25 @@ const UserAuth = ({ setLoggedInUser }) => {
     }));
   };
 
-  const validateEmail = (email) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const validate = () => {
-    const { email, password, confirmPassword, firstName, lastName, termsAccepted } = formData;
+    const {
+      email,
+      password,
+      confirmPassword,
+      firstName,
+      lastName,
+      termsAccepted,
+    } = formData;
 
     if (!email || !password) return "Email and Password are required.";
     if (!validateEmail(email)) return "Invalid email format.";
     if (password.length < 6) return "Password must be at least 6 characters.";
 
     if (!isLogin) {
-      if (!firstName || !lastName || !confirmPassword) return "All fields are required.";
+      if (!firstName || !lastName || !confirmPassword)
+        return "All fields are required.";
       if (password !== confirmPassword) return "Passwords do not match.";
       if (!termsAccepted) return "You must accept the terms.";
     }
@@ -76,7 +84,9 @@ const UserAuth = ({ setLoggedInUser }) => {
     }
 
     setLoading(true);
-    const url = `http://localhost:5000/api/users/${isLogin ? "login" : "signup"}`;
+    const url = `http://localhost:5000/api/users/${
+      isLogin ? "login" : "signup"
+    }`;
 
     const body = isLogin
       ? { email: formData.email, password: formData.password }
@@ -88,6 +98,7 @@ const UserAuth = ({ setLoggedInUser }) => {
           password: formData.password,
           dob: formData.dob,
           gender: formData.gender,
+          role: formData.role, // Include this
         };
 
     try {
@@ -101,7 +112,10 @@ const UserAuth = ({ setLoggedInUser }) => {
 
       if (res.ok) {
         setStatusType("success");
-        setMessage(data.message || (isLogin ? "Login successful." : "Registered successfully."));
+        setMessage(
+          data.message ||
+            (isLogin ? "Login successful." : "Registered successfully.")
+        );
 
         if (isLogin) {
           const user = {
@@ -110,6 +124,7 @@ const UserAuth = ({ setLoggedInUser }) => {
             firstName: data.firstName,
             lastName: data.lastName,
             token: data.token,
+            role:data.role,
           };
           localStorage.setItem("loggedInUser", JSON.stringify(user));
           setLoggedInUser(user);
@@ -193,6 +208,17 @@ const UserAuth = ({ setLoggedInUser }) => {
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
+              </select>
+              <select
+                className="auth-input"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+              >
+                <option value="user">User</option>
+                <option value="sales-rep">Sales Rep</option>
+                <option value="admin">Admin</option>
+                <option value="super-admin">Super Admin</option>
               </select>
             </>
           )}

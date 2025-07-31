@@ -5,8 +5,18 @@ const Profile = ({ user, setLoggedInUser }) => {
   const navigate = useNavigate();
   const [hover, setHover] = useState(false);
   const [avatarEmoji, setAvatarEmoji] = useState("🙂");
+  // const [loggedInUser, setLoggedInUser] = useState(null);
+
+useEffect(() => {
+  const storedUser = localStorage.getItem("loggedInUser");
+  if (storedUser) {
+    setLoggedInUser(JSON.parse(storedUser));
+  }
+}, []);
+
 
   useEffect(() => {
+      console.log("Profile user prop:", user); // ✅ Add this
     if (user?.gender) {
       switch (user.gender.toLowerCase()) {
         case "female":

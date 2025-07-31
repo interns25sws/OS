@@ -35,6 +35,16 @@
   color: #c4a484;
 }
 
+.admin-button {
+  background-color: #222;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin-left: 12px;
+  text-decoration: none;
+}
+
+
 /* Search Bar */
 .search-bar {
   flex: 1;

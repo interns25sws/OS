@@ -3,7 +3,7 @@ import "./shop.css";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(["All"]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -12,22 +12,23 @@ const Shop = () => {
   const [quantity, setQuantity] = useState(1);
   const [addingToCart, setAddingToCart] = useState(false);
   const [showFullDesc, setShowFullDesc] = useState(false);
+  
 
-  const getUserIdFromToken = () => {
-    try {
-      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-      if (!loggedInUser?.token) return null;
-      const payload = JSON.parse(atob(loggedInUser.token.split(".")[1]));
-      return payload.userId || payload._id || payload.id;
-    } catch {
-      return null;
-    }
+  const getToken = () => {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    return loggedInUser?.token || "";
   };
 
-  const userId = getUserIdFromToken();
-
   useEffect(() => {
-    setCategories(["All", "Shirt", "T-Shirt", "Jeans", "Shoes", "Shorts", "Slides"]);
+    setCategories([
+      "All",
+      "Shirt",
+      "T-Shirt",
+      "Jeans",
+      "Shoes",
+      "Shorts",
+      "Slides",
+    ]);
   }, []);
 
   useEffect(() => {
@@ -36,7 +37,9 @@ const Shop = () => {
 
     const url =
       selectedCategory !== "All"
-        ? `http://localhost:5000/api/products?category=${encodeURIComponent(selectedCategory)}`
+        ? `http://localhost:5000/api/products?category=${encodeURIComponent(
+            selectedCategory
+          )}`
         : "http://localhost:5000/api/products";
 
     fetch(url)
@@ -54,28 +57,30 @@ const Shop = () => {
       });
   }, [selectedCategory]);
 
-  const handleAddToCart = (productId) => {
+  const handleAddToCart = (productId, qty = 1) => {
     setAddingToCart(true);
 
-    fetch("http://localhost:5000/api/cart", {
+    fetch("http://localhost:5000/api/cart/add", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, productId, quantity }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify({ productId, quantity: qty }),
     })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to add to cart");
         return res.json();
       })
       .then((data) => {
-        setCartMessage(data.message || "Added to cart");
-        setTimeout(() => setCartMessage(""), 3000);
+        setCartMessage("Added to cart!");
       })
       .catch(() => {
         setCartMessage("Error adding to cart.");
-        setTimeout(() => setCartMessage(""), 3000);
       })
       .finally(() => {
         setAddingToCart(false);
+        setTimeout(() => setCartMessage(""), 3000);
       });
   };
 
@@ -83,10 +88,12 @@ const Shop = () => {
     setSelectedProduct(product);
     setQuantity(1);
     setShowFullDesc(false);
+    document.body.style.overflow = "hidden";
   };
 
   const closeProductModal = () => {
     setSelectedProduct(null);
+    document.body.style.overflow = "auto";
   };
 
   const nextProduct = () => {
@@ -102,8 +109,7 @@ const Shop = () => {
   };
 
   const truncate = (text, len = 100) => {
-    if (!text) return "";
-    return text.length > len ? text.slice(0, len) + "..." : text;
+    return text?.length > len ? text.slice(0, len) + "..." : text;
   };
 
   return (
@@ -119,7 +125,9 @@ const Shop = () => {
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
           {categories.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
           ))}
         </select>
       </div>
@@ -148,26 +156,32 @@ const Shop = () => {
                 <span className="sizes">{product.sizes.join(", ")}</span>
                 <span className="price">${product.price.toFixed(2)}</span>
               </div>
-              {product.tags && <div className="tags">{product.tags.join(", ")}</div>}
+              {product.tags && (
+                <div className="tags">{product.tags.join(", ")}</div>
+              )}
               <button
-                className="shop-add-to-cart-btn"
-                onClick={() => handleAddToCart(product._id)}
+                onClick={() => handleAddToCart(product._id, 1)}
+                disabled={addingToCart}
               >
-                Add to Cart
+                {addingToCart ? "Adding..." : "Add to Cart"}
               </button>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Modal */}
       {selectedProduct && (
         <div className="product-modal-overlay" onClick={closeProductModal}>
           <div className="product-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close-btn" onClick={closeProductModal}>×</button>
+            <button className="modal-close-btn" onClick={closeProductModal}>
+              ×
+            </button>
 
             <div className="modal-image">
-              <img src={selectedProduct.images?.[0]} alt={selectedProduct.name} />
+              <img
+                src={selectedProduct.images?.[0]}
+                alt={selectedProduct.name}
+              />
             </div>
 
             <div className="modal-details">
@@ -185,8 +199,12 @@ const Shop = () => {
                   </button>
                 )}
               </p>
-              <p><strong>Sizes:</strong> {selectedProduct.sizes.join(", ")}</p>
-              <p><strong>Price:</strong> ${selectedProduct.price.toFixed(2)}</p>
+              <p>
+                <strong>Sizes:</strong> {selectedProduct.sizes.join(", ")}
+              </p>
+              <p>
+                <strong>Price:</strong> ${selectedProduct.price.toFixed(2)}
+              </p>
 
               <div className="quantity-selector">
                 <label>Qty:</label>
@@ -200,7 +218,9 @@ const Shop = () => {
 
               <button
                 className="shop-add-to-cart-btn"
-                onClick={() => handleAddToCart(selectedProduct._id)}
+                onClick={() =>
+                  handleAddToCart(selectedProduct._id, quantity)
+                }
                 disabled={addingToCart}
               >
                 {addingToCart ? "Adding..." : "Add to Cart"}

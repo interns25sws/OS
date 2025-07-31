@@ -1,7 +1,11 @@
-// postcss.config.js
+// postcss.config.js (ES module style)
+import tailwind from '@tailwindcss/postcss';
+import autoprefixer from 'autoprefixer';
+
+/** @type {import('postcss').ProcessOptions} */
 export default {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
+  plugins: [
+    tailwind(),
+    autoprefixer(),
+  ],
 };

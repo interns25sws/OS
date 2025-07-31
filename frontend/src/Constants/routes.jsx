@@ -3,7 +3,15 @@ const ROUTES = {
   USER_LOGIN: "/login",
   PROFILE: "/profile",
   CART: "/cart",
-  SHOP: "/shop", 
+  SHOP: "/shop",
+
+  // Dashboard routes
+  DASHBOARD: "/dashboard",
+  PRODUCTS: "/dashboard/products",
+  ORDERS: "/dashboard/orders",
+  CUSTOMERS: "/dashboard/customers",
+  DISCOUNTS: "/dashboard/discounts",
+  USERS: "/dashboard/users",
 };
 
 export default ROUTES;

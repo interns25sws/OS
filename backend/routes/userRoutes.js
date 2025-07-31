@@ -11,19 +11,25 @@ const SALT_ROUNDS = 10;
 
 // Signup
 router.post("/signup", async (req, res) => {
-  const { email, password, firstName, lastName, phone, dob, gender } = req.body;
+  const { email, password, firstName, lastName, phone, dob, gender, role } = req.body;
 
   if (!email || !password || !firstName || !lastName) {
     return res.status(400).json({ message: "Missing required fields." });
   }
 
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    return res.status(409).json({ message: "Email already in use." });
-  }
-
   try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: "Email already in use." });
+    }
+
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+    // Only allow role setting if from a trusted source
+    const assignedRole = role && ["sales-rep", "admin", "super-admin"].includes(role)
+      ? role
+      : "user";
+
     const newUser = new User({
       email,
       password: hashedPassword,
@@ -32,6 +38,7 @@ router.post("/signup", async (req, res) => {
       phone,
       dob,
       gender,
+      role: assignedRole,
     });
 
     await newUser.save();

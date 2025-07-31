@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
-// import "./index.css"
 import Header from "./Components/Header.jsx";
 import HomePage from "./Components/HomePage.jsx";
 import DisplayCloth from "./Components/DisplayCloth.jsx";
@@ -21,7 +20,7 @@ import Shop from "./ShopProducts/shop.jsx";
 import Profile from "./Pages/profile.jsx";
 import ROUTES from "./Constants/routes.jsx";
 
-// import "./index.css"
+import Dashboard from "./dashboard/pages/DashboardHome.jsx";
 
 function Home({ loggedInUser }) {
   return (
@@ -48,27 +47,30 @@ function App() {
     const storedUser = localStorage.getItem("loggedInUser");
     if (storedUser) {
       setLoggedInUser(JSON.parse(storedUser));
-      
     }
   }, []);
 
   return (
     <Router>
       <Routes>
-        <Route path={ROUTES.HOME} element={<Home loggedInUser={loggedInUser} />} />
+        <Route
+          path={ROUTES.HOME}
+          element={<Home loggedInUser={loggedInUser} />}
+        />
         <Route
           path={ROUTES.USER_LOGIN}
           element={<UserAuth setLoggedInUser={setLoggedInUser} />}
         />
         <Route
           path={ROUTES.PROFILE}
-          element={<Profile user={loggedInUser} setLoggedInUser={setLoggedInUser} />}
+          element={
+            <Profile user={loggedInUser} setLoggedInUser={setLoggedInUser} />
+          }
         />
-        <Route
-          path={ROUTES.CART}
-          element={<Cart user={loggedInUser} />}
-        />
+        <Route path={ROUTES.CART} element={<Cart user={loggedInUser} />} />
         <Route path={ROUTES.SHOP} element={<Shop user={loggedInUser} />} />
+        <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+
       </Routes>
     </Router>
   );
