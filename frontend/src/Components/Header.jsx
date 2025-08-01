@@ -1,24 +1,18 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { FaUserCircle, FaShoppingBag } from "react-icons/fa";
 import useInView from "../hooks/useInView";
-import { FaUserCircle, FaShoppingBag } from "react-icons/fa"; // use react-icons for cart too
 import "./Header.css";
 
 const Header = ({ loggedInUser, cartItemCount = 0 }) => {
   const [ref, isInView] = useInView();
-  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    try {
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      setUser(storedUser);
-    } catch (err) {
-      console.error("Failed to parse user from localStorage", err);
-    }
-  }, []);
+  const isAdminUser =
+    loggedInUser &&
+    (loggedInUser.role === "admin" ||
+      loggedInUser.role === "super-admin" ||
+      loggedInUser.role === "sales-rep");
 
   return (
     <div ref={ref} className={`fade-up ${isInView ? "animate" : ""}`}>
@@ -52,7 +46,7 @@ const Header = ({ loggedInUser, cartItemCount = 0 }) => {
                 <FaUserCircle size={28} />
               </Link>
             ) : (
-              <Link to="/login" className="login-link " aria-label="Log in">
+              <Link to="/login" className="login-link" aria-label="Log in">
                 Log In
               </Link>
             )}
@@ -72,9 +66,10 @@ const Header = ({ loggedInUser, cartItemCount = 0 }) => {
                 </span>
               )}
             </div>
-            {user && (user.role === "admin" || user.role === "super-admin") && (
+
+            {isAdminUser && (
               <Link to="/dashboard" className="admin-button">
-                Admin Panel
+                Dashboard
               </Link>
             )}
           </div>

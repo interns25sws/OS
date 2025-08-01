@@ -21,6 +21,8 @@ import Profile from "./Pages/profile.jsx";
 import ROUTES from "./Constants/routes.jsx";
 
 import Dashboard from "./dashboard/pages/DashboardHome.jsx";
+import Products from "./dashboard/pages/Products.jsx";
+import AddProduct from "./dashboard/pages/AddProduct.jsx";
 
 function Home({ loggedInUser }) {
   return (
@@ -69,8 +71,10 @@ function App() {
         />
         <Route path={ROUTES.CART} element={<Cart user={loggedInUser} />} />
         <Route path={ROUTES.SHOP} element={<Shop user={loggedInUser} />} />
-        <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
-
+        <Route path={ROUTES.DASHBOARD} element={<Dashboard />}>
+          <Route path={ROUTES.PRODUCTS} element={<Products />} />
+        </Route>
+          <Route path={ROUTES.ADDPRODUCT} element={<AddProduct />} />
       </Routes>
     </Router>
   );

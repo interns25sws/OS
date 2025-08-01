@@ -13,6 +13,7 @@ const Shop = () => {
   const [addingToCart, setAddingToCart] = useState(false);
   const [showFullDesc, setShowFullDesc] = useState(false);
   
+  
 
   const getToken = () => {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));

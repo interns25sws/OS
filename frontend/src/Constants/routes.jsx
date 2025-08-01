@@ -12,6 +12,7 @@ const ROUTES = {
   CUSTOMERS: "/dashboard/customers",
   DISCOUNTS: "/dashboard/discounts",
   USERS: "/dashboard/users",
+  ADDPRODUCT: "/add-product",
 };
 
 export default ROUTES;

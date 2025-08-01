@@ -1,13 +1,16 @@
-const mongoose = require("mongoose");
-
 const productSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  title: { type: String, required: true },
   description: String,
-  price: { type: Number, required: true },
+  price: { type: Number, required: true, min: [1, "Price must be greater than 1"] },
   category: { type: String, required: true },
+  stock: { type: Number, default: 0, required: true },
   sizes: [String],
   images: [String],
+  status: {
+    type: String,
+    enum: ["active", "draft"],
+    default: "active",
+  },
 }, { timestamps: true });
 
-// Fix: Check if already compiled
 module.exports = mongoose.models.Product || mongoose.model("Product", productSchema);

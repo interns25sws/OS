@@ -9,65 +9,77 @@ const generateToken = require("../utils/generateToken");
 const JWT_SECRET = process.env.JWT_SECRET || "replace_this_with_env_secret";
 const SALT_ROUNDS = 10;
 
-// Signup
-router.post("/signup", async (req, res) => {
-  const { email, password, firstName, lastName, phone, dob, gender, role } = req.body;
 
-  if (!email || !password || !firstName || !lastName) {
-    return res.status(400).json({ message: "Missing required fields." });
+
+const allowRoles = ["admin", "super-admin", "sales-rep"];
+
+router.get("/admin-panel", authMiddleware, (req, res) => {
+  if (!allowRoles.includes(req.user.role)) {
+    return res.status(403).json({ message: "Access denied" });
   }
 
+  res.json({ message: `Welcome to the admin panel, ${req.user.role}` });
+});
+
+module.exports = router;
+
+// Signup
+router.post("/signup", async (req, res) => {
+  const { firstName, lastName, email, password, role } = req.body;
+
   try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({ message: "Email already in use." });
-    }
+    const userExists = await User.findOne({ email });
+    if (userExists) return res.status(400).json({ message: "User already exists" });
 
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-
-    // Only allow role setting if from a trusted source
-    const assignedRole = role && ["sales-rep", "admin", "super-admin"].includes(role)
-      ? role
-      : "user";
-
-    const newUser = new User({
-      email,
-      password: hashedPassword,
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({
       firstName,
       lastName,
-      phone,
-      dob,
-      gender,
-      role: assignedRole,
+      email,
+      password: hashedPassword,
+      role: role || "user",
     });
 
-    await newUser.save();
-    res.status(201).json({ message: "Signup successful. Please login." });
+    res.status(201).json({
+      token: generateToken(user),
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+    });
   } catch (err) {
-    console.error("Signup error:", err);
-    res.status(500).json({ message: "Signup failed." });
+    console.error(err);
+    res.status(500).json({ message: "Signup failed" });
   }
 });
 
 // Login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password)
-    return res.status(400).json({ message: "Email and password required." });
 
-  const user = await User.findOne({ email });
-  if (!user || !(await bcrypt.compare(password, user.password)))
-    return res.status(401).json({ message: "Invalid credentials." });
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
-  const token = generateToken(user);
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
 
-  res.status(200).json({
-    message: "Login successful.",
-    token,
-    _id: user._id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-  });
+    res.json({
+      _id: user._id,
+      email: user.email,
+      role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      token: generateToken(user),
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Login failed" });
+  }
 });
 
 // Get All Users (Protected)
