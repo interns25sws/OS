@@ -5,6 +5,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
+
 // Ensure uploads directory exists
 const uploadDir = path.join(__dirname, "..", "uploads");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
@@ -43,10 +44,12 @@ const productSchema = new mongoose.Schema(
 const Product =
   mongoose.models.Product || mongoose.model("Product", productSchema);
 
-// GET all products with stock info
+
+
+// GET all products 
 router.get("/", async (req, res) => {
   try {
-    const { category, status, page = 1, limit = 10 } = req.query;
+    const { category, status, page = 1, limit = "" } = req.query;
 
     const filter = {};
     if (category && category !== "All") filter.category = category;
@@ -85,6 +88,8 @@ router.get("/", async (req, res) => {
   }
 });
 
+
+
 // POST create new product
 router.post("/", upload.array("images", 5), async (req, res) => {
   try {
@@ -117,6 +122,7 @@ router.post("/", upload.array("images", 5), async (req, res) => {
 });
 
 
+
 // GET distinct categories
 router.get("/categories", async (req, res) => {
   try {
@@ -127,6 +133,7 @@ router.get("/categories", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch categories" });
   }
 });
+
 
 // POST new category (optional route)
 router.post("/categories", async (req, res) => {
@@ -161,6 +168,8 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
 
 // PUT (EDIT) product by ID
 router.put("/:id", async (req, res) => {

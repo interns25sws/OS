@@ -12,8 +12,6 @@ const Shop = () => {
   const [quantity, setQuantity] = useState(1);
   const [addingToCart, setAddingToCart] = useState(false);
   const [showFullDesc, setShowFullDesc] = useState(false);
-  
-  
 
   const getToken = () => {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -21,15 +19,11 @@ const Shop = () => {
   };
 
   useEffect(() => {
-    setCategories([
-      "All",
-      "Shirt",
-      "T-Shirt",
-      "Jeans",
-      "Shoes",
-      "Shorts",
-      "Slides",
-    ]);
+    // Fetch categories dynamically
+    fetch("http://localhost:5000/api/products/categories")
+      .then((res) => res.json())
+      .then((data) => setCategories(["All", ...data]))
+      .catch(() => setCategories(["All"]));
   }, []);
 
   useEffect(() => {
@@ -49,7 +43,7 @@ const Shop = () => {
         return res.json();
       })
       .then((data) => {
-        setProducts(data);
+        setProducts(data.products || []);
         setLoading(false);
       })
       .catch(() => {
@@ -73,7 +67,7 @@ const Shop = () => {
         if (!res.ok) throw new Error("Failed to add to cart");
         return res.json();
       })
-      .then((data) => {
+      .then(() => {
         setCartMessage("Added to cart!");
       })
       .catch(() => {
@@ -145,9 +139,15 @@ const Shop = () => {
               onClick={() => openProductModal(product)}
             >
               {product.images?.[0] ? (
-                <img src={product.images[0]} alt={product.name} />
+                <img
+                  src={`http://localhost:5000/${product.images[0]}`}
+                  alt={product.name}
+                />
               ) : (
                 <div className="shop-no-image">No image</div>
+              )}
+              {product.stock === 0 && (
+                <span className="out-of-stock-badge">Out of Stock</span>
               )}
             </div>
             <div className="shop-product-info">
@@ -162,9 +162,13 @@ const Shop = () => {
               )}
               <button
                 onClick={() => handleAddToCart(product._id, 1)}
-                disabled={addingToCart}
+                disabled={addingToCart || product.stock === 0}
               >
-                {addingToCart ? "Adding..." : "Add to Cart"}
+                {product.stock === 0
+                  ? "Out of Stock"
+                  : addingToCart
+                  ? "Adding..."
+                  : "Add to Cart"}
               </button>
             </div>
           </div>
@@ -180,7 +184,7 @@ const Shop = () => {
 
             <div className="modal-image">
               <img
-                src={selectedProduct.images?.[0]}
+                src={`http://localhost:5000/${selectedProduct.images?.[0]}`}
                 alt={selectedProduct.name}
               />
             </div>
@@ -200,11 +204,24 @@ const Shop = () => {
                   </button>
                 )}
               </p>
+
               <p>
                 <strong>Sizes:</strong> {selectedProduct.sizes.join(", ")}
               </p>
               <p>
                 <strong>Price:</strong> ${selectedProduct.price.toFixed(2)}
+              </p>
+              <p>
+                <strong>Stock:</strong>{" "}
+                <span
+                  style={{
+                    color: selectedProduct.stock === 0 ? "red" : "green",
+                  }}
+                >
+                  {selectedProduct.stock === 0
+                    ? "Out of Stock"
+                    : `${selectedProduct.stock} available`}
+                </span>
               </p>
 
               <div className="quantity-selector">
@@ -219,12 +236,14 @@ const Shop = () => {
 
               <button
                 className="shop-add-to-cart-btn"
-                onClick={() =>
-                  handleAddToCart(selectedProduct._id, quantity)
-                }
-                disabled={addingToCart}
+                onClick={() => handleAddToCart(selectedProduct._id, quantity)}
+                disabled={addingToCart || selectedProduct.stock === 0}
               >
-                {addingToCart ? "Adding..." : "Add to Cart"}
+                {selectedProduct.stock === 0
+                  ? "Out of Stock"
+                  : addingToCart
+                  ? "Adding..."
+                  : "Add to Cart"}
               </button>
 
               <div className="modal-nav-buttons">

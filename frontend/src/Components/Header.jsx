@@ -24,11 +24,11 @@ const Header = ({ loggedInUser, cartItemCount = 0 }) => {
             </Link>
           </div>
 
-          <div className="search-bar">
+          <div className="search-bar-header">
             <input
               type="text"
               placeholder="Search products..."
-              className="search-input"
+              className="search-input-header"
             />
             <button className="search-btn" aria-label="Search products">
               <i className="fa fa-search" />

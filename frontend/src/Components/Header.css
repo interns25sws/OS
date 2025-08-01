@@ -46,7 +46,7 @@
 
 
 /* Search Bar */
-.search-bar {
+.search-bar-header {
   flex: 1;
   display: flex;
   align-items: center;
@@ -56,7 +56,7 @@
   max-width: 400px;
 }
 
-.search-input {
+.search-input-header {
   border: none;
   outline: none;
   background: transparent;

@@ -93,7 +93,7 @@ const AddProduct = () => {
       </h2>
       <form onSubmit={handleSubmit}>
         <Field
-          label="name"
+          label="Name"
           name="name"
           value={formData.name}
           onChange={handleChange}

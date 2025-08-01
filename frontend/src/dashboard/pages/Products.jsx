@@ -7,11 +7,13 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts(currentPage);
+  }, [currentPage]);
 
   useEffect(() => {
     if (!searchTerm.trim()) {
@@ -19,12 +21,14 @@ const Products = () => {
     }
   }, [products, searchTerm]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page = 1) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/products");
-      const productList = Array.isArray(res.data)
-        ? res.data
-        : res.data.products;
+      const res = await axios.get(
+        `http://localhost:5000/api/products?page=${page}&limit=10`
+      );
+      const productList = Array.isArray(res.data.products)
+        ? res.data.products
+        : [];
 
       const cleanedProducts = productList.map((p) => ({
         ...p,
@@ -36,6 +40,8 @@ const Products = () => {
 
       setProducts(cleanedProducts);
       setFiltered(cleanedProducts);
+      setTotalPages(res.data.totalPages || 1);
+      setCurrentPage(res.data.page || 1);
     } catch (err) {
       console.error("Failed to fetch products", err);
     }
@@ -47,7 +53,7 @@ const Products = () => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
         await axios.delete(`http://localhost:5000/api/products/${id}`);
-        fetchProducts();
+        fetchProducts(currentPage); // Refresh same page
       } catch (err) {
         console.error("Failed to delete product", err);
       }
@@ -66,11 +72,17 @@ const Products = () => {
     setFiltered(filteredList);
   };
 
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   return (
     <div className="products-container">
       <div className="products-header">
         <h2>Product Management</h2>
-        <div className="actions">
+        <div className="actions-products">
           <input
             type="text"
             placeholder="Search by name, ID, category..."
@@ -117,37 +129,18 @@ const Products = () => {
                   </td>
                   <td className="edit-button-table">
                     <button
-                      className="edit-btn"
+                      className="edit-btn-table"
                       onClick={() => handleEdit(product._id)}
                       title="Edit"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="icon edit-icon"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                        <path
-                          fillRule="evenodd"
-                          d="M2 15.25V18h2.75l8.071-8.071-2.75-2.75L2 15.25zM17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      ✎
                     </button>
                     <button
-                      className="delete-btn"
+                      className="delete-btn-table"
                       onClick={() => handleDelete(product._id)}
                       title="Delete"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="icon delete-icon"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                      >
-                        <path d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
-                      </svg>
+                      🗑
                     </button>
                   </td>
                 </tr>
@@ -161,6 +154,39 @@ const Products = () => {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="pagination">
+        <button
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="pagination-btn"
+        >
+          ← Prev
+        </button>
+
+        {[...Array(totalPages)].map((_, index) => {
+          const page = index + 1;
+          return (
+            <button
+              key={page}
+              onClick={() => goToPage(page)}
+              className={`pagination-page ${
+                currentPage === page ? "active" : ""
+              }`}
+            >
+              {page}
+            </button>
+          );
+        })}
+
+        <button
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="pagination-btn"
+        >
+          Next →
+        </button>
       </div>
     </div>
   );
