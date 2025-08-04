@@ -8,6 +8,8 @@ const Products = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [statusFilter, setStatusFilter] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,10 +31,12 @@ const Products = () => {
     }
   }, [products, searchTerm]);
 
-  const fetchProducts = async (page = 1) => {
+  const fetchProducts = async (page = 1, status = statusFilter) => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/products?page=${page}&limit=10`
+        `http://localhost:5000/api/products?page=${page}&limit=10${
+          status ? `&status=${status}` : ""
+        }`
       );
       const productList = Array.isArray(res.data.products)
         ? res.data.products
@@ -44,12 +48,14 @@ const Products = () => {
         stock: typeof p.stock === "number" ? p.stock : 0,
         category: p.category || "-",
         price: typeof p.price === "number" ? p.price : 0,
+        status: p.status || "draft",
       }));
 
       setProducts(cleaned);
       setFiltered(cleaned);
       setTotalPages(res.data.totalPages || 1);
       setCurrentPage(res.data.page || 1);
+      setStatusFilter(status);
     } catch (err) {
       console.error("Failed to fetch products", err);
     }
@@ -82,20 +88,33 @@ const Products = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen font-inter text-gray-800">
+    <div className="p-4 sm:p-6 lg:p-8 bg-gray-100 min-h-screen font-inter text-gray-800">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-semibold text-gray-900">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+        <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">
           Product Management
         </h2>
-        <div className="flex gap-4">
+
+        <div className="flex flex-col sm:flex-row flex-wrap gap-3">
           <input
             type="text"
             placeholder="Search by name, ID, category..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-4 py-2 w-72 text-sm border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-indigo-300 focus:outline-none"
+            className="px-4 py-2 w-full sm:w-72 text-sm border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-indigo-300 focus:outline-none"
           />
+          <select
+            value={statusFilter}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              fetchProducts(1, e.target.value);
+            }}
+            className="px-4 py-2 w-full sm:w-auto text-sm border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-indigo-300 focus:outline-none"
+          >
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="draft">Draft</option>
+          </select>
           <button
             onClick={() => navigate("/add-product")}
             className="bg-indigo-600 text-white px-5 py-2 rounded-lg font-semibold shadow hover:bg-indigo-500 transition"
@@ -106,11 +125,11 @@ const Products = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl p-6 shadow-md overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100 text-sm uppercase text-gray-600">
+      <div className="bg-white rounded-xl shadow-md overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200 text-sm">
+          <thead className="bg-gray-100 text-gray-600 uppercase">
             <tr>
-              <th className="px-4 py-3 text-left">Product ID</th>
+              <th className="px-4 py-3 text-left whitespace-nowrap">Product ID</th>
               <th className="px-4 py-3 text-left">Name</th>
               <th className="px-4 py-3 text-left">Price</th>
               <th className="px-4 py-3 text-left">Stock</th>
@@ -119,11 +138,13 @@ const Products = () => {
               <th className="px-4 py-3 text-left">Actions</th>
             </tr>
           </thead>
-          <tbody className="text-sm text-gray-700">
+          <tbody className="text-gray-800">
             {filtered.length > 0 ? (
-              filtered.map((product) => (
-                <tr key={product._id} className="hover:bg-gray-50 border-b">
-                  <td className="px-4 py-3">{product._id}</td>
+              filtered.map((product, index) => (
+                <tr key={product._id} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    PROD-{(index + 1).toString().padStart(3, "0")}
+                  </td>
                   <td className="px-4 py-3">{product.title}</td>
                   <td className="px-4 py-3">₹{product.price}</td>
                   <td className="px-4 py-3">{product.stock}</td>
@@ -131,12 +152,12 @@ const Products = () => {
                   <td className="px-4 py-3">
                     <span
                       className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                        product.stock > 0
+                        product.status === "active"
                           ? "bg-green-100 text-green-800 border border-green-300"
                           : "bg-red-100 text-red-800 border border-red-300"
                       }`}
                     >
-                      {product.stock > 0 ? "Active" : "Out of Stock"}
+                      {product.status === "active" ? "Active" : "Draft"}
                     </span>
                   </td>
                   <td className="px-4 py-3">

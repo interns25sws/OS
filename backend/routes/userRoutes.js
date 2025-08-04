@@ -9,6 +9,7 @@ const generateToken = require("../utils/generateToken");
 
 const allowRoles = ["admin", "super-admin", "sales-rep"];
 
+
 // GET all users (Protected)
 router.get("/", authMiddleware, async (req, res) => {
   try {
@@ -19,6 +20,7 @@ router.get("/", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Error fetching users." });
   }
 });
+
 
 // DELETE user (Protected)
 router.delete("/:id", authMiddleware, async (req, res) => {
@@ -33,21 +35,28 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 });
 
 // PUT update user (Protected)
-router.put("/:id", authMiddleware, async (req, res) => {
-  const { firstName, lastName, phone, dob, gender } = req.body;
+router.put('/:id', async (req, res) => {
   try {
-    const updated = await User.findByIdAndUpdate(
-      req.params.id,
-      { firstName, lastName, phone, dob, gender },
-      { new: true, select: "-password" }
-    );
-    if (!updated) return res.status(404).json({ message: "User not found." });
-    res.status(200).json({ message: "User updated successfully.", user: updated });
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    // Update fields
+    if (req.body.firstName) user.firstName = req.body.firstName;
+    if (req.body.lastName) user.lastName = req.body.lastName;
+    if (req.body.email) user.email = req.body.email;
+    if (req.body.role) user.role = req.body.role; // 🟡 Make sure this is present
+    if (req.body.password) {
+      user.password = await hashPassword(req.body.password); // if using hashing
+    }
+
+    await user.save();
+    res.json({ message: 'User updated', user });
   } catch (err) {
-    console.error("UpdateUser error:", err);
-    res.status(500).json({ message: "Error updating user." });
+    console.error('Update error:', err);
+    res.status(500).json({ error: 'Update failed' });
   }
 });
+
 
 // Admin panel (role restricted)
 router.get("/admin-panel", authMiddleware, (req, res) => {

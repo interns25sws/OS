@@ -3,41 +3,28 @@ import { useNavigate } from "react-router-dom";
 
 const Profile = ({ user, setLoggedInUser }) => {
   const navigate = useNavigate();
-  const [hover, setHover] = useState(false);
-  const [avatarEmoji, setAvatarEmoji] = useState("🙂");
-  // const [loggedInUser, setLoggedInUser] = useState(null);
-
-useEffect(() => {
-  const storedUser = localStorage.getItem("loggedInUser");
-  if (storedUser) {
-    setLoggedInUser(JSON.parse(storedUser));
-  }
-}, []);
-
+  const [editing, setEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
 
   useEffect(() => {
-      console.log("Profile user prop:", user); // ✅ Add this
-    if (user?.gender) {
-      switch (user.gender.toLowerCase()) {
-        case "female":
-          setAvatarEmoji("👩");
-          break;
-        case "male":
-          setAvatarEmoji("👨");
-          break;
-        case "other":
-          setAvatarEmoji("🧑");
-          break;
-        default:
-          setAvatarEmoji("🙂");
-      }
+    const storedUser = localStorage.getItem("loggedInUser");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setFormData({
+        firstName: parsedUser.firstName || "",
+        lastName: parsedUser.lastName || "",
+        email: parsedUser.email || "",
+      });
+      setLoggedInUser(parsedUser);
     }
-  }, [user]);
+  }, []);
 
   const handleLogout = () => {
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
-
+    if (!window.confirm("Are you sure you want to logout?")) return;
     localStorage.removeItem("loggedInUser");
     setLoggedInUser(null);
     navigate("/login");
@@ -45,195 +32,152 @@ useEffect(() => {
 
   const goHome = () => navigate("/");
 
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSave = () => {
+    const updatedUser = { ...formData };
+    setLoggedInUser(updatedUser);
+    localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+    setEditing(false);
+  };
+
   if (!user) {
     return (
-      <div style={styles.container}>
-        <p style={styles.loginPrompt}>
-          Please <a href="/login" style={styles.loginLink}>log in</a> to view your profile.
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+        <p className="text-lg text-gray-700">
+          Please{" "}
+          <a href="/login" className="text-blue-600 font-semibold underline">
+            log in
+          </a>{" "}
+          to view your profile.
         </p>
       </div>
     );
   }
 
   return (
-    <div style={styles.pageWrapper}>
-      <button onClick={goHome} style={styles.homeButton} aria-label="Go home">
+    <div className="min-h-screen bg-gradient-to-br from-white to-gray-100 px-4 py-10 flex flex-col items-center relative">
+      <button
+        onClick={goHome}
+        className="absolute top-4 left-4 text-blue-600 font-semibold hover:underline"
+      >
         ← Home
       </button>
 
-      <div style={styles.profileBox}>
-        <div style={styles.avatar}>
-          <span role="img" aria-label="user avatar" style={styles.avatarIcon}>
-            {avatarEmoji}
-          </span>
+      <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl p-8 sm:p-10">
+        <div className="flex items-center justify-between mb-6 sm:mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
+            Your Profile
+          </h2>
+          {!editing && (
+            <button
+              onClick={() => setEditing(true)}
+              className="text-sm text-blue-600 font-medium hover:underline"
+            >
+              Edit
+            </button>
+          )}
         </div>
 
-        <h2
-          onClick={goHome}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-          style={{
-            ...styles.title,
-            color: hover ? "#4a90e2" : "#34495e",
-          }}
-        >
-          Your Profile
-        </h2>
-
-        <div style={styles.infoRow}>
-          <span style={styles.label}>Name:</span>
-          <span style={styles.infoText}>
-            {user.firstName ?? "N/A"} {user.lastName ?? ""}
-          </span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <ProfileInput
+            label="First Name"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            editable={editing}
+          />
+          <ProfileInput
+            label="Last Name"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            editable={editing}
+          />
+          <ProfileInput
+            label="Email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            editable={false}
+          />
         </div>
 
-        <div style={styles.infoRow}>
-          <span style={styles.label}>Email:</span>
-          <span style={styles.infoText}>{user.email ?? "N/A"}</span>
+        <div className="flex flex-col sm:flex-row justify-between items-center mt-10 gap-4">
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
+          >
+            Logout
+          </button>
+
+          {editing && (
+            <div className="flex gap-3">
+              <button
+                onClick={() => setEditing(false)}
+                className="bg-gray-300 text-gray-800 px-5 py-2 rounded-md hover:bg-gray-400 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition"
+              >
+                Save
+              </button>
+            </div>
+          )}
         </div>
-
-        {user.phone && (
-          <div style={styles.infoRow}>
-            <span style={styles.label}>Phone:</span>
-            <span style={styles.infoText}>{user.phone}</span>
-          </div>
-        )}
-
-        {user.dob && (
-          <div style={styles.infoRow}>
-            <span style={styles.label}>DOB:</span>
-            <span style={styles.infoText}>{user.dob}</span>
-          </div>
-        )}
-
-        {user.gender && (
-          <div style={styles.infoRow}>
-            <span style={styles.label}>Gender:</span>
-            <span style={styles.infoText}>{user.gender}</span>
-          </div>
-        )}
-
-        <button
-          onClick={handleLogout}
-          style={styles.logoutButton}
-          onMouseEnter={(e) => e.target.style.backgroundColor = "#d32f2f"}
-          onMouseLeave={(e) => e.target.style.backgroundColor = "#e53935"}
-        >
-          Logout
-        </button>
       </div>
     </div>
   );
 };
 
-const styles = {
-  pageWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    padding: "2rem",
-    position: "relative",
-  },
-  homeButton: {
-    position: "absolute",
-    top: "20px",
-    left: "20px",
-    backgroundColor: "transparent",
-    border: "none",
-    color: "#4a90e2",
-    fontSize: "1.1rem",
-    fontWeight: "600",
-    cursor: "pointer",
-    userSelect: "none",
-    transition: "color 0.3s ease",
-  },
-  container: {
-    minHeight: "80vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    backgroundColor: "#f5f7fa",
-    padding: "2rem",
-  },
-  loginPrompt: {
-    fontSize: "1.2rem",
-    color: "#555",
-  },
-  loginLink: {
-    color: "#4a90e2",
-    textDecoration: "none",
-    fontWeight: "600",
-    borderBottom: "2px solid transparent",
-    transition: "border-color 0.3s ease",
-  },
-  profileBox: {
-    backgroundColor: "#fff",
-    padding: "3rem 3.5rem",
-    borderRadius: "16px",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
-    maxWidth: "400px",
-    width: "100%",
-    textAlign: "center",
-  },
-  avatar: {
-    width: "100px",
-    height: "100px",
-    backgroundColor: "#4a90e2",
-    borderRadius: "50%",
-    margin: "0 auto 1.5rem",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    boxShadow: "0 4px 10px rgba(74,144,226,0.4)",
-  },
-  avatarIcon: {
-    fontSize: "56px",
-    color: "#fff",
-  },
-  title: {
-    fontSize: "2rem",
-    fontWeight: "700",
-    cursor: "pointer",
-    marginBottom: "2rem",
-    userSelect: "none",
-  },
-  infoRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "0.6rem 0",
-    borderBottom: "1px solid #eee",
-  },
-  label: {
-    color: "#7f8c8d",
-    fontWeight: "600",
-    fontSize: "1rem",
-    textAlign: "left",
-  },
-  infoText: {
-    color: "#2c3e50",
-    fontWeight: "500",
-    fontSize: "1.1rem",
-    textAlign: "right",
-    wordBreak: "break-word",
-  },
-  logoutButton: {
-    marginTop: "2.5rem",
-    padding: "12px 28px",
-    backgroundColor: "#e53935",
-    color: "#fff",
-    border: "none",
-    borderRadius: "8px",
-    fontSize: "1.1rem",
-    fontWeight: "700",
-    cursor: "pointer",
-    boxShadow: "0 4px 14px rgba(229,57,53,0.5)",
-    transition: "background-color 0.3s ease, box-shadow 0.3s ease",
-    userSelect: "none",
-  },
-};
+const ProfileInput = ({
+  label,
+  name,
+  value,
+  onChange,
+  editable,
+  type = "text",
+  placeholder = "",
+}) => (
+  <div className="flex flex-col">
+    <label htmlFor={name} className="text-sm text-gray-500 font-medium mb-1">
+      {label}
+    </label>
+    {editable ? (
+      type === "textarea" ? (
+        <textarea
+          id={name}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          className="border border-gray-300 rounded-md px-3 py-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      ) : (
+        <input
+          id={name}
+          name={name}
+          value={value}
+          onChange={onChange}
+          type={type}
+          placeholder={placeholder}
+          className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      )
+    ) : (
+      <div className="bg-gray-50 border border-gray-200 rounded-md px-3 py-2 text-gray-800 font-medium">
+        {value || "N/A"}
+      </div>
+    )}
+  </div>
+);
 
 export default Profile;
-  

@@ -5,8 +5,13 @@ const productSchema = new mongoose.Schema({
   description: String,
   price: { type: Number, required: true },
   category: String,
-  status: { type: String, enum: ["active", "inactive"], default: "active" },
+  status: { type: String, enum: ["active", "draft"], default: "active" },
   stock: { type: Number, default: 0 },
+  sizes: {
+    type: [String],
+    required: true,
+  },
+
   images: [String]
 }, { timestamps: true }); // This adds createdAt and updatedAt
 

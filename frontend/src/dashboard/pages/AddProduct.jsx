@@ -12,6 +12,7 @@ const AddProduct = () => {
     stock: 0,
     status: "active",
     images: [],
+    sizes: [],
   });
   const [previewUrls, setPreviewUrls] = useState([]);
   const [submitting, setSubmitting] = useState(false);
@@ -64,7 +65,7 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { title, description, price, category, stock, status, images } = formData;
+    const { title, description, price, category, stock, status, images, sizes } = formData;
 
     if (!title || !description || !price || !category || images.length === 0) {
       alert("Please fill all required fields and upload at least one image.");
@@ -78,6 +79,8 @@ const AddProduct = () => {
     submitData.append("category", category);
     submitData.append("stock", parseInt(stock));
     submitData.append("status", status);
+
+    sizes.forEach((size) => submitData.append("sizes[]", size));
     images.forEach((img) => submitData.append("images", img));
 
     try {
@@ -94,6 +97,7 @@ const AddProduct = () => {
         stock: 0,
         status: "active",
         images: [],
+        sizes: [],
       });
       setPreviewUrls([]);
     } catch (err) {
@@ -106,7 +110,7 @@ const AddProduct = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-14 mb-10 p-8 bg-white rounded-xl shadow-lg text-gray-800">
-      <h2 className="text-2xl font-semibold text-center mb-8 text-gray-800">Add New Product</h2>
+      <h2 className="text-2xl font-semibold text-center mb-8">Add New Product</h2>
       <form onSubmit={handleSubmit} className="space-y-5">
         <Field label="Title" name="title" value={formData.title} onChange={handleChange} required />
         <Field
@@ -135,6 +139,34 @@ const AddProduct = () => {
           required
         />
 
+        {/* Sizes */}
+        <div>
+          <label className="block font-semibold mb-2">Available Sizes</label>
+          <div className="flex flex-wrap gap-3">
+            {["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
+              <label key={size} className="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  value={size}
+                  checked={formData.sizes.includes(size)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setFormData((prev) => ({
+                      ...prev,
+                      sizes: prev.sizes.includes(value)
+                        ? prev.sizes.filter((s) => s !== value)
+                        : [...prev.sizes, value],
+                    }));
+                  }}
+                  className="mr-2"
+                />
+                {size}
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Category */}
         <div>
           <label className="block font-semibold mb-2">Category</label>
           <select
@@ -153,6 +185,7 @@ const AddProduct = () => {
           </select>
         </div>
 
+        {/* Images */}
         <div>
           <label className="block font-semibold mb-2">Product Images</label>
           <input
@@ -186,6 +219,7 @@ const AddProduct = () => {
           </div>
         </div>
 
+        {/* Status */}
         <div>
           <label className="block font-semibold mb-2">Status</label>
           <select

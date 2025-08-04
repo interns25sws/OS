@@ -66,18 +66,39 @@ router.post("/", upload.array("images", 5), async (req, res) => {
     const { title, description, price, category, status, stock } = req.body;
     const imageFiles = req.files;
 
-    if (!title || !description || !price || !category || !status || stock == null || imageFiles.length === 0) {
-      return res.status(400).json({ error: "All fields are required, including at least one image." });
+    // ✅ Get sizes from FormData (can be string or array)
+    let sizes = req.body["sizes[]"] || [];
+    if (typeof sizes === "string") {
+      sizes = [sizes];
+    }
+
+    if (
+      !title ||
+      !description ||
+      !price ||
+      !category ||
+      !status ||
+      stock == null ||
+      imageFiles.length === 0
+    ) {
+      return res.status(400).json({
+        error: "All fields are required, including at least one image.",
+      });
     }
 
     const parsedPrice = parseFloat(price);
     const parsedStock = parseInt(stock);
 
     if (isNaN(parsedPrice) || parsedPrice < 1) {
-      return res.status(400).json({ error: "Price must be at least 1 or Greater." });
+      return res
+        .status(400)
+        .json({ error: "Price must be at least 1 or Greater." });
     }
+
     if (isNaN(parsedStock) || parsedStock < 0) {
-      return res.status(400).json({ error: "Stock must be a number and 0 or more." });
+      return res
+        .status(400)
+        .json({ error: "Stock must be a number and 0 or more." });
     }
 
     const imageNames = imageFiles.map((file) => file.filename);
@@ -89,17 +110,32 @@ router.post("/", upload.array("images", 5), async (req, res) => {
       category,
       status,
       stock: parsedStock,
+      sizes, // ✅ Added sizes field
       images: imageNames,
     });
 
     await newProduct.save();
-    res.status(201).json({ message: "Product created successfully", product: newProduct });
-
+    res
+      .status(201)
+      .json({ message: "Product created successfully", product: newProduct });
   } catch (err) {
     console.error("Error creating product:", err);
     res.status(500).json({ error: "Failed to create product" });
   }
 });
+
+
+// GET only active products (for main website)
+router.get("/active", async (req, res) => {
+  try {
+    const activeProducts = await Product.find({ status: "active" });
+    res.json(activeProducts);
+  } catch (err) {
+    console.error("Error fetching active products:", err);
+    res.status(500).json({ error: "Failed to fetch active products" });
+  }
+});
+
 
 
 // GET: Distinct categories

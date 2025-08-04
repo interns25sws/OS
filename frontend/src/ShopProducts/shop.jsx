@@ -34,7 +34,7 @@ const Shop = () => {
         ? `http://localhost:5000/api/products?category=${encodeURIComponent(
             selectedCategory
           )}`
-        : "http://localhost:5000/api/products";
+        : "http://localhost:5000/api/products/active";
 
     fetch(url)
       .then((res) => {
@@ -42,16 +42,17 @@ const Shop = () => {
         return res.json();
       })
       .then((data) => {
-        setProducts(data.products || []);
+        // If backend returns array, use data directly
+        const productList = Array.isArray(data) ? data : data.products || [];
+        setProducts(productList);
         setLoading(false);
       })
+
       .catch(() => {
         setError("Failed to load products.");
         setLoading(false);
       });
   }, [selectedCategory]);
-
-  
 
   const handleAddToCart = (productId, qty = 1) => {
     setAddingToCart(true);
