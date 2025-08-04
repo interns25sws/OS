@@ -116,7 +116,7 @@ const Cart = () => {
         <div className="cart-item" key={item.productId._id}>
           <div className="cart-image">
             <img
-              src={item.productId.images?.[0] || "/no-image.png"}
+              src={`http://localhost:5000/images/${item.productId.images?.[0]}`}
               alt={item.productId.name}
             />
           </div>

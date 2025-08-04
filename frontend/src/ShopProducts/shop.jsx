@@ -19,7 +19,6 @@ const Shop = () => {
   };
 
   useEffect(() => {
-    // Fetch categories dynamically
     fetch("http://localhost:5000/api/products/categories")
       .then((res) => res.json())
       .then((data) => setCategories(["All", ...data]))
@@ -52,6 +51,8 @@ const Shop = () => {
       });
   }, [selectedCategory]);
 
+  
+
   const handleAddToCart = (productId, qty = 1) => {
     setAddingToCart(true);
 
@@ -64,14 +65,19 @@ const Shop = () => {
       body: JSON.stringify({ productId, quantity: qty }),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to add to cart");
+        if (!res.ok) {
+          return res.json().then((data) => {
+            throw new Error(data.error || "Failed to add to cart");
+          });
+        }
         return res.json();
       })
       .then(() => {
         setCartMessage("Added to cart!");
       })
-      .catch(() => {
-        setCartMessage("Error adding to cart.");
+      .catch((err) => {
+        console.error("Add to cart failed:", err.message);
+        setCartMessage(err.message || "Error adding to cart.");
       })
       .finally(() => {
         setAddingToCart(false);
@@ -140,7 +146,7 @@ const Shop = () => {
             >
               {product.images?.[0] ? (
                 <img
-                  src={`http://localhost:5000/${product.images[0]}`}
+                  src={`http://localhost:5000/images/${product.images[0]}`}
                   alt={product.name}
                 />
               ) : (
@@ -154,7 +160,6 @@ const Shop = () => {
               <h3>{product.name}</h3>
               <p className="desc">{truncate(product.description)}</p>
               <div className="info-row">
-                <span className="sizes">{product.sizes.join(", ")}</span>
                 <span className="price">${product.price.toFixed(2)}</span>
               </div>
               {product.tags && (
@@ -184,7 +189,7 @@ const Shop = () => {
 
             <div className="modal-image">
               <img
-                src={`http://localhost:5000/${selectedProduct.images?.[0]}`}
+                src={`http://localhost:5000/images/${selectedProduct.images?.[0]}`}
                 alt={selectedProduct.name}
               />
             </div>
@@ -206,8 +211,12 @@ const Shop = () => {
               </p>
 
               <p>
-                <strong>Sizes:</strong> {selectedProduct.sizes.join(", ")}
+                <strong>Sizes:</strong>{" "}
+                {Array.isArray(selectedProduct.sizes)
+                  ? selectedProduct.sizes.join(", ")
+                  : "N/A"}
               </p>
+
               <p>
                 <strong>Price:</strong> ${selectedProduct.price.toFixed(2)}
               </p>

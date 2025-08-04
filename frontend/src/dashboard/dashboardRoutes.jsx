@@ -10,7 +10,6 @@ const dashboardRoutes = (
     <Route index element={<DashboardHome />} />
     <Route path="products" element={<Products />} />
     <Route path="orders" element={<Orders />} />
-    <Route path="customers" element={<Customers />} />
     <Route path="discounts" element={<Discounts />} />
   </Route>
 );

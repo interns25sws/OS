@@ -62,7 +62,6 @@ const Sidebar = () => {
     { name: "Dashboard", path: "/dashboard" },
     { name: "Products", path: "/dashboard/products" },
     { name: "Orders", path: "/dashboard/orders" },
-    { name: "Customers", path: "/dashboard/customers" },
     { name: "Discounts", path: "/dashboard/discounts" },
     { name: "Users", path: "/dashboard/users" },
   ];

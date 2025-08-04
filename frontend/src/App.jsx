@@ -23,6 +23,9 @@ import ROUTES from "./Constants/routes.jsx";
 import Dashboard from "./dashboard/pages/DashboardHome.jsx";
 import Products from "./dashboard/pages/Products.jsx";
 import AddProduct from "./dashboard/pages/AddProduct.jsx";
+import Orders from "./dashboard/pages/Orders.jsx";
+import Discounts from "./dashboard/pages/Discounts.jsx";
+import Users from "./dashboard/pages/Users.jsx";
 
 function Home({ loggedInUser }) {
   return (
@@ -73,8 +76,11 @@ function App() {
         <Route path={ROUTES.SHOP} element={<Shop user={loggedInUser} />} />
         <Route path={ROUTES.DASHBOARD} element={<Dashboard />}>
           <Route path={ROUTES.PRODUCTS} element={<Products />} />
+          <Route path={ROUTES.ORDERS} element={<Orders />} />
+          <Route path={ROUTES.DISCOUNTS} element={<Discounts />} />
+          <Route path={ROUTES.USERS} element={<Users />} />
         </Route>
-          <Route path={ROUTES.ADDPRODUCT} element={<AddProduct />} />
+        <Route path={ROUTES.ADDPRODUCT} element={<AddProduct />} />
       </Routes>
     </Router>
   );

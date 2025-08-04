@@ -1,55 +1,64 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const { Types } = mongoose; // ✅ Fix: import Types
 const Cart = require("../models/cart.model.js");
+const Product = require("../models/product.model.js");
 const authMiddleware = require("../middleware/authMiddleware.js");
 
 const router = express.Router();
 
-// ✅ Add or update item
+// ✅ Add or update item in cart
 router.post("/add", authMiddleware, async (req, res) => {
   const { productId, quantity } = req.body;
-  const userId = req.user._id;
+  const userId = new Types.ObjectId(req.user._id); // enforce correct ObjectId
+
+  console.log("Add to cart request:", { userId, productId, quantity });
 
   if (!productId || !quantity || isNaN(quantity) || quantity < 1) {
-    return res.status(400).json({ message: "Invalid product ID or quantity" });
+    return res.status(400).json({ error: "Invalid product ID or quantity" });
   }
 
   try {
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).json({ error: "Product not found" });
+
     let cart = await Cart.findOne({ userId });
 
     if (!cart) {
       cart = new Cart({
-        userId,
-        items: [{ productId, quantity }],
+        userId, // use directly
+        items: [{ productId: new Types.ObjectId(productId), quantity }],
       });
     } else {
-      const itemIndex = cart.items.findIndex(
+      const existingItem = cart.items.find(
         (item) => item.productId.toString() === productId
       );
 
-      const parsedQty = parseInt(quantity);
-
-      if (itemIndex > -1) {
-        cart.items[itemIndex].quantity += parsedQty;
+      if (existingItem) {
+        existingItem.quantity += quantity;
       } else {
-        cart.items.push({ productId, quantity: parsedQty });
+        cart.items.push({
+          productId: new Types.ObjectId(productId),
+          quantity,
+        });
       }
-
     }
 
     await cart.save();
-    const populatedCart = await Cart.findOne({ userId }).populate("items.productId");
-
-    res.status(200).json({ message: "Cart updated", cart: populatedCart });
-  } catch (error) {
-    console.error("Cart Add Error:", error);
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    res.status(200).json({ message: "Item added to cart" });
+  } catch (err) {
+    console.error("Add to cart error:", err.message);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-// ✅ Get user cart
+
+// ✅ Get cart
 router.get("/", authMiddleware, async (req, res) => {
   try {
-    const cart = await Cart.findOne({ userId: req.user._id }).populate("items.productId");
+    const cart = await Cart.findOne({ userId: req.user._id }).populate(
+      "items.productId"
+    );
     res.json(cart || { items: [] });
   } catch (error) {
     res.status(500).json({ message: "Error fetching cart", error });
@@ -71,25 +80,32 @@ router.delete("/remove/:productId", authMiddleware, async (req, res) => {
     );
 
     await cart.save();
+
     const updatedCart = await Cart.findOne({ userId }).populate("items.productId");
 
     res.status(200).json({ message: "Item removed", cart: updatedCart });
   } catch (err) {
-    res.status(500).json({ message: "Failed to remove item", error: err });
+    res.status(500).json({ message: "Failed to remove item", error: err.message });
   }
 });
 
-// ✅ Update item quantity (optional cleaner endpoint)
+// ✅ Update item quantity
 router.put("/update", authMiddleware, async (req, res) => {
   const { productId, quantity } = req.body;
   const userId = req.user._id;
+
+  if (!productId || isNaN(quantity) || quantity < 1) {
+    return res.status(400).json({ error: "Invalid product ID or quantity" });
+  }
 
   try {
     const cart = await Cart.findOne({ userId });
 
     if (!cart) return res.status(404).json({ message: "Cart not found" });
 
-    const item = cart.items.find((item) => item.productId.toString() === productId);
+    const item = cart.items.find(
+      (item) => item.productId.toString() === productId
+    );
 
     if (item) {
       item.quantity = quantity;
@@ -100,7 +116,7 @@ router.put("/update", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "Product not found in cart" });
     }
   } catch (err) {
-    res.status(500).json({ message: "Failed to update quantity", error: err });
+    res.status(500).json({ message: "Failed to update quantity", error: err.message });
   }
 });
 

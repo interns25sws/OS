@@ -18,6 +18,14 @@ const Products = () => {
   useEffect(() => {
     if (!searchTerm.trim()) {
       setFiltered(products);
+    } else {
+      const filteredList = products.filter(
+        (p) =>
+          p.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p._id?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFiltered(filteredList);
     }
   }, [products, searchTerm]);
 
@@ -53,7 +61,14 @@ const Products = () => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
         await axios.delete(`http://localhost:5000/api/products/${id}`);
-        fetchProducts(currentPage); // Refresh same page
+        const updatedProducts = products.filter((p) => p._id !== id);
+        setProducts(updatedProducts);
+        setFiltered(updatedProducts);
+        if (updatedProducts.length === 0 && currentPage > 1) {
+          setCurrentPage(currentPage - 1);
+        } else {
+          fetchProducts(currentPage);
+        }
       } catch (err) {
         console.error("Failed to delete product", err);
       }
