@@ -59,7 +59,7 @@ const Users = () => {
         "http://localhost:5000/api/users/signup",
         newUser
       );
-      setUsers([...users, res.data.user]); // optionally re-fetch instead
+      setUsers([...users, res.data.user]);
       setShowForm(false);
       setNewUser({
         firstName: "",
@@ -74,162 +74,79 @@ const Users = () => {
     }
   };
 
-  const styles = {
-    container: {
-      marginLeft: "20px",
-      padding: "60px 40px",
-      fontFamily: "'Inter', sans-serif",
-      backgroundColor: "#f1f5f9",
-      minHeight: "100vh",
-      color: "#1f2937",
-    },
-    title: {
-      fontSize: "30px",
-      fontWeight: 600,
-      marginBottom: "30px",
-      color: "#111827",
-    },
-    table: {
-      width: "100%",
-      borderCollapse: "separate",
-      borderSpacing: "0",
-      borderRadius: "12px",
-      overflow: "hidden",
-      boxShadow: "0 2px 10px rgba(0, 0, 0, 0.08)",
-      backgroundColor: "#ffffff",
-    },
-    th: {
-      backgroundColor: "#f9fafb",
-      color: "#6b7280",
-      textAlign: "left",
-      padding: "14px 20px",
-      fontSize: "14px",
-      borderBottom: "1px solid #e5e7eb",
-    },
-    td: {
-      padding: "16px 20px",
-      fontSize: "15px",
-      borderBottom: "1px solid #f1f3f5",
-      color: "#1f2937",
-    },
-    row: (index) => ({
-      backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9fafb",
-    }),
-    actions: {
-      display: "flex",
-      gap: "10px",
-    },
-    buttonBase: {
-      padding: "8px 14px",
-      borderRadius: "6px",
-      fontSize: "14px",
-      fontWeight: 500,
-      cursor: "pointer",
-      transition: "all 0.3s ease",
-      border: "1px solid transparent",
-    },
-    editBtn: {
-      backgroundColor: "#3b82f6",
-      color: "#ffffff",
-      borderColor: "#3b82f6",
-    },
-    deleteBtn: {
-      backgroundColor: "#ef4444",
-      color: "#ffffff",
-      borderColor: "#ef4444",
-    },
-    addUserBtn: {
-      marginBottom: "20px",
-      backgroundColor: "#6366f1",
-      fontWeight: "700",
-      color: "#ffffff",
-      border: "none",
-    },
-    form: {
-      marginBottom: "30px",
-      padding: "20px",
-      backgroundColor: "#ffffff",
-      borderRadius: "8px",
-      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-    },
-    input: {
-      display: "block",
-      marginBottom: "12px",
-      padding: "10px",
-      width: "100%",
-      borderRadius: "4px",
-      border: "1px solid #d1d5db",
-    },
-  };
-
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>User Management</h1>
+    <div className="p-10 bg-gray-100 min-h-screen font-inter text-gray-800">
+      <h1 className="text-3xl font-semibold mb-6 text-gray-900">
+        User Management
+      </h1>
 
       <button
-        style={{ ...styles.buttonBase, ...styles.addUserBtn }}
+        className="mb-6 px-5 py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-500 transition"
         onClick={() => setShowForm(!showForm)}
       >
         {showForm ? "Cancel" : "Add User"}
       </button>
 
       {showForm && (
-        <form style={styles.form} onSubmit={handleAddUser}>
-          <input
-            style={styles.input}
-            type="text"
-            placeholder="First Name"
-            value={newUser.firstName}
-            onChange={(e) =>
-              setNewUser({ ...newUser, firstName: e.target.value })
-            }
-            required
-          />
-          <input
-            style={styles.input}
-            type="text"
-            placeholder="Last Name"
-            value={newUser.lastName}
-            onChange={(e) =>
-              setNewUser({ ...newUser, lastName: e.target.value })
-            }
-            required
-          />
-          <input
-            style={styles.input}
-            type="email"
-            placeholder="Email"
-            value={newUser.email}
-            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-            required
-          />
-          <input
-            style={styles.input}
-            type="password"
-            placeholder="Password"
-            value={newUser.password}
-            onChange={(e) =>
-              setNewUser({ ...newUser, password: e.target.value })
-            }
-            required
-          />
-          <select
-            style={styles.input}
-            value={newUser.role}
-            onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
-          >
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-            <option value="super-admin">Super Admin</option>
-            <option value="sales-rep">Sales Rep</option>
-          </select>
+        <form
+          onSubmit={handleAddUser}
+          className="mb-10 p-6 bg-white rounded-lg shadow space-y-4"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              placeholder="First Name"
+              value={newUser.firstName}
+              onChange={(e) =>
+                setNewUser({ ...newUser, firstName: e.target.value })
+              }
+              className="p-3 border border-gray-300 rounded w-full"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Last Name"
+              value={newUser.lastName}
+              onChange={(e) =>
+                setNewUser({ ...newUser, lastName: e.target.value })
+              }
+              className="p-3 border border-gray-300 rounded w-full"
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={newUser.email}
+              onChange={(e) =>
+                setNewUser({ ...newUser, email: e.target.value })
+              }
+              className="p-3 border border-gray-300 rounded w-full"
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={newUser.password}
+              onChange={(e) =>
+                setNewUser({ ...newUser, password: e.target.value })
+              }
+              className="p-3 border border-gray-300 rounded w-full"
+              required
+            />
+            <select
+              value={newUser.role}
+              onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
+              className="p-3 border border-gray-300 rounded w-full"
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+              <option value="super-admin">Super Admin</option>
+              <option value="sales-rep">Sales Rep</option>
+            </select>
+          </div>
           <button
             type="submit"
-            style={{
-              ...styles.buttonBase,
-              backgroundColor: "#2563eb",
-              color: "#ffffff",
-            }}
+            className="mt-4 px-5 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-500 transition"
           >
             Submit
           </button>
@@ -237,58 +154,59 @@ const Users = () => {
       )}
 
       {loading ? (
-        <p>Loading users...</p>
+        <p className="text-gray-600">Loading users...</p>
       ) : error ? (
-        <p style={{ color: "red" }}>{error}</p>
+        <p className="text-red-600">{error}</p>
       ) : (
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th style={styles.th}>Name</th>
-              <th style={styles.th}>Email</th>
-              <th style={styles.th}>Role</th>
-              <th style={styles.th}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user, index) => (
-              <tr key={user._id} style={styles.row(index)}>
-                <td style={styles.td}>
-                  {user.firstName} {user.lastName}
-                </td>
-                <td style={styles.td}>{user.email}</td>
-                <td style={styles.td}>{user.role}</td>
-                <td style={styles.td}>
-                  <div style={styles.actions}>
-                    <button
-                      style={{ ...styles.buttonBase, ...styles.editBtn }}
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.backgroundColor = "#2563eb")
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.backgroundColor = "#3b82f6")
-                      }
-                    >
-                      Edit
-                    </button>
-                    <button
-                      style={{ ...styles.buttonBase, ...styles.deleteBtn }}
-                      onClick={() => handleDelete(user._id)}
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.backgroundColor = "#dc2626")
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.backgroundColor = "#ef4444")
-                      }
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
+        <div className="overflow-x-auto bg-white shadow rounded-lg">
+          <table className="w-full text-sm text-left">
+            <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
+              <tr>
+                <th className="px-6 py-3">Name</th>
+                <th className="px-6 py-3">Email</th>
+                <th className="px-6 py-3">Role</th>
+                <th className="px-6 py-3">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {users.map((user, index) => (
+                <tr
+                  key={user._id}
+                  className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {user.firstName} {user.lastName}
+                  </td>
+                  <td className="px-6 py-4">{user.email}</td>
+                  <td className="px-6 py-4">{user.role}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex gap-3">
+                      <button className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm">
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(user._id)}
+                        className="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {users.length === 0 && (
+                <tr>
+                  <td
+                    colSpan="4"
+                    className="text-center px-6 py-6 text-gray-400 italic"
+                  >
+                    No users found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

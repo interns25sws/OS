@@ -44,9 +44,7 @@ const AddProduct = () => {
       const newImages = [...formData.images, ...fileArray];
       const newUrls = [...previewUrls, ...fileArray.map((f) => URL.createObjectURL(f))];
 
-      // Reset input so same file can be selected again
       e.target.value = null;
-
       setFormData((prev) => ({ ...prev, images: newImages }));
       setPreviewUrls(newUrls);
     } else {
@@ -88,7 +86,6 @@ const AddProduct = () => {
       alert("Product added successfully!");
       navigate("/dashboard/products");
 
-      // Optional: clear form after success
       setFormData({
         title: "",
         description: "",
@@ -108,18 +105,18 @@ const AddProduct = () => {
   };
 
   return (
-    <div style={wrapperStyle}>
-      <h2 style={titleStyle}>Add New Product</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="max-w-3xl mx-auto mt-14 mb-10 p-8 bg-white rounded-xl shadow-lg text-gray-800">
+      <h2 className="text-2xl font-semibold text-center mb-8 text-gray-800">Add New Product</h2>
+      <form onSubmit={handleSubmit} className="space-y-5">
         <Field label="Title" name="title" value={formData.title} onChange={handleChange} required />
         <Field
           label="Description"
           name="description"
           value={formData.description}
           onChange={handleChange}
-          required
           type="textarea"
           rows={4}
+          required
         />
         <Field
           label="Price"
@@ -138,14 +135,14 @@ const AddProduct = () => {
           required
         />
 
-        <div style={{ marginBottom: "15px" }}>
-          <label style={labelStyle}>Category:</label>
+        <div>
+          <label className="block font-semibold mb-2">Category</label>
           <select
             name="category"
             value={formData.category}
             onChange={handleChange}
+            className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
-            style={inputStyle}
           >
             <option value="">-- Select Category --</option>
             {categories.map((cat, idx) => (
@@ -156,21 +153,32 @@ const AddProduct = () => {
           </select>
         </div>
 
-        <div style={{ marginBottom: "15px" }}>
-          <label style={labelStyle}>Product Images:</label>
+        <div>
+          <label className="block font-semibold mb-2">Product Images</label>
           <input
             type="file"
             name="images"
             accept="image/*"
             multiple
             onChange={handleChange}
-            style={{ marginBottom: "10px" }}
+            className="mb-3"
           />
-          <div style={imagePreviewContainer}>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-3">
             {previewUrls.map((url, idx) => (
-              <div key={idx} style={imageBox}>
-                <img src={url} alt={`preview-${idx}`} style={imageStyle} />
-                <button type="button" style={removeBtnStyle} onClick={() => removeImage(idx)}>
+              <div
+                key={idx}
+                className="relative w-full aspect-square rounded-md overflow-hidden border border-gray-300 bg-gray-100 shadow"
+              >
+                <img
+                  src={url}
+                  alt={`preview-${idx}`}
+                  className="w-full h-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeImage(idx)}
+                  className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shadow hover:bg-red-700"
+                >
                   ✕
                 </button>
               </div>
@@ -178,13 +186,13 @@ const AddProduct = () => {
           </div>
         </div>
 
-        <div style={{ marginBottom: "20px" }}>
-          <label style={labelStyle}>Status:</label>
+        <div>
+          <label className="block font-semibold mb-2">Status</label>
           <select
             name="status"
             value={formData.status}
             onChange={handleChange}
-            style={inputStyle}
+            className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           >
             <option value="active">Active</option>
@@ -194,8 +202,12 @@ const AddProduct = () => {
 
         <button
           type="submit"
-          style={{ ...buttonStyle, opacity: submitting ? 0.6 : 1 }}
           disabled={submitting}
+          className={`w-full py-3 text-white font-semibold rounded-md transition ${
+            submitting
+              ? "bg-blue-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
           {submitting ? "Submitting..." : "Add Product"}
         </button>
@@ -205,8 +217,8 @@ const AddProduct = () => {
 };
 
 const Field = ({ label, name, value, onChange, type = "text", rows = 1, required = false }) => (
-  <div style={{ marginBottom: "15px" }}>
-    <label style={labelStyle}>{label}:</label>
+  <div>
+    <label className="block font-semibold mb-2">{label}</label>
     {type === "textarea" ? (
       <textarea
         name={name}
@@ -214,7 +226,7 @@ const Field = ({ label, name, value, onChange, type = "text", rows = 1, required
         onChange={onChange}
         rows={rows}
         required={required}
-        style={{ ...inputStyle, resize: "vertical" }}
+        className="w-full border border-gray-300 px-4 py-2 rounded-md resize-y focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
     ) : (
       <input
@@ -223,107 +235,10 @@ const Field = ({ label, name, value, onChange, type = "text", rows = 1, required
         value={value}
         onChange={onChange}
         required={required}
-        style={inputStyle}
+        className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
     )}
   </div>
 );
-
-// Styles (same as yours)
-const wrapperStyle = {
-  maxWidth: "720px",
-  margin: "50px auto",
-  padding: "40px",
-  backgroundColor: "#f9f9f9",
-  borderRadius: "12px",
-  boxShadow: "0 12px 24px rgba(0, 0, 0, 0.08)",
-  fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-  color: "#2c3e50",
-};
-
-const titleStyle = {
-  textAlign: "center",
-  color: "#2c3e50",
-  fontSize: "28px",
-  fontWeight: "600",
-  marginBottom: "30px",
-};
-
-const labelStyle = {
-  display: "block",
-  fontWeight: "600",
-  fontSize: "15px",
-  marginBottom: "8px",
-  color: "#34495e",
-};
-
-const inputStyle = {
-  width: "100%",
-  padding: "12px 14px",
-  borderRadius: "8px",
-  border: "1px solid #dcdde1",
-  fontSize: "15px",
-  backgroundColor: "#fff",
-  boxSizing: "border-box",
-  transition: "border-color 0.2s",
-  outline: "none",
-};
-
-const buttonStyle = {
-  width: "100%",
-  padding: "14px",
-  backgroundColor: "#3498db",
-  color: "#ffffff",
-  border: "none",
-  borderRadius: "8px",
-  fontWeight: "600",
-  fontSize: "16px",
-  cursor: "pointer",
-  transition: "background-color 0.3s ease",
-};
-
-const imagePreviewContainer = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
-  gap: "16px",
-  marginTop: "16px",
-};
-
-const imageBox = {
-  position: "relative",
-  width: "100%",
-  aspectRatio: "1 / 1",
-  borderRadius: "10px",
-  overflow: "hidden",
-  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
-  border: "1px solid #ddd",
-  backgroundColor: "#f8f8f8",
-};
-
-const imageStyle = {
-  width: "100%",
-  height: "100%",
-  objectFit: "cover",
-  display: "block",
-};
-
-const removeBtnStyle = {
-  position: "absolute",
-  top: "6px",
-  right: "6px",
-  backgroundColor: "#e74c3c",
-  color: "white",
-  border: "none",
-  borderRadius: "50%",
-  width: "22px",
-  height: "22px",
-  cursor: "pointer",
-  fontWeight: "bold",
-  fontSize: "14px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-};
 
 export default AddProduct;

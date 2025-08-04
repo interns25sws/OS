@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
+import "./index.css"
 import Header from "./Components/Header.jsx";
 import HomePage from "./Components/HomePage.jsx";
 import DisplayCloth from "./Components/DisplayCloth.jsx";
@@ -41,6 +42,7 @@ function Home({ loggedInUser }) {
       <HowItWorks />
       <Recommendations />
       <Footer />
+      
     </>
   );
 }

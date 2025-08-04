@@ -1,130 +1,94 @@
-import React from "react";
-import { Outlet,useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 
 const DashboardHome = () => {
   const location = useLocation();
-
   const isHomePage = location.pathname === "/dashboard";
 
+  const [summary, setSummary] = useState({
+    products: 0,
+    orders: 0,
+    customers: 0,
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSummary = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/dashboard/summary");
+        setSummary(res.data);
+      } catch (error) {
+        console.error("Error fetching dashboard summary", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (isHomePage) fetchSummary();
+  }, [isHomePage]);
+
   return (
-    <div style={styles.container}>
-      <div style={styles.sidebar}>
+    <div className="flex w-full h-screen bg-gray-100 overflow-hidden">
+      {/* Sidebar */}
+      <div className="w-60 bg-white border-r border-gray-300 fixed top-0 bottom-0 left-0 z-10">
         <Sidebar />
       </div>
-      <div style={styles.main}>
-        <div style={styles.topbar}>
+
+      {/* Main Content */}
+      <div className="ml-60 flex flex-col w-[calc(100%-240px)] h-screen">
+        {/* Topbar */}
+        <div className="h-16 bg-white border-b border-gray-300 sticky top-0 z-20 flex items-center px-6">
           <Topbar />
         </div>
-        <div style={styles.content}>
+
+        {/* Content */}
+        <div className="flex-1 p-6 overflow-y-auto bg-gray-100">
           {isHomePage && (
             <>
               {/* Welcome Section */}
-              <div style={styles.welcome}>
-                <h1 style={styles.title}>Welcome Back 👋</h1>
-                <p style={styles.subtitle}>
+              <div className="mb-6">
+                <h1 className="text-2xl font-semibold">Welcome Back 👋</h1>
+                <p className="text-gray-600 mt-1">
                   Here's what's happening in your store today.
                 </p>
               </div>
 
               {/* Summary Cards */}
-              <div style={styles.cards}>
-                <div style={styles.card}>
-                  <h3>150</h3>
-                  <p>Products</p>
-                </div>
-                <div style={styles.card}>
-                  <h3>45</h3>
-                  <p>Orders</p>
-                </div>
-                <div style={styles.card}>
-                  <h3>85</h3>
-                  <p>Customers</p>
-                </div>
+              <div className="flex gap-5 mt-5">
+                {loading ? (
+                  <div className="text-gray-500">Loading summary...</div>
+                ) : (
+                  <>
+                    <div className="flex-1 bg-white p-5 rounded-xl shadow-sm border border-gray-200 text-center">
+                      <h3 className="text-xl font-bold">{summary.products}</h3>
+                      <p className="text-gray-600 mt-1">Products</p>
+                    </div>
+                    <div className="flex-1 bg-white p-5 rounded-xl shadow-sm border border-gray-200 text-center">
+                      <h3 className="text-xl font-bold">{summary.orders}</h3>
+                      <p className="text-gray-600 mt-1">Orders</p>
+                    </div>
+                    <div className="flex-1 bg-white p-5 rounded-xl shadow-sm border border-gray-200 text-center">
+                      <h3 className="text-xl font-bold">{summary.customers}</h3>
+                      <p className="text-gray-600 mt-1">Customers</p>
+                    </div>
+                  </>
+                )}
               </div>
             </>
           )}
 
-          {/* Route Content */}
-          <div style={{ marginTop: isHomePage ? "30px" : "0" }}>
+          {/* Nested Route Content */}
+          <div className={`${isHomePage ? "mt-8" : "mt-0"}`}>
             <Outlet />
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-
-const styles = {
-  container: {
-    display: "flex",
-    width: "100%",
-    height: "100vh",
-    backgroundColor: "#f4f6f8",
-    overflow: "hidden",
-  },
-  sidebar: {
-    width: "240px",
-    backgroundColor: "#fff",
-    borderRight: "1px solid #e0e0e0",
-    height: "100vh",
-    position: "fixed",
-    left: 0,
-    top: 0,
-    bottom: 0,
-  },
-  main: {
-    marginLeft: "240px",
-    display: "flex",
-    flexDirection: "column",
-    width: "calc(100% - 240px)",
-    height: "100vh",
-  },
-  topbar: {
-    height: "64px",
-    backgroundColor: "#fff",
-    borderBottom: "1px solid #e0e0e0",
-    position: "sticky",
-    top: 0,
-    zIndex: 10,
-    display: "flex",
-    alignItems: "center",
-    padding: "0 24px",
-  },
-  content: {
-    flex: 1,
-    padding: "24px 32px",
-    overflowY: "auto",
-    backgroundColor: "#f4f6f8",
-  },
-  welcome: {
-    marginBottom: "24px",
-  },
-  title: {
-    fontSize: "28px",
-    fontWeight: "600",
-    margin: 0,
-  },
-  subtitle: {
-    color: "#666",
-    marginTop: "4px",
-  },
-  cards: {
-    display: "flex",
-    gap: "20px",
-    marginTop: "20px",
-  },
-  card: {
-    flex: "1",
-    backgroundColor: "#fff",
-    padding: "20px",
-    borderRadius: "12px",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-    textAlign: "center",
-    border: "1px solid #e0e0e0",
-  },
 };
 
 export default DashboardHome;

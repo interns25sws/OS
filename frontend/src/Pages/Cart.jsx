@@ -164,7 +164,7 @@ const Cart = () => {
       ))}
     </div>
 
-    <footer className="cart-summary">
+    <footer className="cart-summary ">
       <h2>Total: ${calculateTotal().toFixed(2)}</h2>
       <button className="checkout-btn">Proceed to Checkout</button>
     </footer>
