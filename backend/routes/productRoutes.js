@@ -14,21 +14,19 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-  cb(null, file.originalname);
-}
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
 });
 
+const fileFilter = function (req, file, cb) {
+  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+  cb(null, allowedTypes.includes(file.mimetype));
+};
+
 const upload = multer({
-  storage,
-  fileFilter: function (req, file, cb) {
-    const allowedTypes = /jpeg|jpg|png|webp/;
-    const ext = path.extname(file.originalname).toLowerCase();
-    if (allowedTypes.test(ext)) {
-      cb(null, true);
-    } else {
-      cb(new Error("Only image files are allowed!"));
-    }
-  },
+  storage:storage,
+  fileFilter: fileFilter,
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB max per file
 });
 
@@ -37,7 +35,7 @@ const upload = multer({
 
 router.get("/", async (req, res) => {
   try {
-    const { page = 1, limit = 10, category, status } = req.query;
+    const { page = 1, limit = null, category, status } = req.query;
     const query = {};
     if (category) query.category = category;
     if (status) query.status = status;
@@ -162,40 +160,48 @@ router.get("/:id", async (req, res) => {
 });
 
 // PUT: Update product
-router.put("/:id", async (req, res) => {
+router.put("/:id", upload.array("images", 5), async (req, res) => {
   try {
-    const { title, description, price, category, status, stock } = req.body;
-
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      { title, description, price, category, status, stock },
-      { new: true }
-    );
-
+    const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
-    res.json(product);
+    const imageFiles = req.files;
+    const retained = req.body["retainedImages[]"];
+    const retainedArray = typeof retained === "string" ? [retained] : retained || [];
 
-    // To also update images, use:
-    /*
-    router.put("/:id", upload.array("images", 5), async (req, res) => {
-      const product = await Product.findById(req.params.id);
-      if (!product) return res.status(404).json({ error: "Product not found" });
-
-      // Optionally delete old images
-      product.images.forEach(img => fs.unlinkSync(path.join(uploadDir, img)));
-
-      const newImages = req.files.map(file => file.filename);
-      Object.assign(product, { title, description, price, category, status, stock, images: newImages });
-      await product.save();
-      res.json(product);
+    // Delete removed images
+    product.images.forEach((img) => {
+      if (!retainedArray.includes(img)) {
+        const imgPath = path.join(uploadDir, img);
+        if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
+      }
     });
-    */
-  } catch (err) {
-    console.error("Error updating product:", err);
-    res.status(500).json({ error: "Failed to update product" });
+
+    // Build new images array
+    const newImages = imageFiles.map((file) => file.filename);
+    product.images = [...retainedArray, ...newImages];
+
+    // Sizes
+    const sizes = req.body["sizes[]"];
+    const sizesArray = Array.isArray(sizes) ? sizes : sizes ? [sizes] : [];
+
+    // Other fields
+    product.title = req.body.title;
+    product.description = req.body.description;
+    product.price = req.body.price;
+    product.stock = req.body.stock;
+    product.category = req.body.category;
+    product.sizes = sizesArray;
+
+    await product.save();
+    res.json(product);
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.status(500).json({ error: "Server error" });
   }
 });
+
+
 
 // DELETE: Remove product + images
 router.delete("/:id", async (req, res) => {

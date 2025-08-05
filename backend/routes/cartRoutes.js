@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { Types } = mongoose; // ✅ Fix: import Types
+const { Types } = mongoose;
 const Cart = require("../models/cart.model.js");
 const Product = require("../models/product.model.js");
 const authMiddleware = require("../middleware/authMiddleware.js");
@@ -10,9 +10,7 @@ const router = express.Router();
 // ✅ Add or update item in cart
 router.post("/add", authMiddleware, async (req, res) => {
   const { productId, quantity } = req.body;
-  const userId = new Types.ObjectId(req.user._id); // enforce correct ObjectId
-
-  console.log("Add to cart request:", { userId, productId, quantity });
+  const userId = new Types.ObjectId(req.user._id);
 
   if (!productId || !quantity || isNaN(quantity) || quantity < 1) {
     return res.status(400).json({ error: "Invalid product ID or quantity" });
@@ -26,7 +24,7 @@ router.post("/add", authMiddleware, async (req, res) => {
 
     if (!cart) {
       cart = new Cart({
-        userId, // use directly
+        userId,
         items: [{ productId: new Types.ObjectId(productId), quantity }],
       });
     } else {
@@ -45,27 +43,26 @@ router.post("/add", authMiddleware, async (req, res) => {
     }
 
     await cart.save();
-    res.status(200).json({ message: "Item added to cart" });
+    const updatedCart = await Cart.findOne({ userId }).populate("items.productId");
+    res.status(200).json({ message: "Item added to cart", cart: updatedCart });
   } catch (err) {
-    console.error("Add to cart error:", err.message);
+    console.error("Add to cart error:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-
-// ✅ Get cart
+// ✅ Get user's cart
 router.get("/", authMiddleware, async (req, res) => {
   try {
-    const cart = await Cart.findOne({ userId: req.user._id }).populate(
-      "items.productId"
-    );
-    res.json(cart || { items: [] });
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching cart", error });
+    const cart = await Cart.findOne({ userId: req.user._id }).populate("items.productId");
+    res.status(200).json(cart || { items: [] });
+  } catch (err) {
+    console.error("Get cart error:", err);
+    res.status(500).json({ message: "Error fetching cart", error: err.message });
   }
 });
 
-// ✅ Remove item from cart
+// ✅ Remove product from cart
 router.delete("/remove/:productId", authMiddleware, async (req, res) => {
   const { productId } = req.params;
   const userId = req.user._id;
@@ -75,21 +72,26 @@ router.delete("/remove/:productId", authMiddleware, async (req, res) => {
 
     if (!cart) return res.status(404).json({ message: "Cart not found" });
 
+    const originalLength = cart.items.length;
     cart.items = cart.items.filter(
       (item) => item.productId.toString() !== productId
     );
 
-    await cart.save();
+    if (cart.items.length === originalLength) {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
 
+    await cart.save();
     const updatedCart = await Cart.findOne({ userId }).populate("items.productId");
 
     res.status(200).json({ message: "Item removed", cart: updatedCart });
   } catch (err) {
+    console.error("Remove item error:", err);
     res.status(500).json({ message: "Failed to remove item", error: err.message });
   }
 });
 
-// ✅ Update item quantity
+// ✅ Update quantity of cart item
 router.put("/update", authMiddleware, async (req, res) => {
   const { productId, quantity } = req.body;
   const userId = req.user._id;
@@ -107,15 +109,17 @@ router.put("/update", authMiddleware, async (req, res) => {
       (item) => item.productId.toString() === productId
     );
 
-    if (item) {
-      item.quantity = quantity;
-      await cart.save();
-      const updatedCart = await Cart.findOne({ userId }).populate("items.productId");
-      return res.status(200).json({ message: "Quantity updated", cart: updatedCart });
-    } else {
+    if (!item) {
       return res.status(404).json({ message: "Product not found in cart" });
     }
+
+    item.quantity = quantity;
+    await cart.save();
+
+    const updatedCart = await Cart.findOne({ userId }).populate("items.productId");
+    res.status(200).json({ message: "Quantity updated", cart: updatedCart });
   } catch (err) {
+    console.error("Update quantity error:", err);
     res.status(500).json({ message: "Failed to update quantity", error: err.message });
   }
 });
