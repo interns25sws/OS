@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // at top
 
 const Cart = () => {
   const [cart, setCart] = useState(null);
@@ -7,6 +8,8 @@ const Cart = () => {
   const [updatingItemId, setUpdatingItemId] = useState(null);
   const [message, setMessage] = useState("");
   const [token, setToken] = useState("");
+
+  const navigate = useNavigate();
 
   const getToken = () => {
     const user = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -222,7 +225,10 @@ const Cart = () => {
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
           Total: ₹{calculateTotal().toFixed(2)}
         </h2>
-        <button className="bg-green-600 text-white px-6 py-3 rounded-xl text-lg font-semibold hover:bg-green-700 transition-all shadow-md">
+        <button
+          onClick={() => navigate("/checkout")}
+          className="bg-green-600 text-white px-6 py-3 rounded-xl text-lg font-semibold hover:bg-green-700 transition-all shadow-md"
+        >
           Proceed to Checkout
         </button>
       </div>

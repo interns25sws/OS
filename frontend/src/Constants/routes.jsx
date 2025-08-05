@@ -4,6 +4,7 @@ const ROUTES = {
   PROFILE: "/profile",
   CART: "/cart",
   SHOP: "/shop",
+  CHECKOUT:"/checkout",
 
   // Dashboard routes
   DASHBOARD: "/dashboard",

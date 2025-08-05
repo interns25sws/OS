@@ -20,6 +20,7 @@ import Cart from "./Pages/Cart.jsx";
 import Shop from "./ShopProducts/shop.jsx";
 import Profile from "./Pages/profile.jsx";
 import ROUTES from "./Constants/routes.jsx";
+import Checkout from "./Pages/Checkout.jsx"
 
 import Dashboard from "./dashboard/pages/DashboardHome.jsx";
 import Products from "./dashboard/pages/Products.jsx";
@@ -77,6 +78,7 @@ function App() {
         />
         <Route path={ROUTES.CART} element={<Cart user={loggedInUser} />} />
         <Route path={ROUTES.SHOP} element={<Shop user={loggedInUser} />} />
+        <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
         <Route path={ROUTES.DASHBOARD} element={<Dashboard />}>
           <Route path={ROUTES.PRODUCTS} element={<Products />} />
           <Route path={ROUTES.ORDERS} element={<Orders />} />

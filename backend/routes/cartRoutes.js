@@ -124,4 +124,34 @@ router.put("/update", authMiddleware, async (req, res) => {
   }
 });
 
+router.post("/checkout", authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+
+  const cart = await Cart.findOne({ userId }).populate("items.productId");
+  if (!cart || cart.items.length === 0)
+    return res.status(400).json({ message: "Cart is empty" });
+
+  const orderItems = cart.items.map((item) => ({
+    productId: item.productId._id,
+    quantity: item.quantity,
+    price: item.productId.price,
+  }));
+
+  const total = orderItems.reduce(
+    (sum, item) => sum + item.quantity * item.price,
+    0
+  );
+
+  const newOrder = await Order.create({
+    userId,
+    items: orderItems,
+    total,
+    status: "placed",
+  });
+
+  await Cart.findOneAndDelete({ userId });
+
+  res.json({ success: true, order: newOrder });
+});
+
 module.exports = router;

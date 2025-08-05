@@ -6,7 +6,6 @@ const productRoutes = require('./routes/productRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const dashboardRoutes = require("./routes/dashboard");
-// const customerRoutes = require("./routes/customer.routes");
 const connectDB = require('./config/db');
 
 require('dotenv').config();
@@ -23,6 +22,7 @@ app.get('/', (req, res) => res.send('🚀 Server is up and running!'));
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('api/cart/checkout',cartRoutes)
 app.use("/api/dashboard", dashboardRoutes);
 // app.use("/api/customers", customerRoutes);
 
