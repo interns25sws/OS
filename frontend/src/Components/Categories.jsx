@@ -1,5 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom"; // import Link
 import useInView from "../hooks/useInView";
+import { categorySlugMap } from "../utils/categoryMap";
+
 
 import OverSized from "../assets/Images/Oversized.jpg";
 import AllBottom from "../assets/Images/Allbottom.jpg";
@@ -13,7 +16,7 @@ import jackets from "../assets/Images/jackets.jpg";
 const categories = [
   { title: "OVERSIZED T-SHIRTS", img: OverSized },
   { title: "ALL BOTTOMS", img: AllBottom },
-  { title: "SHIRTS", img: shirts },
+  { title: "SHIRT", img: shirts },
   { title: "POLOS", img: Polos },
   { title: "SHORTS", img: Shorts },
   { title: "SNEAKERS", img: Sneakers },
@@ -38,8 +41,11 @@ const Categories = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
           {categories.map((cat, index) => (
-            <div
+            <Link
               key={index}
+              to={`/category/${Object.keys(categorySlugMap).find(
+                (slug) => categorySlugMap[slug] === cat.title
+              )}`}
               className="relative group overflow-hidden rounded-lg shadow hover:shadow-lg transition duration-300 cursor-pointer"
             >
               <img
@@ -50,7 +56,7 @@ const Categories = () => {
               <span className="absolute bottom-0 left-0 w-full text-center bg-black bg-opacity-60 text-white text-sm md:text-base font-semibold py-2">
                 {cat.title}
               </span>
-            </div>
+            </Link>
           ))}
         </div>
       </section>

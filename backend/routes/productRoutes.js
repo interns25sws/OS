@@ -141,6 +141,28 @@ router.get("/active", async (req, res) => {
 
 
 
+// GET /api/products/category/:categoryName
+router.get("/category/:categoryName", async (req, res) => {
+  const { categoryName } = req.params;
+
+  try {
+    // Convert hyphens to spaces if your DB has categories like "summer wear"
+    const formattedCategory = categoryName.replace(/-/g, " ");
+
+    const products = await Product.find({
+      category: { $regex: new RegExp("^" + formattedCategory + "$", "i") }, // case-insensitive match
+    });
+
+    res.json(products);
+  } catch (err) {
+    console.error("Error fetching products by category:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+
+
 // GET: Distinct categories
 router.get("/categories", async (req, res) => {
   try {

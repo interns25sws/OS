@@ -29,6 +29,7 @@ import Orders from "./dashboard/pages/Orders.jsx";
 import Discounts from "./dashboard/pages/Discounts.jsx";
 import Users from "./dashboard/pages/Users.jsx";
 import EditProduct from "./dashboard/pages/EditProduct.jsx";
+import CategoryProducts from "./Pages/CategoryProducts.jsx";
 
 function Home({ loggedInUser }) {
   return (
@@ -79,6 +80,8 @@ function App() {
         <Route path={ROUTES.CART} element={<Cart user={loggedInUser} />} />
         <Route path={ROUTES.SHOP} element={<Shop user={loggedInUser} />} />
         <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
+        <Route path={ROUTES.CATEGORYNAME} element={<CategoryProducts />} />
+
         <Route path={ROUTES.DASHBOARD} element={<Dashboard />}>
           <Route path={ROUTES.PRODUCTS} element={<Products />} />
           <Route path={ROUTES.ORDERS} element={<Orders />} />

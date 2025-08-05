@@ -5,6 +5,7 @@ const ROUTES = {
   CART: "/cart",
   SHOP: "/shop",
   CHECKOUT:"/checkout",
+  CATEGORYNAME:"/category/:categoryName",
 
   // Dashboard routes
   DASHBOARD: "/dashboard",
