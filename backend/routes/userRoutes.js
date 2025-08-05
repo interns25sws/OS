@@ -123,4 +123,15 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/me", authMiddleware, (req, res) => {
+  const { firstName, lastName, email, phone, address } = req.user;
+  res.json({
+    name: `${firstName} ${lastName}`,
+    email,
+    phone,
+    address,
+  });
+});
+
+
 module.exports = router;

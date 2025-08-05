@@ -25,7 +25,7 @@ const fileFilter = function (req, file, cb) {
 };
 
 const upload = multer({
-  storage:storage,
+  storage: storage,
   fileFilter: fileFilter,
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB max per file
 });
@@ -125,14 +125,19 @@ router.post("/", upload.array("images", 5), async (req, res) => {
 
 // GET only active products (for main website)
 router.get("/active", async (req, res) => {
+  const category = req.query.category;
+
+  const filter = { status: "active" };
+  if (category) filter.category = category;
+
   try {
-    const activeProducts = await Product.find({ status: "active" });
-    res.json(activeProducts);
-  } catch (err) {
-    console.error("Error fetching active products:", err);
-    res.status(500).json({ error: "Failed to fetch active products" });
+    const products = await Product.find(filter);
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch products" });
   }
 });
+
 
 
 
@@ -166,10 +171,15 @@ router.put("/:id", upload.array("images", 5), async (req, res) => {
     if (!product) return res.status(404).json({ error: "Product not found" });
 
     const imageFiles = req.files;
-    const retained = req.body["retainedImages[]"];
-    const retainedArray = typeof retained === "string" ? [retained] : retained || [];
 
-    // Delete removed images
+    // Normalize retained images
+    const retained = req.body["retainedImages[]"];
+    const retainedArrayRaw = typeof retained === "string" ? [retained] : retained || [];
+    const retainedArray = retainedArrayRaw.map((imgUrl) =>
+      path.basename(imgUrl)
+    );
+
+    // Delete removed images from server
     product.images.forEach((img) => {
       if (!retainedArray.includes(img)) {
         const imgPath = path.join(uploadDir, img);
@@ -177,11 +187,11 @@ router.put("/:id", upload.array("images", 5), async (req, res) => {
       }
     });
 
-    // Build new images array
+    // Add new image filenames
     const newImages = imageFiles.map((file) => file.filename);
     product.images = [...retainedArray, ...newImages];
 
-    // Sizes
+    // Sizes normalization
     const sizes = req.body["sizes[]"];
     const sizesArray = Array.isArray(sizes) ? sizes : sizes ? [sizes] : [];
 
@@ -191,6 +201,7 @@ router.put("/:id", upload.array("images", 5), async (req, res) => {
     product.price = req.body.price;
     product.stock = req.body.stock;
     product.category = req.body.category;
+    product.status = req.body.status; // ✅ <-- this was missing before
     product.sizes = sizesArray;
 
     await product.save();
@@ -200,6 +211,7 @@ router.put("/:id", upload.array("images", 5), async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
 
 
 

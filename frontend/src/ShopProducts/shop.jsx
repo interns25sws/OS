@@ -30,7 +30,7 @@ const Shop = () => {
 
     const url =
       selectedCategory !== "All"
-        ? `http://localhost:5000/api/products?category=${encodeURIComponent(
+        ? `http://localhost:5000/api/products/active?category=${encodeURIComponent(
             selectedCategory
           )}`
         : "http://localhost:5000/api/products/active";
@@ -189,7 +189,7 @@ const Shop = () => {
                   {truncate(product.description)}
                 </p>
                 <div className="font-semibold text-blue-600 text-md">
-                  ${product.price.toFixed(2)}
+                  {product.price.toFixed(2)}
                 </div>
                 {product.tags && (
                   <div className="text-xs text-gray-500 mt-1 italic truncate">
@@ -246,7 +246,7 @@ const Shop = () => {
 
               {/* Right: Product Info */}
               <div className="w-1/2 p-8 overflow-y-auto text-gray-800 space-y-6">
-                <h2 className="text-3xl font-bold">{selectedProduct.name}</h2>
+                <h2 className="text-3xl font-bold">{selectedProduct.title}</h2>
 
                 {/* Description */}
                 <p className="text-sm text-gray-700 leading-relaxed">
@@ -272,7 +272,7 @@ const Shop = () => {
                   <p>
                     <span className="font-semibold">Price:</span>{" "}
                     <span className="text-lg font-bold text-black">
-                      ${selectedProduct.price.toFixed(2)}
+                      {selectedProduct.price.toFixed(2)}
                     </span>
                   </p>
                   <p>

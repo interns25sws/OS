@@ -136,7 +136,7 @@ const EditProduct = () => {
 
   return (
     <div className="max-w-7xl mx-auto mt-14 mb-10 p-8 bg-white rounded-xl shadow-lg">
-      <h2 className="text-3xl font-bold mb-8">✏️ Edit Product</h2>
+      <h2 className="text-3xl font-bold mb-8">Edit Product</h2>
 
       <form
         onSubmit={handleSubmit}
