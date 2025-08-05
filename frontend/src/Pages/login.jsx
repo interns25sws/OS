@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import "./login.css";
 
 const UserAuth = ({ setLoggedInUser }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,19 +9,15 @@ const UserAuth = ({ setLoggedInUser }) => {
   const [statusType, setStatusType] = useState("info");
   const [showAdminPanel, setShowAdminPanel] = useState(false);
 
-
   const navigate = useNavigate();
   const emailInputRef = useRef(null);
 
-
-
   useEffect(() => {
-  const role = localStorage.getItem("userRole"); // set it from login response
-  if (["admin", "super-admin", "sales-rep"].includes(role)) {
-    setShowAdminPanel(true);
-  }
-}, []);
-
+    const role = localStorage.getItem("userRole");
+    if (["admin", "super-admin", "sales-rep"].includes(role)) {
+      setShowAdminPanel(true);
+    }
+  }, []);
 
   const initialForm = {
     firstName: "",
@@ -90,7 +85,7 @@ const UserAuth = ({ setLoggedInUser }) => {
           lastName,
           email,
           password,
-          role: "user", // Default to user regardless of role field
+          role: "user",
         };
 
     try {
@@ -108,13 +103,13 @@ const UserAuth = ({ setLoggedInUser }) => {
 
         if (isLogin) {
           const user = {
-  _id: data._id,
-  email: data.email,
-  firstName: data.firstName,
-  lastName: data.lastName,
-  token: data.token,
-  role: data.role,
-};
+            _id: data._id,
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            token: data.token,
+            role: data.role,
+          };
 
           localStorage.setItem("loggedInUser", JSON.stringify(user));
           setLoggedInUser(user);
@@ -137,11 +132,7 @@ const UserAuth = ({ setLoggedInUser }) => {
   const redirectBasedOnRole = (role) => {
     switch (role) {
       case "admin":
-        navigate("/dashboard");
-        break;
       case "sales-rep":
-        navigate("/dashboard");
-        break;
       case "super-admin":
         navigate("/dashboard");
         break;
@@ -159,78 +150,75 @@ const UserAuth = ({ setLoggedInUser }) => {
   };
 
   return (
-    <div className="auth-wrapper">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 p-6">
       <motion.div
-        className="auth-card"
+        className="bg-white w-full max-w-md p-8 rounded-xl shadow-lg"
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="auth-heading">
-          {isLogin ? "🔐 Login to Your Account" : "📝 Create an Account"}
+        <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-6">
+          {isLogin ? " Login to Your Account" : " Create an Account"}
         </h2>
 
-        <form onSubmit={handleSubmit} noValidate>
+        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
           {!isLogin && (
             <>
               <input
-                className="auth-input"
                 name="firstName"
                 placeholder="First Name"
                 value={firstName}
                 onChange={handleChange}
-                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
               />
               <input
-                className="auth-input"
                 name="lastName"
                 placeholder="Last Name"
                 value={lastName}
                 onChange={handleChange}
-                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
               />
             </>
           )}
 
           <input
-            className="auth-input"
             type="email"
             name="email"
             placeholder="Email"
             value={email}
             onChange={handleChange}
             ref={emailInputRef}
-            required
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
           />
 
           <input
-            className="auth-input"
             type="password"
             name="password"
             placeholder="Password"
             value={password}
             onChange={handleChange}
-            required
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
           />
 
           {!isLogin && (
             <input
-              className="auth-input"
               type="password"
               name="confirmPassword"
               placeholder="Confirm Password"
               value={confirmPassword}
               onChange={handleChange}
-              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
             />
           )}
 
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="auth-button"
             type="submit"
             disabled={loading}
+            className={`mt-2 py-2 px-4 rounded-md text-white font-semibold transition-all ${
+              loading ? "bg-blue-300 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+            }`}
           >
             {loading ? "Processing..." : isLogin ? "Login" : "Register"}
           </motion.button>
@@ -239,19 +227,26 @@ const UserAuth = ({ setLoggedInUser }) => {
         <AnimatePresence>
           {message && (
             <motion.p
-              className={`auth-message ${statusType}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              className={`mt-4 p-3 text-sm rounded-md text-center border ${
+                statusType === "success"
+                  ? "bg-green-100 text-green-700 border-green-300"
+                  : "bg-red-100 text-red-700 border-red-300"
+              }`}
             >
               {message}
             </motion.p>
           )}
         </AnimatePresence>
 
-        <p className="auth-toggle">
+        <p className="mt-6 text-center text-sm text-gray-600">
           {isLogin ? "Don't have an account?" : "Already registered?"}{" "}
-          <span onClick={toggleMode}>
+          <span
+            onClick={toggleMode}
+            className="text-blue-600 font-semibold cursor-pointer hover:underline"
+          >
             {isLogin ? "Register here" : "Login here"}
           </span>
         </p>

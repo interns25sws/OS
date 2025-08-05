@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./shop.css";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -42,12 +41,10 @@ const Shop = () => {
         return res.json();
       })
       .then((data) => {
-        // If backend returns array, use data directly
         const productList = Array.isArray(data) ? data : data.products || [];
         setProducts(productList);
         setLoading(false);
       })
-
       .catch(() => {
         setError("Failed to load products.");
         setLoading(false);
@@ -115,155 +112,234 @@ const Shop = () => {
   };
 
   return (
-    <div className="shop-wrapper">
-      <h1 className="shop-header">🛒 Explore Our Products</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 font-sans">
+      <div className="max-w-7xl mx-auto px-6 py-10">
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-10 drop-shadow-md">
+          🛒 Explore Our Products
+        </h1>
 
-      <div className="shop-filter-bar">
-        <label htmlFor="category-select">Category:</label>
-        <select
-          id="category-select"
-          className="shop-category-select"
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-        >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-      </div>
+        {/* Filter */}
+        <div className="flex justify-center items-center mb-10">
+          <label htmlFor="category" className="mr-2 text-gray-700 font-medium">
+            Filter by Category:
+          </label>
+          <select
+            id="category"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="border border-gray-300 rounded-md px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-sm"
+          >
+            {categories.map((cat) => (
+              <option key={cat}>{cat}</option>
+            ))}
+          </select>
+        </div>
 
-      {cartMessage && <div className="shop-cart-message">{cartMessage}</div>}
-      {loading && <div className="shop-loading">Loading products...</div>}
-      {error && <div className="shop-error">{error}</div>}
-
-      <div className="shop-product-grid">
-        {products.map((product) => (
-          <div className="shop-product-card" key={product._id}>
-            <div
-              className="shop-product-image"
-              onClick={() => openProductModal(product)}
-            >
-              {product.images?.[0] ? (
-                <img
-                  src={`http://localhost:5000/images/${product.images[0]}`}
-                  alt={product.name}
-                />
-              ) : (
-                <div className="shop-no-image">No image</div>
-              )}
-              {product.stock === 0 && (
-                <span className="out-of-stock-badge">Out of Stock</span>
-              )}
-            </div>
-            <div className="shop-product-info">
-              <h3>{product.name}</h3>
-              <p className="desc">{truncate(product.description)}</p>
-              <div className="info-row">
-                <span className="price">${product.price.toFixed(2)}</span>
-              </div>
-              {product.tags && (
-                <div className="tags">{product.tags.join(", ")}</div>
-              )}
-              <button
-                onClick={() => handleAddToCart(product._id, 1)}
-                disabled={addingToCart || product.stock === 0}
-              >
-                {product.stock === 0
-                  ? "Out of Stock"
-                  : addingToCart
-                  ? "Adding..."
-                  : "Add to Cart"}
-              </button>
-            </div>
+        {/* Cart Message */}
+        {cartMessage && (
+          <div className="bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded mb-6 text-center max-w-md mx-auto shadow">
+            {cartMessage}
           </div>
-        ))}
-      </div>
+        )}
 
-      {selectedProduct && (
-        <div className="product-modal-overlay" onClick={closeProductModal}>
-          <div className="product-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close-btn" onClick={closeProductModal}>
-              ×
-            </button>
+        {/* Loading & Error */}
+        {loading && (
+          <div className="text-center text-gray-500 text-lg">Loading...</div>
+        )}
+        {error && (
+          <div className="text-center text-red-600 text-lg">{error}</div>
+        )}
 
-            <div className="modal-image">
-              <img
-                src={`http://localhost:5000/images/${selectedProduct.images?.[0]}`}
-                alt={selectedProduct.name}
-              />
-            </div>
-
-            <div className="modal-details">
-              <h2>{selectedProduct.name}</h2>
-              <p>
-                {showFullDesc
-                  ? selectedProduct.description
-                  : truncate(selectedProduct.description, 150)}
-                {selectedProduct.description?.length > 150 && (
-                  <button
-                    onClick={() => setShowFullDesc(!showFullDesc)}
-                    className="toggle-desc"
-                  >
-                    {showFullDesc ? "Read Less" : "Read More"}
-                  </button>
+        {/* Product Grid */}
+        <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {products.map((product) => (
+            <div
+              key={product._id}
+              className="bg-white/70 backdrop-blur-md shadow-xl hover:shadow-2xl transition-all duration-300 rounded-xl overflow-hidden group border border-gray-100"
+            >
+              {/* Image */}
+              <div
+                className="relative h-[350px] cursor-pointer"
+                onClick={() => openProductModal(product)}
+              >
+                {product.images?.[0] ? (
+                  <img
+                    src={`http://localhost:5000/images/${product.images[0]}`}
+                    alt={product.title}
+                    className="object-cover w-full h-full transition-transform duration-300 ease-in-out group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-gray-400">
+                    No Image
+                  </div>
                 )}
-              </p>
+                {product.stock === 0 && (
+                  <span className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 text-xs rounded shadow">
+                    Out of Stock
+                  </span>
+                )}
+              </div>
 
-              <p>
-                <strong>Sizes:</strong>{" "}
-                {Array.isArray(selectedProduct.sizes)
-                  ? selectedProduct.sizes.join(", ")
-                  : "N/A"}
-              </p>
+              {/* Info */}
+              <div className="p-4 space-y-2 text-sm">
+                <h3 className="font-bold text-gray-900 text-base truncate">
+                  {product.title}
+                </h3>
+                <p className="text-gray-600 text-sm line-clamp-2">
+                  {truncate(product.description)}
+                </p>
+                <div className="font-semibold text-blue-600 text-md">
+                  ${product.price.toFixed(2)}
+                </div>
+                {product.tags && (
+                  <div className="text-xs text-gray-500 mt-1 italic truncate">
+                    {product.tags.join(", ")}
+                  </div>
+                )}
+                <button
+                  onClick={() => handleAddToCart(product._id)}
+                  disabled={addingToCart || product.stock === 0}
+                  className={`w-full mt-3 py-2 px-4 rounded text-white font-medium transition-all duration-300 ${
+                    product.stock === 0 || addingToCart
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-black hover:bg-gray-800"
+                  }`}
+                >
+                  {product.stock === 0
+                    ? "Out of Stock"
+                    : addingToCart
+                    ? "Adding..."
+                    : "Add to Cart"}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
 
-              <p>
-                <strong>Price:</strong> ${selectedProduct.price.toFixed(2)}
-              </p>
-              <p>
-                <strong>Stock:</strong>{" "}
-                <span
-                  style={{
-                    color: selectedProduct.stock === 0 ? "red" : "green",
-                  }}
+        {/* Modal already included below (unchanged) */}
+        {selectedProduct && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center px-4"
+            onClick={closeProductModal}
+          >
+            <div
+              className="relative bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[90vh] flex overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                className="absolute top-4 right-4 text-3xl text-gray-400 hover:text-black transition z-10"
+                onClick={closeProductModal}
+                aria-label="Close"
+              >
+                &times;
+              </button>
+
+              {/* Left: Product Image */}
+              <div className="w-1/2 bg-gray-50 flex items-center justify-center p-6 border-r border-gray-200">
+                <img
+                  src={`http://localhost:5000/images/${selectedProduct.images?.[0]}`}
+                  alt={selectedProduct.name}
+                  className="w-full h-full object-contain rounded-xl shadow"
+                />
+              </div>
+
+              {/* Right: Product Info */}
+              <div className="w-1/2 p-8 overflow-y-auto text-gray-800 space-y-6">
+                <h2 className="text-3xl font-bold">{selectedProduct.name}</h2>
+
+                {/* Description */}
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  {showFullDesc
+                    ? selectedProduct.description
+                    : truncate(selectedProduct.description, 160)}{" "}
+                  {selectedProduct.description?.length > 160 && (
+                    <button
+                      onClick={() => setShowFullDesc(!showFullDesc)}
+                      className="text-blue-600 hover:underline text-sm ml-1"
+                    >
+                      {showFullDesc ? "Read Less" : "Read More"}
+                    </button>
+                  )}
+                </p>
+
+                {/* Sizes, Price, Stock */}
+                <div className="text-sm space-y-2">
+                  <p>
+                    <span className="font-semibold">Sizes:</span>{" "}
+                    {selectedProduct.sizes?.join(", ") || "N/A"}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Price:</span>{" "}
+                    <span className="text-lg font-bold text-black">
+                      ${selectedProduct.price.toFixed(2)}
+                    </span>
+                  </p>
+                  <p>
+                    <span className="font-semibold">Stock:</span>{" "}
+                    <span
+                      className={`font-semibold ${
+                        selectedProduct.stock === 0
+                          ? "text-red-500"
+                          : "text-green-600"
+                      }`}
+                    >
+                      {selectedProduct.stock === 0
+                        ? "Out of Stock"
+                        : `${selectedProduct.stock} available`}
+                    </span>
+                  </p>
+                </div>
+
+                {/* Quantity Selector */}
+                <div className="flex items-center gap-3 mt-4">
+                  <label className="font-medium">Qty:</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={quantity}
+                    onChange={(e) => setQuantity(Number(e.target.value))}
+                    className="w-20 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+
+                {/* Add to Cart Button */}
+                <button
+                  className={`mt-5 w-full py-3 px-4 rounded-xl text-white font-semibold transition duration-200 ${
+                    selectedProduct.stock === 0 || addingToCart
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-black hover:bg-gray-800"
+                  }`}
+                  onClick={() => handleAddToCart(selectedProduct._id, quantity)}
+                  disabled={addingToCart || selectedProduct.stock === 0}
                 >
                   {selectedProduct.stock === 0
                     ? "Out of Stock"
-                    : `${selectedProduct.stock} available`}
-                </span>
-              </p>
+                    : addingToCart
+                    ? "Adding..."
+                    : "Add to Cart"}
+                </button>
 
-              <div className="quantity-selector">
-                <label>Qty:</label>
-                <input
-                  type="number"
-                  min="1"
-                  value={quantity}
-                  onChange={(e) => setQuantity(Number(e.target.value))}
-                />
-              </div>
-
-              <button
-                className="shop-add-to-cart-btn"
-                onClick={() => handleAddToCart(selectedProduct._id, quantity)}
-                disabled={addingToCart || selectedProduct.stock === 0}
-              >
-                {selectedProduct.stock === 0
-                  ? "Out of Stock"
-                  : addingToCart
-                  ? "Adding..."
-                  : "Add to Cart"}
-              </button>
-
-              <div className="modal-nav-buttons">
-                <button onClick={prevProduct}>← Prev</button>
-                <button onClick={nextProduct}>Next →</button>
+                {/* Prev/Next Navigation */}
+                <div className="flex justify-between items-center mt-6 text-sm text-gray-600">
+                  <button
+                    className="hover:text-black transition font-medium"
+                    onClick={prevProduct}
+                  >
+                    ← Previous
+                  </button>
+                  <button
+                    className="hover:text-black transition font-medium"
+                    onClick={nextProduct}
+                  >
+                    Next →
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
