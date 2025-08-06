@@ -9,17 +9,17 @@ const items = [
   {
     title: "Custom T-shirts",
     image: MensTrend,
-    price: "$49.99",
+    price: "49.99",
   },
   {
     title: "Air Jordan 1",
     image: Shoes,
-    price: "$129.99",
+    price: "129.99",
   },
   {
     title: "Aesthetic Wear",
     image: Womenstrend,
-    price: "$89.99",
+    price: "89.99",
   },
 ];
 

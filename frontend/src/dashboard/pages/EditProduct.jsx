@@ -108,7 +108,16 @@ const EditProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { title, description, price, category, stock, status, images, sizes } = formData;
+    const {
+      title,
+      description,
+      price,
+      category,
+      stock,
+      status,
+      images,
+      sizes,
+    } = formData;
 
     if (!title || !description || !price || !category) {
       alert("Please fill all required fields.");
@@ -144,13 +153,42 @@ const EditProduct = () => {
     <div className="max-w-7xl mx-auto mt-14 mb-10 p-8 bg-white rounded-xl shadow-lg">
       <h2 className="text-3xl font-bold mb-8">Edit Product</h2>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 md:grid-cols-3 gap-12"
+      >
         {/* Left form section */}
         <div className="md:col-span-2 space-y-6">
-          <Input label="Title" name="title" value={formData.title} onChange={handleChange} required />
-          <Textarea label="Description" name="description" value={formData.description} onChange={handleChange} required />
-          <Input label="Price (₹)" name="price" type="number" value={formData.price} onChange={handleChange} required />
-          <Input label="Stock" name="stock" type="number" value={formData.stock} onChange={handleChange} required />
+          <Input
+            label="Title"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
+          <Textarea
+            label="Description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            required
+          />
+          <Input
+            label="Price (₹)"
+            name="price"
+            type="number"
+            value={formData.price}
+            onChange={handleChange}
+            required
+          />
+          <Input
+            label="Stock"
+            name="stock"
+            type="number"
+            value={formData.stock}
+            onChange={handleChange}
+            required
+          />
 
           <SizeSelector
             title="Available Sizes"
@@ -229,7 +267,9 @@ const EditProduct = () => {
             type="submit"
             disabled={submitting}
             className={`w-full py-3 text-white font-bold rounded-md transition ${
-              submitting ? "bg-indigo-300 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
+              submitting
+                ? "bg-indigo-300 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700"
             }`}
           >
             {submitting ? "Updating..." : "Update Product"}
@@ -243,7 +283,12 @@ const EditProduct = () => {
 // Input component
 const Input = ({ label, name, value, onChange, type = "text", required }) => (
   <div>
-    <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <label
+      htmlFor={name}
+      className="block text-sm font-medium text-gray-700 mb-1"
+    >
+      {label}
+    </label>
     <input
       id={name}
       name={name}
@@ -259,7 +304,12 @@ const Input = ({ label, name, value, onChange, type = "text", required }) => (
 // Textarea component
 const Textarea = ({ label, name, value, onChange, required }) => (
   <div>
-    <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <label
+      htmlFor={name}
+      className="block text-sm font-medium text-gray-700 mb-1"
+    >
+      {label}
+    </label>
     <textarea
       id={name}
       name={name}
@@ -273,9 +323,17 @@ const Textarea = ({ label, name, value, onChange, required }) => (
 );
 
 // SizeSelector component
-const SizeSelector = ({ title, sizes, selected, onToggle, labelPrefix = "" }) => (
+const SizeSelector = ({
+  title,
+  sizes,
+  selected,
+  onToggle,
+  labelPrefix = "",
+}) => (
   <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">{title}</label>
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      {title}
+    </label>
     <div className="flex flex-wrap gap-2">
       {sizes.map((sz) => (
         <span
@@ -287,7 +345,8 @@ const SizeSelector = ({ title, sizes, selected, onToggle, labelPrefix = "" }) =>
               : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
           }`}
         >
-          {labelPrefix}{sz}
+          {labelPrefix}
+          {sz}
         </span>
       ))}
     </div>
@@ -297,7 +356,12 @@ const SizeSelector = ({ title, sizes, selected, onToggle, labelPrefix = "" }) =>
 // Dropdown component
 const Dropdown = ({ label, name, value, onChange, options, placeholder }) => (
   <div>
-    <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <label
+      htmlFor={name}
+      className="block text-sm font-medium text-gray-700 mb-1"
+    >
+      {label}
+    </label>
     <select
       id={name}
       name={name}
@@ -308,7 +372,9 @@ const Dropdown = ({ label, name, value, onChange, options, placeholder }) => (
     >
       {placeholder && <option value="">{placeholder}</option>}
       {options.map((opt, idx) => (
-        <option key={idx} value={opt}>{opt}</option>
+        <option key={idx} value={opt}>
+          {opt}
+        </option>
       ))}
     </select>
   </div>
@@ -320,8 +386,15 @@ const ImageGrid = ({ title, images, onRemove, isPreview }) => (
     {title && <label className="block font-semibold mb-2">{title}</label>}
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
       {images.map((url, i) => (
-        <div key={i} className="relative aspect-square rounded-lg overflow-hidden border bg-gray-100">
-          <img src={url} alt={`preview-${i}`} className="w-full h-full object-cover" />
+        <div
+          key={i}
+          className="relative aspect-square rounded-lg overflow-hidden border bg-gray-100"
+        >
+          <img
+            src={url}
+            alt={`preview-${i}`}
+            className="w-full h-full object-cover"
+          />
           <button
             type="button"
             aria-label="Remove image"

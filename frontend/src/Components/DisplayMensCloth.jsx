@@ -31,7 +31,7 @@ const SummerCollection = () => {
     const interval = setInterval(() => {
       console.log("Re-fetching products..."); // Debug log
       setPage((prevPage) => prevPage + 1);
-    }, 60 * 1000); 
+    }, 30 * 1000); 
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, [page]);
