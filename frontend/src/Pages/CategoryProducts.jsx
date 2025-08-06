@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {
-  categorySlugMap,
-  backendCategoryMap,
-} from "../utils/categoryMap";
+import { categorySlugMap, backendCategoryMap } from "../utils/categoryMap";
 
 const CategoryProducts = () => {
   const { categoryName } = useParams();
@@ -18,6 +15,7 @@ const CategoryProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [addingToCartId, setAddingToCartId] = useState(null);
   const [showFullDesc, setShowFullDesc] = useState(false);
 
   const getToken = () => {
@@ -47,7 +45,7 @@ const CategoryProducts = () => {
   }, [backendCategory]);
 
   const handleAddToCart = (productId, qty = 1) => {
-    setAddingToCart(true);
+    setAddingToCartId(productId);
 
     fetch("http://localhost:5000/api/cart/add", {
       method: "POST",
@@ -73,7 +71,7 @@ const CategoryProducts = () => {
         setCartMessage(err.message || "Error adding to cart.");
       })
       .finally(() => {
-        setAddingToCart(false);
+        setAddingToCartId(null);
         setTimeout(() => setCartMessage(""), 3000);
       });
   };
@@ -178,16 +176,18 @@ const CategoryProducts = () => {
                   )}
                   <button
                     onClick={() => handleAddToCart(product._id)}
-                    disabled={addingToCart || product.stock === 0}
+                    disabled={
+                      addingToCartId === product._id || product.stock === 0
+                    }
                     className={`w-full mt-3 py-2 px-4 rounded text-white font-medium transition-all duration-300 ${
-                      product.stock === 0 || addingToCart
+                      product.stock === 0 || addingToCartId === product._id
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-black hover:bg-gray-800"
                     }`}
                   >
                     {product.stock === 0
                       ? "Out of Stock"
-                      : addingToCart
+                      : addingToCartId === product._id
                       ? "Adding..."
                       : "Add to Cart"}
                   </button>
@@ -278,22 +278,21 @@ const CategoryProducts = () => {
                 </div>
 
                 <button
-                  className={`mt-5 w-full py-3 px-4 rounded-xl text-white font-semibold transition duration-200 ${
-                    selectedProduct.stock === 0 || addingToCart
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-black hover:bg-gray-800"
-                  }`}
-                  onClick={() =>
-                    handleAddToCart(selectedProduct._id, quantity)
-                  }
-                  disabled={addingToCart || selectedProduct.stock === 0}
-                >
-                  {selectedProduct.stock === 0
-                    ? "Out of Stock"
-                    : addingToCart
-                    ? "Adding..."
-                    : "Add to Cart"}
-                </button>
+  className={`mt-5 w-full py-3 px-4 rounded-xl text-white font-semibold transition duration-200 ${
+    selectedProduct.stock === 0 || addingToCartId === selectedProduct._id
+      ? "bg-gray-400 cursor-not-allowed"
+      : "bg-black hover:bg-gray-800"
+  }`}
+  onClick={() => handleAddToCart(selectedProduct._id, quantity)}
+  disabled={addingToCartId === selectedProduct._id || selectedProduct.stock === 0}
+>
+  {selectedProduct.stock === 0
+    ? "Out of Stock"
+    : addingToCartId === selectedProduct._id
+    ? "Adding..."
+    : "Add to Cart"}
+</button>
+
 
                 <div className="flex justify-between items-center mt-6 text-sm text-gray-600">
                   <button

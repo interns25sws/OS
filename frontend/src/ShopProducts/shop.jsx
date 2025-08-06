@@ -10,6 +10,7 @@ const Shop = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [addingToCartId, setAddingToCartId] = useState(null);
   const [showFullDesc, setShowFullDesc] = useState(false);
 
   const getToken = () => {
@@ -52,7 +53,7 @@ const Shop = () => {
   }, [selectedCategory]);
 
   const handleAddToCart = (productId, qty = 1) => {
-    setAddingToCart(true);
+    setAddingToCartId(productId);
 
     fetch("http://localhost:5000/api/cart/add", {
       method: "POST",
@@ -78,7 +79,7 @@ const Shop = () => {
         setCartMessage(err.message || "Error adding to cart.");
       })
       .finally(() => {
-        setAddingToCart(false);
+        setAddingToCartId(null);
         setTimeout(() => setCartMessage(""), 3000);
       });
   };
@@ -198,16 +199,18 @@ const Shop = () => {
                 )}
                 <button
                   onClick={() => handleAddToCart(product._id)}
-                  disabled={addingToCart || product.stock === 0}
+                  disabled={
+                    addingToCartId === product._id || product.stock === 0
+                  }
                   className={`w-full mt-3 py-2 px-4 rounded text-white font-medium transition-all duration-300 ${
-                    product.stock === 0 || addingToCart
+                    product.stock === 0 || addingToCartId === product._id
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-black hover:bg-gray-800"
                   }`}
                 >
                   {product.stock === 0
                     ? "Out of Stock"
-                    : addingToCart
+                    : addingToCartId === product._id
                     ? "Adding..."
                     : "Add to Cart"}
                 </button>
@@ -306,16 +309,20 @@ const Shop = () => {
                 {/* Add to Cart Button */}
                 <button
                   className={`mt-5 w-full py-3 px-4 rounded-xl text-white font-semibold transition duration-200 ${
-                    selectedProduct.stock === 0 || addingToCart
+                    selectedProduct.stock === 0 ||
+                    addingToCartId === selectedProduct._id
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-black hover:bg-gray-800"
                   }`}
                   onClick={() => handleAddToCart(selectedProduct._id, quantity)}
-                  disabled={addingToCart || selectedProduct.stock === 0}
+                  disabled={
+                    addingToCartId === selectedProduct._id ||
+                    selectedProduct.stock === 0
+                  }
                 >
                   {selectedProduct.stock === 0
                     ? "Out of Stock"
-                    : addingToCart
+                    : addingToCartId === selectedProduct._id
                     ? "Adding..."
                     : "Add to Cart"}
                 </button>
