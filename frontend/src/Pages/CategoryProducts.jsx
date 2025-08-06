@@ -4,7 +4,7 @@ import axios from "axios";
 import {
   categorySlugMap,
   backendCategoryMap,
-} from "../utils/categoryMap"; // maps slug → display name → backend
+} from "../utils/categoryMap";
 
 const CategoryProducts = () => {
   const { categoryName } = useParams();
@@ -14,10 +14,10 @@ const CategoryProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [cartMessage, setCartMessage] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [addingToCart, setAddingToCart] = useState(false);
-  const [cartMessage, setCartMessage] = useState("");
   const [showFullDesc, setShowFullDesc] = useState(false);
 
   const getToken = () => {
@@ -27,14 +27,14 @@ const CategoryProducts = () => {
 
   useEffect(() => {
     const fetchCategoryProducts = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
         const res = await axios.get(
           `http://localhost:5000/api/products/active?category=${encodeURIComponent(
             backendCategory
           )}`
         );
-        setProducts(Array.isArray(res.data) ? res.data : res.data.products || []);
+        setProducts(res.data);
       } catch (err) {
         console.error("Error fetching category products:", err);
         setError("Failed to load products.");
@@ -43,9 +43,7 @@ const CategoryProducts = () => {
       }
     };
 
-    if (backendCategory) {
-      fetchCategoryProducts();
-    }
+    if (backendCategory) fetchCategoryProducts();
   }, [backendCategory]);
 
   const handleAddToCart = (productId, qty = 1) => {
@@ -112,7 +110,7 @@ const CategoryProducts = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 font-sans">
       <div className="max-w-7xl mx-auto px-6 py-10">
         <h1 className="text-4xl font-bold text-center text-gray-800 mb-10 drop-shadow-md">
-          {displayTitle}
+          🛍️ {displayTitle}
         </h1>
 
         {cartMessage && (
@@ -121,11 +119,14 @@ const CategoryProducts = () => {
           </div>
         )}
 
-        {loading ? (
+        {loading && (
           <div className="text-center text-gray-500 text-lg">Loading...</div>
-        ) : error ? (
+        )}
+        {error && (
           <div className="text-center text-red-600 text-lg">{error}</div>
-        ) : products.length === 0 ? (
+        )}
+
+        {products.length === 0 && !loading ? (
           <p className="text-center text-gray-600 text-lg mt-10">
             No products found in this category.
           </p>
@@ -136,6 +137,7 @@ const CategoryProducts = () => {
                 key={product._id}
                 className="bg-white/70 backdrop-blur-md shadow-xl hover:shadow-2xl transition-all duration-300 rounded-xl overflow-hidden group border border-gray-100"
               >
+                {/* Image */}
                 <div
                   className="relative h-[350px] cursor-pointer"
                   onClick={() => openProductModal(product)}
@@ -158,6 +160,7 @@ const CategoryProducts = () => {
                   )}
                 </div>
 
+                {/* Info */}
                 <div className="p-4 space-y-2 text-sm">
                   <h3 className="font-bold text-gray-900 text-base truncate">
                     {product.title}
@@ -204,7 +207,6 @@ const CategoryProducts = () => {
               className="relative bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[90vh] flex overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close Button */}
               <button
                 className="absolute top-4 right-4 text-3xl text-gray-400 hover:text-black transition z-10"
                 onClick={closeProductModal}
@@ -213,7 +215,6 @@ const CategoryProducts = () => {
                 &times;
               </button>
 
-              {/* Left Image */}
               <div className="w-1/2 bg-gray-50 flex items-center justify-center p-6 border-r border-gray-200">
                 <img
                   src={`http://localhost:5000/images/${selectedProduct.images?.[0]}`}
@@ -222,10 +223,8 @@ const CategoryProducts = () => {
                 />
               </div>
 
-              {/* Right Info */}
               <div className="w-1/2 p-8 overflow-y-auto text-gray-800 space-y-6">
                 <h2 className="text-3xl font-bold">{selectedProduct.title}</h2>
-
                 <p className="text-sm text-gray-700 leading-relaxed">
                   {showFullDesc
                     ? selectedProduct.description
@@ -284,7 +283,9 @@ const CategoryProducts = () => {
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-black hover:bg-gray-800"
                   }`}
-                  onClick={() => handleAddToCart(selectedProduct._id, quantity)}
+                  onClick={() =>
+                    handleAddToCart(selectedProduct._id, quantity)
+                  }
                   disabled={addingToCart || selectedProduct.stock === 0}
                 >
                   {selectedProduct.stock === 0

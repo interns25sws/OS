@@ -139,41 +139,6 @@ router.get("/active", async (req, res) => {
 });
 
 
-
-
-// GET /api/products/category/:categoryName
-router.get("/category/:categoryName", async (req, res) => {
-  const { categoryName } = req.params;
-
-  try {
-    // Convert hyphens to spaces if your DB has categories like "summer wear"
-    const formattedCategory = categoryName.replace(/-/g, " ");
-
-    const products = await Product.find({
-      category: { $regex: new RegExp("^" + formattedCategory + "$", "i") }, // case-insensitive match
-    });
-
-    res.json(products);
-  } catch (err) {
-    console.error("Error fetching products by category:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-
-
-
-// GET: Distinct categories
-router.get("/categories", async (req, res) => {
-  try {
-    const categories = await Product.distinct("category");
-    res.json(categories);
-  } catch (err) {
-    console.error("Error fetching categories:", err);
-    res.status(500).json({ error: "Failed to fetch categories" });
-  }
-});
-
 // GET: Single product by ID
 router.get("/:id", async (req, res) => {
   try {
@@ -192,6 +157,7 @@ router.put("/:id", upload.array("images", 5), async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
+
     const imageFiles = req.files;
 
     // Normalize retained images
@@ -201,17 +167,23 @@ router.put("/:id", upload.array("images", 5), async (req, res) => {
       path.basename(imgUrl)
     );
 
-    // Delete removed images from server
-    product.images.forEach((img) => {
-      if (!retainedArray.includes(img)) {
-        const imgPath = path.join(uploadDir, img);
-        if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
-      }
-    });
 
-    // Add new image filenames
-    const newImages = imageFiles.map((file) => file.filename);
-    product.images = [...retainedArray, ...newImages];
+    let finalImages;
+    if (retainedArray.length === 0 && imageFiles.length === 0) {
+      finalImages = product.images; // ✅ Keep old images
+    } else {
+      //  Delete removed images from server
+      product.images.forEach((img) => {
+        if (!retainedArray.includes(img)) {
+          const imgPath = path.join(uploadDir, img);
+          if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
+        }
+      });
+
+      // ✅ Add new image filenames
+      const newImages = imageFiles.map((file) => file.filename);
+      finalImages = [...retainedArray, ...newImages];
+    }
 
     // Sizes normalization
     const sizes = req.body["sizes[]"];
@@ -225,6 +197,8 @@ router.put("/:id", upload.array("images", 5), async (req, res) => {
     product.category = req.body.category;
     product.status = req.body.status; // ✅ <-- this was missing before
     product.sizes = sizesArray;
+    product.images = finalImages; // ✅ ADD THIS LINE
+
 
     await product.save();
     res.json(product);
@@ -233,8 +207,6 @@ router.put("/:id", upload.array("images", 5), async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-
-
 
 
 // DELETE: Remove product + images
@@ -255,8 +227,6 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to delete product" });
   }
 });
-
-
 
 
 

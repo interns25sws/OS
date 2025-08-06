@@ -26,20 +26,20 @@ const AddProduct = () => {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch(
-          "http://localhost:5000/api/products/categories"
-        );
-        const data = await res.json();
-        setCategories(data);
-      } catch (err) {
-        console.error("Failed to load categories", err);
-      }
-    };
-    fetchCategories();
-  }, []);
+useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/categories");
+      const data = await res.json();
+      setCategories(data); // should be an array of category names
+    } catch (err) {
+      console.error("Failed to load categories", err);
+    }
+  };
+
+  fetchCategories();
+}, []);
+
 
   useEffect(() => {
     return () => {
@@ -130,15 +130,12 @@ const AddProduct = () => {
 
   return (
     <div className="max-w-7xl mx-auto mt-14 mb-10 p-8 bg-white rounded-2xl shadow-2xl text-gray-800">
-      <h2 className="text-3xl font-bold text-center mb-10 ">
-        Add New Product
-      </h2>
+      <h2 className="text-3xl font-bold text-center mb-10">Add New Product</h2>
 
       <form
         onSubmit={handleSubmit}
         className="flex flex-col lg:flex-row gap-12"
       >
-        {/* Left Form */}
         <div className="flex-1 space-y-6">
           <Field
             icon={<FiEdit3 />}
@@ -180,18 +177,17 @@ const AddProduct = () => {
           {/* Sizes */}
           <div>
             <label className="block font-semibold mb-2">Available Sizes</label>
-
             <div className="border border-gray-300 rounded-md p-4 bg-white shadow-sm">
               <div className="flex flex-wrap gap-2">
                 {["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
                   <label
                     key={size}
                     className={`px-4 py-2 border rounded-full text-sm cursor-pointer transition 
-            ${
-              formData.sizes.includes(size)
-                ? "bg-blue-600 text-white border-blue-600"
-                : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-            }`}
+                    ${
+                      formData.sizes.includes(size)
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                    }`}
                   >
                     <input
                       type="checkbox"
@@ -215,24 +211,23 @@ const AddProduct = () => {
             </div>
           </div>
 
-          {/* Shoe Sizes (Conditional) */}
+          {/* Shoe Sizes */}
           {formData.category.toLowerCase() === "shoes" && (
             <div>
-              <label className="block font-semibold  mb-2">
+              <label className="block font-semibold mb-2">
                 Shoe Sizes (EU)
               </label>
-
               <div className="border border-gray-300 rounded-md p-4 bg-white shadow-sm">
                 <div className="flex flex-wrap gap-2">
                   {[6, 7, 8, 9, 10, 11, 12].map((size) => (
                     <label
                       key={size}
                       className={`px-4 py-2 border rounded-full text-sm cursor-pointer transition
-              ${
-                formData.sizes.includes(String(size))
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-              }`}
+                      ${
+                        formData.sizes.includes(String(size))
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                      }`}
                     >
                       <input
                         type="checkbox"
@@ -257,7 +252,7 @@ const AddProduct = () => {
             </div>
           )}
 
-          {/* Category */}
+          {/* Category Dropdown */}
           <div>
             <label className="block font-semibold mb-2">Category</label>
             <select
@@ -273,12 +268,57 @@ const AddProduct = () => {
                   {cat}
                 </option>
               ))}
+              <option value="_new">+ Add New Category</option>
             </select>
+
+            {formData.category === "_new" && (
+              <div className="mt-4">
+                <label className="block font-semibold mb-2">
+                  New Category Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter new category"
+                  className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onKeyDown={async (e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      const newCategory = e.target.value.trim();
+                      if (!newCategory) return;
+                      try {
+                        await axios.post(
+                          "http://localhost:5000/api/categories",
+                          { name: newCategory }
+                        );
+                        const updated = await axios.get(
+                          "http://localhost:5000/api/categories"
+                        );
+                        setCategories(updated.data);
+                        setFormData((prev) => ({
+                          ...prev,
+                          category: newCategory,
+                        }));
+                      } catch (err) {
+                        alert(
+                          err.response?.data?.error || "Failed to add category"
+                        );
+                        setFormData((prev) => ({ ...prev, category: "" }));
+                      }
+                    }
+                  }}
+                  autoFocus
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Press Enter to save
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Right Side - Images & Status */}
+        {/* Right side */}
         <div className="w-full lg:w-[40%] space-y-6">
+          {/* Status */}
           <div>
             <label className="block font-semibold mb-2">Status</label>
             <select
@@ -293,26 +333,20 @@ const AddProduct = () => {
             </select>
           </div>
 
+          {/* Image Upload */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
               <FiUploadCloud className="text-lg " />
               Upload Product Images
             </label>
-
             <input
               type="file"
               name="images"
               accept="image/*"
               multiple
               onChange={handleChange}
-              className="block w-full text-sm text-gray-600
-               file:mr-4 file:py-2 file:px-4
-               file:rounded-md file:border-0
-               file:text-sm file:font-semibold
-               file:bg-blue-50 file:text-blue-700
-               hover:file:bg-blue-100"
+              className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
-
             {previewUrls.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
                 {previewUrls.map((url, idx) => (
@@ -347,7 +381,7 @@ const AddProduct = () => {
                 : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
-            {submitting ? "Submitting..." : " Add Product"}
+            {submitting ? "Submitting..." : "Add Product"}
           </button>
         </div>
       </form>
@@ -355,6 +389,7 @@ const AddProduct = () => {
   );
 };
 
+// Field Component
 const Field = ({
   label,
   name,
