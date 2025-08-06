@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
   const [cart, setCart] = useState(null);
+  const [userLoaded, setUserLoaded] = useState(false);
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -16,56 +17,86 @@ const Checkout = () => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
-  const getToken = () => {
-    const user = JSON.parse(localStorage.getItem("loggedInUser"));
-    return user?.token || "";
-  };
-
   useEffect(() => {
-    const newToken = getToken();
-    setToken(newToken);
+    const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    const userToken = storedUser?.token || "";
+    if (!userToken) {
+      setError("User not logged in");
+      setLoading(false);
+      return;
+    }
+    setToken(userToken);
   }, []);
 
   useEffect(() => {
-    const fetchCartAndUser = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
         const headers = { Authorization: `Bearer ${token}` };
 
-        // Fetch cart
-        const cartRes = await fetch("http://localhost:5000/api/cart", { headers });
+        const [cartRes, userRes] = await Promise.all([
+          fetch("http://localhost:5000/api/cart", { headers }),
+          fetch("http://localhost:5000/api/users/me", { headers }),
+        ]);
+
         if (!cartRes.ok) throw new Error("Failed to fetch cart");
+        if (!userRes.ok) throw new Error("Failed to fetch user");
+
         const cartData = await cartRes.json();
+        const userData = await userRes.json();
+        console.log("User data from backend:", userData);
+
         setCart(cartData);
 
-        // Fetch user
-        const userRes = await fetch("http://localhost:5000/api/users/me", { headers });
-        if (!userRes.ok) throw new Error("Failed to fetch user");
-        const userData = await userRes.json();
+        // Extract first and last name from userData.name if it exists
+        let fetchedFirstName = "";
+        let fetchedLastName = "";
+        if (userData.name) {
+          const nameParts = userData.name.split(" ");
+          fetchedFirstName = nameParts[0] || "";
+          fetchedLastName = nameParts.slice(1).join(" ") || ""; // Join remaining parts for last name
+        }
 
         setUser((prev) => ({
           ...prev,
-          ...userData,
+          firstName: fetchedFirstName, // Set from parsed name
+          lastName: fetchedLastName,   // Set from parsed name
+          email: userData.email || "",
+          phone: userData.phone || "",
+          address: userData.address || "",
+          city: userData.city || "",
+          state: userData.state || "",
+          pincode: userData.pincode || "",
+          country: userData.country || "India",
         }));
+
+        setUserLoaded(true); // Mark user as loaded
       } catch (err) {
-        setError("Unable to load cart or user.");
+        console.error(err);
+        setError("Unable to load cart or user details.");
       } finally {
         setLoading(false);
       }
     };
 
-    if (token) fetchCartAndUser();
+    if (token) fetchData();
   }, [token]);
 
   const handleInputChange = (e) => {
-    setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setUser((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCheckout = async () => {
+    setCheckoutLoading(true);
+    setError("");
+    setSuccess("");
     try {
       const res = await fetch("http://localhost:5000/api/cart/checkout", {
         method: "POST",
@@ -73,7 +104,7 @@ const Checkout = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ ...user }),
+        body: JSON.stringify(user),
       });
 
       if (!res.ok) throw new Error("Checkout failed");
@@ -85,7 +116,10 @@ const Checkout = () => {
         navigate("/thank-you");
       }, 2000);
     } catch (err) {
-      setError("Checkout failed.");
+      console.error(err);
+      setError("❌ Checkout failed. Please try again.");
+    } finally {
+      setCheckoutLoading(false);
     }
   };
 
@@ -93,12 +127,12 @@ const Checkout = () => {
     if (!cart?.items) return 0;
     return cart.items.reduce((acc, item) => {
       const product = item?.productId;
-      if (!product || product.price == null) return acc;
-      return acc + product.price * item.quantity;
+      return acc + (product?.price || 0) * item.quantity;
     }, 0);
   };
 
-  if (loading) return <div className="p-6">Loading checkout...</div>;
+  // Final loading/error check
+  if (loading || !userLoaded) return <div className="p-6">Loading checkout...</div>;
   if (error) return <div className="p-6 text-red-500">{error}</div>;
 
   return (
@@ -108,102 +142,61 @@ const Checkout = () => {
         <h2 className="text-xl font-semibold mb-4">Shipping Details</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block mb-1 font-medium">First Name</label>
-            <input
-              type="text"
-              name="firstName"
-              value={user.firstName}
-              onChange={handleInputChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
-            />
+          {["firstName", "lastName"].map((field) => (
+            <div key={field}>
+              <label className="block mb-1 font-medium capitalize">
+                {field.replace(/([A-Z])/g, " $1")}
+              </label>
+              <input
+                type="text"
+                name={field}
+                value={user[field]}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded px-3 py-2"
+              />
+            </div>
+          ))}
+        </div>
+
+        {["email", "phone", "address"].map((field) => (
+          <div className="mt-4" key={field}>
+            <label className="block mb-1 font-medium capitalize">
+              {field.replace(/([A-Z])/g, " $1")}
+            </label>
+            {field === "address" ? (
+              <textarea
+                name={field}
+                value={user[field]}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded px-3 py-2 min-h-[80px]"
+              ></textarea>
+            ) : (
+              <input
+                type={field === "email" ? "email" : "text"}
+                name={field}
+                value={user[field]}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded px-3 py-2"
+              />
+            )}
           </div>
-          <div>
-            <label className="block mb-1 font-medium">Last Name</label>
-            <input
-              type="text"
-              name="lastName"
-              value={user.lastName}
-              onChange={handleInputChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
-            />
-          </div>
-        </div>
-
-        <div className="mt-4">
-          <label className="block mb-1 font-medium">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={user.email}
-            onChange={handleInputChange}
-            className="w-full border border-gray-300 rounded px-3 py-2"
-          />
-        </div>
-
-        <div className="mt-4">
-          <label className="block mb-1 font-medium">Phone</label>
-          <input
-            type="text"
-            name="phone"
-            value={user.phone}
-            onChange={handleInputChange}
-            className="w-full border border-gray-300 rounded px-3 py-2"
-          />
-        </div>
-
-        <div className="mt-4">
-          <label className="block mb-1 font-medium">Address</label>
-          <textarea
-            name="address"
-            value={user.address}
-            onChange={handleInputChange}
-            className="w-full border border-gray-300 rounded px-3 py-2 min-h-[80px]"
-            placeholder="Street, area, etc."
-          ></textarea>
-        </div>
+        ))}
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-          <div>
-            <label className="block mb-1 font-medium">City</label>
-            <input
-              type="text"
-              name="city"
-              value={user.city}
-              onChange={handleInputChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">State</label>
-            <input
-              type="text"
-              name="state"
-              value={user.state}
-              onChange={handleInputChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Pincode</label>
-            <input
-              type="text"
-              name="pincode"
-              value={user.pincode}
-              onChange={handleInputChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Country</label>
-            <input
-              type="text"
-              name="country"
-              value={user.country}
-              onChange={handleInputChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
-            />
-          </div>
+          {["city", "state", "pincode", "country"].map((field) => (
+            <div key={field}>
+              <label className="block mb-1 font-medium capitalize">
+                {field}
+              </label>
+              <input
+                type="text"
+                name={field}
+                value={user[field]}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded px-3 py-2"
+              />
+            </div>
+          ))}
         </div>
       </div>
 
@@ -214,6 +207,11 @@ const Checkout = () => {
         {success && (
           <div className="p-4 mb-4 bg-green-100 text-green-800 rounded">
             {success}
+          </div>
+        )}
+        {error && (
+          <div className="p-4 mb-4 bg-red-100 text-red-800 rounded">
+            {error}
           </div>
         )}
 
@@ -244,9 +242,10 @@ const Checkout = () => {
 
         <button
           onClick={handleCheckout}
-          className="mt-6 w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition"
+          disabled={checkoutLoading || success}
+          className="mt-6 w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition disabled:opacity-50"
         >
-          Place Order
+          {checkoutLoading ? "Placing Order..." : "Place Order"}
         </button>
       </div>
     </div>

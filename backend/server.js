@@ -26,11 +26,10 @@ app.use('/api/cart', cartRoutes);
 app.use('api/cart/checkout',cartRoutes)
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/categories", categoriesRoutes);
-// app.use("/api/customers", customerRoutes);
 
 
+// Backend Images Routes
 app.use('/images', express.static(path.join(__dirname, 'uploads')));
-
 
 
 // Connect to MongoDB
