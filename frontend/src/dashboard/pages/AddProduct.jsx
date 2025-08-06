@@ -26,20 +26,19 @@ const AddProduct = () => {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-useEffect(() => {
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/api/categories");
-      const data = await res.json();
-      setCategories(data); // should be an array of category names
-    } catch (err) {
-      console.error("Failed to load categories", err);
-    }
-  };
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/categories");
+        const data = await res.json();
+        setCategories(data); // should be an array of category names
+      } catch (err) {
+        console.error("Failed to load categories", err);
+      }
+    };
 
-  fetchCategories();
-}, []);
-
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -212,7 +211,7 @@ useEffect(() => {
           </div>
 
           {/* Shoe Sizes */}
-          {formData.category.toLowerCase() === "shoes" && (
+          {formData.category.toLowerCase() === "sneakers" && (
             <div>
               <label className="block font-semibold mb-2">
                 Shoe Sizes (EU)
@@ -245,6 +244,56 @@ useEffect(() => {
                         className="hidden"
                       />
                       EU {size}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Jeans Sizes */}
+          {formData.category.toLowerCase() === "all bottom" && (
+            <div>
+              <label className="block font-semibold mb-2">
+                Jeans Sizes (Waist x Length)
+              </label>
+              <div className="border border-gray-300 rounded-md p-4 bg-white shadow-sm">
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    "28x30",
+                    "30x30",
+                    "30x32",
+                    "32x32",
+                    "32x34",
+                    "34x32",
+                    "36x34",
+                    "38x32",
+                  ].map((size) => (
+                    <label
+                      key={size}
+                      className={`px-4 py-2 border rounded-full text-sm cursor-pointer transition
+            ${
+              formData.sizes.includes(size)
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+            }`}
+                    >
+                      <input
+                        type="checkbox"
+                        value={size}
+                        checked={formData.sizes.includes(size)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setFormData((prev) => ({
+                            ...prev,
+                            sizes: prev.sizes.includes(value)
+                              ? prev.sizes.filter((s) => s !== value)
+                              : [...prev.sizes, value],
+                          }));
+                        }}
+                        className="hidden"
+                      />
+                      {size}
                     </label>
                   ))}
                 </div>

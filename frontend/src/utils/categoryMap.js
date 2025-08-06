@@ -22,3 +22,4 @@ export const backendCategoryMap = {
   "SLIDES & CLOGS": "Slides",
   "JACKETS & MORE": "Jackets",
 };
+

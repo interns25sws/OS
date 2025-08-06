@@ -129,7 +129,9 @@ const Products = () => {
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-100 text-gray-600 uppercase">
             <tr>
-              <th className="px-4 py-3 text-left whitespace-nowrap">Product ID</th>
+              <th className="px-4 py-3 text-left whitespace-nowrap">
+                Product ID
+              </th>
               <th className="px-4 py-3 text-left">Name</th>
               <th className="px-4 py-3 text-left">Price</th>
               <th className="px-4 py-3 text-left">Stock</th>
@@ -140,11 +142,9 @@ const Products = () => {
           </thead>
           <tbody className="text-gray-800">
             {filtered.length > 0 ? (
-              filtered.map((product, index) => (
+              filtered.map((product) => (
                 <tr key={product._id} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    PROD-{(index + 1).toString().padStart(3, "0")}
-                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">{product._id}</td>
                   <td className="px-4 py-3">{product.title}</td>
                   <td className="px-4 py-3">₹{product.price}</td>
                   <td className="px-4 py-3">{product.stock}</td>

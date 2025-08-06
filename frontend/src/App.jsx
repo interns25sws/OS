@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
-import "./index.css"
+import "./index.css";
 import Header from "./Components/Header.jsx";
 import HomePage from "./Components/HomePage.jsx";
 import DisplayCloth from "./Components/DisplayCloth.jsx";
@@ -12,7 +12,6 @@ import WomensCloth from "./Components/DisplayWomenCloth.jsx";
 import DemandingProducts from "./Components/DemandingProducts.jsx";
 import Combination from "./Components/Combination.jsx";
 import HowItWorks from "./Components/HIW.jsx";
-import Recommendations from "./Components/Recommendations.jsx";
 import Footer from "./Components/Footer.jsx";
 
 import UserAuth from "./Pages/login.jsx";
@@ -20,7 +19,7 @@ import Cart from "./Pages/Cart.jsx";
 import Shop from "./ShopProducts/shop.jsx";
 import Profile from "./Pages/profile.jsx";
 import ROUTES from "./Constants/routes.jsx";
-import Checkout from "./Pages/Checkout.jsx"
+import Checkout from "./Pages/Checkout.jsx";
 
 import Dashboard from "./dashboard/pages/DashboardHome.jsx";
 import Products from "./dashboard/pages/Products.jsx";
@@ -43,9 +42,7 @@ function Home({ loggedInUser }) {
       <DemandingProducts />
       <Combination />
       <HowItWorks />
-      <Recommendations />
       <Footer />
-      
     </>
   );
 }
@@ -81,6 +78,7 @@ function App() {
         <Route path={ROUTES.SHOP} element={<Shop user={loggedInUser} />} />
         <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
         <Route path={ROUTES.CATEGORYNAME} element={<CategoryProducts />} />
+        
 
         <Route path={ROUTES.DASHBOARD} element={<Dashboard />}>
           <Route path={ROUTES.PRODUCTS} element={<Products />} />

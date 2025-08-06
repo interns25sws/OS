@@ -31,6 +31,24 @@ const upload = multer({
 });
 
 
+router.get("/products", async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 3;
+
+    const products = await Product.aggregate([{ $sample: { size: limit } }]);
+
+    // Optional: prevent caching on the response
+    res.set('Cache-Control', 'no-store');
+
+    res.json({ products }); // Important: Wrap in an object to match your frontend code
+  } catch (err) {
+    console.error("Error fetching products:", err);
+    res.status(500).json({ error: "Server Error" });
+  }
+});
+
+
+
 // GET: List products with filter + pagination
 
 router.get("/", async (req, res) => {

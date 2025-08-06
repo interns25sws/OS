@@ -3,7 +3,6 @@ import { Link } from "react-router-dom"; // import Link
 import useInView from "../hooks/useInView";
 import { categorySlugMap } from "../utils/categoryMap";
 
-
 import OverSized from "../assets/Images/Oversized.jpg";
 import AllBottom from "../assets/Images/Allbottom.jpg";
 import shirts from "../assets/Images/shirts.jpg";
@@ -39,25 +38,31 @@ const Categories = () => {
           CATEGORIES
         </h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
-          {categories.map((cat, index) => (
-            <Link
-              key={index}
-              to={`/category/${Object.keys(categorySlugMap).find(
-                (slug) => categorySlugMap[slug] === cat.title
-              )}`}
-              className="relative group overflow-hidden rounded-lg shadow hover:shadow-lg transition duration-300 cursor-pointer"
-            >
-              <img
-                src={cat.img}
-                alt={cat.title}
-                className="w-full h-50 sm:h-48 md:h-56 object-cover transform group-hover:scale-105 transition duration-300"
-              />
-              <span className="absolute bottom-0 left-0 w-full text-center bg-black bg-opacity-60 text-white text-sm md:text-base font-semibold py-2">
-                {cat.title}
-              </span>
-            </Link>
-          ))}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto px-4">
+          {categories.map((cat, index) => {
+            const matchedSlug = Object.keys(categorySlugMap).find(
+              (slug) => categorySlugMap[slug] === cat.title
+            );
+
+            return (
+              <Link
+                key={index}
+                to={`/category/${matchedSlug}`}
+                className="relative group overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
+                aria-label={`View products in ${cat.title}`}
+              >
+                <img
+                  src={cat.img}
+                  alt={cat.title}
+                  className="w-full h-48 sm:h-56 md:h-72 object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-black/20 text-white text-sm md:text-base font-medium text-center py-2">
+                  {cat.title}
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
     </div>
