@@ -113,8 +113,8 @@ const Shop = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 font-sans">
-      <div className="max-w-7xl mx-auto px-6 py-10">
+    <div className="min-h-screen font-sans bg-[radial-gradient(circle_at_top_left,_#f0f4f8,_#dbeafe)] bg-fixed relative">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-10">
         <h1 className="text-4xl font-bold text-center text-gray-800 mb-10 drop-shadow-md">
           🛒 Explore Our Products
         </h1>
@@ -286,7 +286,7 @@ const Shop = () => {
                           ? "text-red-500"
                           : "text-green-600"
                       }`}
-                    >
+                    > 
                       {selectedProduct.stock === 0
                         ? "Out of Stock"
                         : `${selectedProduct.stock} available`}

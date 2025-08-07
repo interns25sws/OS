@@ -29,7 +29,7 @@ const Categories = () => {
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-in-out ${
+      className={`transition-all duration-normal ease-in-out-smooth   animate-fade-in motion-safe:animate-slide-up-fade${
         isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
       }`}
     >
