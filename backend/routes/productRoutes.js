@@ -142,17 +142,19 @@ router.post("/", upload.array("images", 5), async (req, res) => {
 
 
 // GET only active products (for main website)
-router.get("/active", async (req, res) => {
+router.get('/active', async (req, res) => {
   const category = req.query.category;
+  const filter = { status: 'active' };
 
-  const filter = { status: "active" };
-  if (category) filter.category = category;
+  if (category && category !== 'All') {
+    filter.category = category;
+  }
 
   try {
     const products = await Product.find(filter);
     res.json(products);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch products" });
+    res.status(500).json({ error: 'Failed to fetch products' });
   }
 });
 

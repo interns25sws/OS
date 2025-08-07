@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Category = require('../models/category.model');
 
-// Get all categories
+// ✅ Get all category names
 router.get('/', async (req, res) => {
+  
   try {
     const categories = await Category.find().sort({ name: 1 });
     res.json(categories.map(c => c.name));
@@ -12,7 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Add new category
+// ✅ Add a new category
 router.post('/', async (req, res) => {
   const { name } = req.body;
   if (!name) return res.status(400).json({ error: 'Category name is required' });
@@ -28,7 +29,5 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Failed to create category' });
   }
 });
-
-
 
 module.exports = router;
