@@ -20,6 +20,8 @@ const Shop = () => {
     return loggedInUser?.token || "";
   };
 
+  
+
   useEffect(() => {
     fetch("http://localhost:5000/api/categories")
       .then((res) => res.json())
@@ -103,7 +105,6 @@ const Shop = () => {
     const idx = products.findIndex((p) => p._id === selectedProduct._id);
     const nextIdx = (idx + 1) % products.length;
     openProductModal(products[nextIdx]);
-
   };
 
   const prevProduct = () => {
@@ -117,63 +118,56 @@ const Shop = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_#f0f4f8,_#dbeafe)] bg-fixed">
-      <div className="max-w-7xl mx-auto px-6 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-[#8e9091] via-[#e6e9ee] to-[#f0f4f8] animate-pulse-slow relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 py-10 relative z-10">
         <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">
           Explore Our Products
         </h1>
 
-        {/* Filter + Search + Sort */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
-          <div className="flex items-center gap-2">
-            <label className="text-gray-700 font-medium">Category:</label>
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="border border-gray-300 rounded px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-400"
-            >
-              {categories.map((cat) => (
-                <option key={cat}>{cat}</option>
-              ))}
-            </select>
-          </div>
+        {/* Filters */}
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 p-4 rounded-xl bg-white/60 backdrop-blur-md shadow-md border border-gray-200">
+      {/* Category Filter */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+        <label className="text-gray-800 font-medium whitespace-nowrap">Category:</label>
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="border border-gray-300 rounded-md px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white/80 transition"
+        >
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
+      </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <AiOutlineSearch className="text-gray-500 text-xl" />
-            <input
-              type="text"
-              placeholder="Search products..."
-              onChange={(e) => {
-                const keyword = e.target.value.toLowerCase();
-                const filtered = allProducts.filter((p) =>
-                  p.title.toLowerCase().includes(keyword)
-                );
-                setProducts(filtered);
-              }}
-              className="border border-gray-300 rounded px-3 py-2 w-full sm:w-64 text-sm shadow-sm focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
+      {/* Search */}
+      <div className="relative flex items-center w-full sm:w-64">
+        <AiOutlineSearch className="absolute left-3 text-gray-500 text-lg" />
+        <input
+          type="text"
+          placeholder="Search products..."
+          onChange={handleSearch}
+          className="pl-10 pr-3 py-2 border border-gray-300 rounded-md w-full text-sm shadow-inner bg-white/80 backdrop-blur-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+        />
+      </div>
 
-          <select
-            className="border border-gray-300 rounded px-3 py-2 text-sm shadow-sm focus:ring-2 focus:ring-blue-400"
-            onChange={(e) => {
-              const sort = e.target.value;
-              const sorted = [...products];
-              if (sort === "asc") sorted.sort((a, b) => a.price - b.price);
-              else if (sort === "desc")
-                sorted.sort((a, b) => b.price - a.price);
-              setProducts(sorted);
-            }}
-          >
-            <option value="">Sort by</option>
-            <option value="asc">Price: Low → High</option>
-            <option value="desc">Price: High → Low</option>
-          </select>
-        </div>
+      {/* Sort Dropdown */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+        <label className="text-gray-800 font-medium whitespace-nowrap">Sort:</label>
+        <select
+          onChange={handleSort}
+          className="border border-gray-300 rounded-md px-3 py-2 text-sm shadow-sm bg-white/80 backdrop-blur-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+        >
+          <option value="">Select</option>
+          <option value="asc">Price: Low → High</option>
+          <option value="desc">Price: High → Low</option>
+        </select>
+      </div>
+    </div>
 
         {/* Toast */}
         {cartMessage && (
-          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-full shadow-lg z-50">
+          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-green-600/90 text-white px-6 py-3 rounded-full shadow-xl backdrop-blur-xl z-50">
             {cartMessage}
           </div>
         )}
@@ -181,7 +175,7 @@ const Shop = () => {
         {/* Error */}
         {error && <div className="text-center text-red-600">{error}</div>}
 
-        {/* Loader */}
+        {/* Products */}
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {Array.from({ length: 8 }).map((_, i) => (
@@ -202,11 +196,11 @@ const Shop = () => {
             {products.map((product) => (
               <div
                 key={product._id}
-                className="relative bg-white/70 backdrop-blur-md shadow-xl hover:shadow-2xl transition-all duration-300 rounded-xl overflow-hidden border border-gray-100"
+                className="relative bg-white/30 backdrop-blur-xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 rounded-2xl overflow-hidden border border-white/20"
               >
                 <FaHeart className="absolute top-3 right-3 text-gray-300 hover:text-red-500 transition cursor-pointer z-10" />
                 <div
-                  className="relative h-[300px] cursor-pointer"
+                  className="relative h-[300px] cursor-pointer group overflow-hidden"
                   onClick={() => openProductModal(product)}
                 >
                   {product.images?.[0] ? (
@@ -214,7 +208,7 @@ const Shop = () => {
                       src={`http://localhost:5000/images/${product.images[0]}`}
                       alt={product.title}
                       loading="lazy"
-                      className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                      className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                     />
                   ) : (
                     <div className="flex items-center justify-center h-full text-gray-400">
@@ -238,7 +232,6 @@ const Shop = () => {
                   <div className="font-semibold text-blue-600">
                     ₹{product.price.toFixed(2)}
                   </div>
-
                   <div className="flex flex-wrap gap-1 mt-1">
                     {product.tags?.map((tag, index) => (
                       <span
@@ -249,13 +242,12 @@ const Shop = () => {
                       </span>
                     ))}
                   </div>
-
                   <button
                     onClick={() => handleAddToCart(product._id)}
                     disabled={
                       addingToCartId === product._id || product.stock === 0
                     }
-                    className={`w-full mt-3 py-2 px-4 rounded text-white font-medium transition-all duration-300 ${
+                    className={`w-full mt-3 py-2 px-4 rounded-xl text-white font-semibold transition-all duration-300 ${
                       product.stock === 0 || addingToCartId === product._id
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-black hover:bg-gray-800"
@@ -276,11 +268,11 @@ const Shop = () => {
         {/* Product Modal */}
         {selectedProduct && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center px-4"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center px-4"
             onClick={closeProductModal}
           >
             <div
-              className="relative bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[90vh] flex overflow-hidden"
+              className="relative bg-white/80 backdrop-blur-2xl rounded-3xl shadow-[0_15px_50px_rgba(0,0,0,0.3)] w-full max-w-6xl h-[90vh] flex overflow-hidden border border-white/20"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -290,7 +282,7 @@ const Shop = () => {
                 &times;
               </button>
 
-              <div className="w-1/2 bg-gray-50 flex items-center justify-center p-6 border-r border-gray-200">
+              <div className="w-1/2 bg-gradient-to-br from-gray-100 via-gray-200 to-white flex items-center justify-center p-6 border-r border-gray-300">
                 <img
                   src={`http://localhost:5000/images/${selectedProduct.images?.[0]}`}
                   alt={selectedProduct.name}
@@ -359,7 +351,9 @@ const Shop = () => {
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-black hover:bg-gray-800"
                   }`}
-                  onClick={() => handleAddToCart(selectedProduct._id, quantity)}
+                  onClick={() =>
+                    handleAddToCart(selectedProduct._id, quantity)
+                  }
                   disabled={
                     addingToCartId === selectedProduct._id ||
                     selectedProduct.stock === 0
